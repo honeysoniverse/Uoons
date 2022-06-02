@@ -1,11 +1,12 @@
 import React from 'react'
 import Header from '../Header'
+import DesktopMenu from '../Menu/DesktopMenu'
 
 const Homepage = () => {
   return (
     <div>
     <Header/>
-    <p style={{marginTop:"2000px"}}>hello</p>
+    <DesktopMenu />
     </div>
   )
 }

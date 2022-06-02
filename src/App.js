@@ -15,8 +15,8 @@ function App() {
   }
   return (
       <ChakraProvider>
-        {!isAuthenticated ? <Login setIsAuthenticated={setIsAuthenticated}/> : <Homepage/>}
-        <RoutesWrapper />
+        {!isAuthenticated ? <Login setIsAuthenticated={setIsAuthenticated}/> : <RoutesWrapper/>}
+      
       </ChakraProvider>
   );
 }
