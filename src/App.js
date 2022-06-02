@@ -12,6 +12,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const redirect = () => {
     navigateTo(pathNames.homepage)
+    console.log('surbhi')
   }
   return (
       <ChakraProvider>
