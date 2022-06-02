@@ -16,6 +16,7 @@ import {
   FaLinkedin,
   FaUser,
   FaKey,
+  FaBars,
 } from 'react-icons/fa';
 import axios from 'axios';
 import PagesWrapper from '../PagesWrapper';
@@ -38,9 +39,9 @@ const Login = ({ setIsAuthenticated }) => {
     const responseData = JSON.stringify(response.data);
     localStorage.setItem('LoginData', responseData);
     const localData = (JSON.parse(localStorage.getItem('LoginData')));
-    console.log(JSON.parse(responseData).token)
+  
     setIsAuthenticated(true)
-  if(localData.token === JSON.parse(responseData).token) setIsAuthenticated(true);
+  if(responseData.status === 'success') setIsAuthenticated(true);
   };
 
   const handleOnClick = () => {
@@ -93,6 +94,7 @@ const Login = ({ setIsAuthenticated }) => {
               <Icon as={FaFacebook} color={colors.iconGray} />
               <Icon as={FaGoogle} color={colors.iconGray} />
               <Icon as={FaLinkedin} color={colors.iconGray} />
+              <Icon as={FaBars} color={colors.iconGray} />
             </HStack>
             <InputField
               margin="14px 0px"

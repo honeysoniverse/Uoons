@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import { pathNames } from './components/config/pathNames';
@@ -9,12 +9,13 @@ import Homepage from './components/pages/HomePage';
 function App() {
   const navigateTo = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const redirect = () => {
+ const redirect = () => {
     navigateTo(pathNames.homepage)
+    console.log('redirested')
   }
   return (
       <ChakraProvider>
-        {!isAuthenticated ? <Login setIsAuthenticated={setIsAuthenticated}/> : <Homepage />}
+        {!isAuthenticated ? <Login setIsAuthenticated={setIsAuthenticated}/> : <Homepage/>}
         <RoutesWrapper />
       </ChakraProvider>
   );

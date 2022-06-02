@@ -7,9 +7,9 @@ const InputField = ({ placeholder, setValue, icon }) => {
         setValue(e.target.value)
     }
   return (
-      <HStack>
+      <HStack width='80%'>
          <Icon as={icon} color={colors.iconGray} />
-       <Input onChange={handleSetValue} placeholder={placeholder}/>   
+       <Input onChange={handleSetValue} placeholder={placeholder} />   
       </HStack>
     
   )
