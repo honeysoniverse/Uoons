@@ -2,7 +2,7 @@ export const pathNames = {
   root: '/',
   wildcard: '*',
   login: '/login',
-  homepage: '/home/',
+  homepage: '/',
   orders: '/orders',
   products: '/products',
   analytics: '/analytics',
@@ -19,7 +19,7 @@ export const pathNames = {
 export const rootPathNames = {
   root: '/',
   wildcard: '*',
-  homepage: '/home/*',
+  homepage: '/*',
   login: '/login/*',
   orders: '/orders/*',
   products: '/products/*',
