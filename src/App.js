@@ -5,6 +5,7 @@ import { pathNames } from './components/config/pathNames';
 import RoutesWrapper from './components/RoutesWrapper';
 import Login from './components/pages/Login';
 import Homepage from './components/pages/HomePage';
+import Product from './components/Product';
 
 function App() {
   const navigateTo = useNavigate();
@@ -15,7 +16,8 @@ function App() {
   }
   return (
       <ChakraProvider>
-        {!isAuthenticated ? <Login setIsAuthenticated={setIsAuthenticated}/> : <Homepage/>}
+    {/* {!isAuthenticated ? <Login setIsAuthenticated={setIsAuthenticated}/> : <Homepage/>} */}
+  
         <RoutesWrapper />
       </ChakraProvider>
   );
