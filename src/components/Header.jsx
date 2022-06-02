@@ -17,10 +17,6 @@ const Header = () => {
         <Icon as={FaBars} color={colors.iconGray} />
       </HStack>
       <HStack flex="2">
-        {/* <Icon as={FaSearchengin} color={colors.iconGray} />
-        <Input
-          width="500px">
-        </Input> */}
         <InputField placeholder='Search' setValue={setSearch} icon={FaSearchengin} />
       </HStack>
       <HStack justifyContent='space-evenly' flex="1">
@@ -30,8 +26,8 @@ const Header = () => {
           />
         </HStack>
         <VStack>
-          <h1>Darren Ritchie</h1>
-          <h1>Edit Profile</h1>
+          <h1 style={{fontFamily:"Poppins, sans-serif"}}>Darren Ritchie</h1>
+          <h1 style={{fontFamily:"Poppins, sans-serif", color:"rgb(148, 163, 175)"}}>Edit Profile</h1>
         </VStack>
         <HStack>
           <Image
