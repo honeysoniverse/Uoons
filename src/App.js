@@ -6,7 +6,7 @@ import { pathNames } from './components/config/pathNames';
 import RoutesWrapper from './components/RoutesWrapper';
 import Login from './components/pages/Login';
 import Homepage from './components/pages/HomePage';
-
+//branch feature/addproduct
 function App() {
   const navigateTo = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
