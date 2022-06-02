@@ -1,8 +1,12 @@
 import React from 'react'
+import Header from '../Header'
 
 const Homepage = () => {
   return (
-    <div>Homepage</div>
+    <div>
+    <Header/>
+    <p style={{marginTop:"2000px"}}>hello</p>
+    </div>
   )
 }
 
