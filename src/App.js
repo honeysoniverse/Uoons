@@ -13,12 +13,13 @@ function App() {
   const navigateTo = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showLabel, setShowLabel] = useState(true)
+  const [showImg, setShowImg] = useState(true)
  const redirect = () => {
     navigateTo(pathNames.homepage)
   }
   return (
       <ChakraProvider>
-        {!isAuthenticated && <Login setIsAuthenticated={setIsAuthenticated}/>}
+        {!isAuthenticated && <Login setIsAuthenticated={setIsAuthenticated} setShowImg={setShowImg}/>}
         {isAuthenticated && <Header setShowLabel={setShowLabel}/>}
         {isAuthenticated && <DesktopMenu setIsAuthenticated={setIsAuthenticated} showLabel={showLabel}/>}
         {isAuthenticated && <RoutesWrapper/>}

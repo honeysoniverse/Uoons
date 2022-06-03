@@ -43,7 +43,7 @@ const DesktopMenu = ({setIsAuthenticated, showLabel}) => {
       flexDirection="column"
       alignItems="flex-start"
       boxShadow="2xl"
-      display={isMdBreakpoint ? 'flex' : 'flex'}
+      display='flex'
       position="fixed"
       padding="13px"
     >
@@ -64,7 +64,7 @@ const DesktopMenu = ({setIsAuthenticated, showLabel}) => {
           }
           fontSize={
             {
-              base: '12', md: '114', lg: '14', xl: '18',
+              base: '12', md: '14', lg: '14', xl: '18',
             }
           }
           color={colors.infoGray}
