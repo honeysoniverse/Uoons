@@ -40,8 +40,7 @@ const Login = ({ setIsAuthenticated }) => {
     localStorage.setItem('LoginData', responseData);
     const localData = (JSON.parse(localStorage.getItem('LoginData')));
   
-    setIsAuthenticated(true)
-  if(responseData.status === 'success') setIsAuthenticated(true);
+  if(response.data.status === 'success') setIsAuthenticated(true);
   };
 
   const handleOnClick = () => {
@@ -83,7 +82,7 @@ const Login = ({ setIsAuthenticated }) => {
             justifyContent="center"
             width="540px"
           >
-            <Text color={colors.cornflowerBlue} margin="14px 0px">
+            <Text color={colors.cornflowerBlue} margin="14px 0px" fontSize="30px" fontWeight="bold">
               Login Now
             </Text>
             <Text>
@@ -94,26 +93,31 @@ const Login = ({ setIsAuthenticated }) => {
               <Icon as={FaFacebook} color={colors.iconGray} />
               <Icon as={FaGoogle} color={colors.iconGray} />
               <Icon as={FaLinkedin} color={colors.iconGray} />
-              <Icon as={FaBars} color={colors.iconGray} />
             </HStack>
+
             <InputField
               margin="14px 0px"
               setValue={setEmail}
               icon={FaUser}
-              placeholder="Username"
+              placeholder="Email"
+              type="email"
+              mb="10px"
             />
             <InputField
               margin="14px 0px"
               setValue={setPassword}
               icon={FaKey}
               placeholder="Password"
+              type="password"
+            
             />
             <HStack justifyContent="space-between" margin="14px 0px">
               <HStack>
                 <Checkbox />
                 <FormLabel>Remember Me</FormLabel>
+                
               </HStack>
-              <Button name="Login" handleOnClick={handleOnClick} />
+              <Button name="Login" handleOnClick={handleOnClick} marginLeft="200px"/>
             </HStack>
           </Box>
         </HStack>

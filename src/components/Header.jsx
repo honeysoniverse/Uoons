@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
-import { HStack, Image, Icon, Input, VStack } from '@chakra-ui/react';
+import { HStack, Image, Icon, Input, VStack, SimpleGrid } from '@chakra-ui/react';
 import { FaBars, FaSearchengin } from 'react-icons/fa';
 import { colors } from '../resources/colors';
 import InputField from './InputField';
 
 const Header = () => {
   const [search, setSearch] = useState('');
+  console.log("header")
   return (
-    <HStack justifyContent="space-evenly" boxShadow="md" position="sticky" top="0">
+
+    <HStack justifyContent="space-evenly" boxShadow="md" position="sticky" top="0" bg={colors.white}>
       <HStack justifyContent='space-evenly' flex="1">
         <Image
           src={require('./img/logo_dashboard.png')}
@@ -17,7 +19,7 @@ const Header = () => {
         <Icon as={FaBars} color={colors.iconGray} />
       </HStack>
       <HStack flex="2">
-        <InputField placeholder='Search' setValue={setSearch} icon={FaSearchengin} />
+        <InputField placeholder='Search' setValue={setSearch} icon={FaSearchengin}/>
       </HStack>
       <HStack justifyContent='space-evenly' flex="1">
         <HStack>
@@ -36,7 +38,8 @@ const Header = () => {
         </HStack>
       </HStack>
     </HStack>
+  
   )
 }
 
-export default Header
+export default React.memo(Header) 
