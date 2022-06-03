@@ -12,14 +12,15 @@ import DesktopMenu from './components/Menu/DesktopMenu';
 function App() {
   const navigateTo = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showLabel, setShowLabel] = useState(true)
  const redirect = () => {
     navigateTo(pathNames.homepage)
   }
   return (
       <ChakraProvider>
         {!isAuthenticated && <Login setIsAuthenticated={setIsAuthenticated}/>}
-        {isAuthenticated && <Header/>}
-        {isAuthenticated && <DesktopMenu setIsAuthenticated={setIsAuthenticated}/>}
+        {isAuthenticated && <Header setShowLabel={setShowLabel}/>}
+        {isAuthenticated && <DesktopMenu setIsAuthenticated={setIsAuthenticated} showLabel={showLabel}/>}
         {isAuthenticated && <RoutesWrapper/>}
         {isAuthenticated && <Footer/>}
          

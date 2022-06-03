@@ -4,9 +4,9 @@ import { colors } from '../resources/colors';
 
 const Body = () => {
   return (
-      <div style={{marginLeft:"18%"}}>
-    <VStack marginRight="32%" bg={colors.backgroundGray}>
-    <Text fontSize='2xl' fontFamily="Poppins, sans-serif">Welcome, Darren</Text>
+      <div style={{marginLeft:"21%"}}>
+    <VStack bg={colors.backgroundGray} alignItems="flex-start" paddingLeft='40px'>
+    <Text fontSize='2xl' fontFamily="Poppins, sans-serif" mt="20px">Welcome, Darren</Text>
     <Text fontFamily="Poppins, sans-serif" color="rgb(148, 163, 175)" fontSize='sm'>Let's get your business started in view steps</Text>
     </VStack>
     <SimpleGrid

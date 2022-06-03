@@ -15,7 +15,7 @@ import { getMainMenu } from './getMenuItem';
 import { colors } from '../../resources/colors';
 import { pathNames } from '../config/pathNames';
 
-const DesktopMenu = ({setIsAuthenticated}) => {
+const DesktopMenu = ({setIsAuthenticated, showLabel}) => {
 
   const navigateTo = useNavigate();
 
@@ -33,14 +33,9 @@ const DesktopMenu = ({setIsAuthenticated}) => {
 
   return (
     <VStack
-      spacing={0}
-      height="900px"
+      spacing={0.5}
       border={`3px solid ${colors.backgroundGray}`}
-      width={
-        {
-          base: '0px', sm: '0px', md: '120px', lg: '180px', xl: '250px',
-        }
-      }
+      height="100%"
       top="80px"
       left="0px"
       borderRadius="0px 13px 13px 0px"
@@ -48,7 +43,7 @@ const DesktopMenu = ({setIsAuthenticated}) => {
       flexDirection="column"
       alignItems="flex-start"
       boxShadow="2xl"
-      display={isMdBreakpoint ? 'flex' : 'none'}
+      display={isMdBreakpoint ? 'flex' : 'flex'}
       position="fixed"
       padding="13px"
     >
@@ -97,7 +92,7 @@ const DesktopMenu = ({setIsAuthenticated}) => {
           }}
         >
             <Icon as={navItem.icon} color={colors.iconGray} margin="0px 13px" alignSelf="center"/>
-          {navItem.label}
+          {showLabel && navItem.label}
         </Link>
         </HStack>
       ))}
@@ -136,9 +131,9 @@ const DesktopMenu = ({setIsAuthenticated}) => {
         }}
       >
         <HStack spacing={4}>
-          <Text>
+         {showLabel && <Text>
             Logout
-          </Text>
+          </Text>}
           <Icon as={FaSignOutAlt} color={colors.iconGray}/>
         </HStack>
       </Button>

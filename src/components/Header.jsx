@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
-import { HStack, Image, Icon, Input, VStack, SimpleGrid } from '@chakra-ui/react';
-import { FaBars, FaSearchengin } from 'react-icons/fa';
+import { HStack, Image, Icon, Input, VStack, SimpleGrid, Button } from '@chakra-ui/react';
+import { FaBars, FaSearch } from 'react-icons/fa';
 import { colors } from '../resources/colors';
 import InputField from './InputField';
 
-const Header = () => {
+
+const Header = ({setShowLabel}) => {
   const [search, setSearch] = useState('');
-  console.log("header")
+
+  const sideToggle =()=>{
+    setShowLabel(prev=>!prev)
+  }
   return (
 
     <HStack justifyContent="space-evenly" boxShadow="md" position="sticky" top="0" bg={colors.white}>
@@ -16,10 +20,10 @@ const Header = () => {
           width="120px"
           padding="20px 0"
         />
-        <Icon as={FaBars} color={colors.iconGray} />
+        <Button onClick={sideToggle}><Icon as={FaBars} color={colors.iconGray}/></Button>
       </HStack>
       <HStack flex="2">
-        <InputField placeholder='Search' setValue={setSearch} icon={FaSearchengin}/>
+        <InputField placeholder='Search' setValue={setSearch} icon={FaSearch}/>
       </HStack>
       <HStack justifyContent='space-evenly' flex="1">
         <HStack>

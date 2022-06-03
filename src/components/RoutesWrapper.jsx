@@ -6,8 +6,9 @@ import ProtectedRoute from './ProtectedRoute';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
 const OrdersPage = lazy(() => import('./pages/Orders'));
+const ProductPage = lazy(() => import('./pages/Product'));
 const RoutesWrapper = () => (
-  <Suspense fallback={<Spinner />}>
+  <Suspense fallback={<Spinner/>}>
     <Routes>
       <Route
         path={rootPathNames.homepage}
@@ -16,6 +17,10 @@ const RoutesWrapper = () => (
        <Route
         path={rootPathNames.orders}
         element={<ProtectedRoute component={OrdersPage} isProtected={false} />}
+      />
+        <Route
+        path={rootPathNames.products}
+        element={<ProtectedRoute component={ProductPage} isProtected={false} />}
       />
     </Routes>
   </Suspense>

@@ -24,7 +24,7 @@ import { colors } from '../../resources/colors';
 import InputField from '../InputField';
 import Button from '../Button';
 
-const Login = ({ setIsAuthenticated }) => {
+const Login = ({ setIsAuthenticated, setShowImg }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const loginApi = process.env.REACT_APP_AUTH_API;
@@ -65,11 +65,11 @@ const Login = ({ setIsAuthenticated }) => {
             <Text fontSize="16px" color={colors.white}>
               Welcome to
             </Text>
-            <Image
+           { <Image
               src={require('../img/logo.png')}
               width="160px"
               padding="12px 0"
-            />
+            />}
             <Text color={colors.white}>{`Create your seller account in \n
           just few steps to become a seller with us`}</Text>
           </Box>
