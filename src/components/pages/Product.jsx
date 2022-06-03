@@ -70,7 +70,7 @@ const Product = () => {
         <Flex>
           <Box w="20%" p="2%">
             <Center>
-              {' '}
+              
               <Box w="30%" h="30px" boxShadow="xl" bg={colors.white}>
                 Box
               </Box>

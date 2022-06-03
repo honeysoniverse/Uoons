@@ -9,7 +9,7 @@ const InputField = ({ placeholder, setValue, icon, type, mb}) => {
   return (
       <HStack width='80%' mb={mb}>
          <Icon as={icon} color={colors.iconGray} />
-       <Input onChange={handleSetValue} placeholder={placeholder} type={type}/>   
+       <Input onChange={handleSetValue} placeholder={placeholder} type={type} />   
       </HStack>
     
   )
