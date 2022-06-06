@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import * as Yup from 'yup';
 import {
+  useBreakpointValue,
   Box,
   Text,
   Image,
@@ -29,47 +26,13 @@ import InputField from '../InputField';
 import Button from '../Button';
 
 const Login = ({ setIsAuthenticated, setShowImg }) => {
-  const validationSchema = Yup.object().shape({
-    // fullname: Yup.string().required('Fullname is required'),
-    username: Yup.string()
-      .required('Username is required')
-      .min(6, 'Username must be at least 6 characters')
-      .max(20, 'Username must not exceed 20 characters'),
-    email: Yup.string().required('Email is required').email('Email is invalid'),
-    password: Yup.string()
-      .required('Password is required')
-      .min(6, 'Password must be at least 6 characters')
-      .max(40, 'Password must not exceed 40 characters'),
-    // confirmPassword: Yup.string()
-    //   .required('Confirm Password is required')
-    //   .oneOf([Yup.ref('password'), null], 'Confirm Password does not match'),
-    // acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required')
-  });
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(validationSchema),
-  });
+  const isMdBreakpoint = useBreakpointValue({ base: false, md: true });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const loginApi = process.env.REACT_APP_AUTH_API;
+  const loginInfo = JSON.stringify({ email, password });
 
-  const onSubmit = async (data,event) => {
-                event.preventDefault();
-    console.log('form data');
-    // const loginApi = process.env.REACT_APP_AUTH_API;
-    // const loginInfo = JSON.stringify({ email, password });
-    // const { username, email, password } = data;
-    // console.log(JSON.stringify(data, null, 2));
-    // handleLogin(loginApi, loginInfo);
-  };
-console.log(onSubmit);
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
-  // const loginApi = process.env.REACT_APP_AUTH_API;
-  // const loginInfo = JSON.stringify({ email, password });
-
-  const handleLogin = async (loginApi, loginInfo) => {
+  const handleLogin = async () => {
     const response = await axios.post(`${loginApi}`, loginInfo, {
       headers: {
         'Content-Type': 'application/json',
@@ -77,147 +40,116 @@ console.log(onSubmit);
     });
     const responseData = JSON.stringify(response.data);
     localStorage.setItem('LoginData', responseData);
-    const localData = JSON.parse(localStorage.getItem('LoginData'));
-
-    if (response.data.status === 'success') setIsAuthenticated(true);
+    const localData = (JSON.parse(localStorage.getItem('LoginData')));
+  
+  if(response.data.status === 'success') setIsAuthenticated(true);
   };
 
-  // const handleOnClick = () => {
-  //   handleLogin();
-  // };
+  const handleOnClick = () => {
+    handleLogin();
+  };
+
+  
 
   return (
     <>
       <PagesWrapper>
-        <HStack>
-          <Box
+        <HStack spacing={0}>
+         {isMdBreakpoint && <Box
             padding="50px"
             background={colors.cornflowerBlue}
-            height="360px"
+            height={
+              {
+                base: '100vh', sm:'100vh', md: '640px', lg: '540px', xl: '500px',
+              }
+            }
             display="flex"
             flexDirection="column"
             justifyContent="center"
-            width="360px"
+            width={
+              {
+                base: '100vw', sm:'100vw' , md: '360px', lg: '360px', xl: '460px',
+              }
+            }
           >
-            <Text fontSize="16px" color={colors.white}>
+            <Text fontSize="20px" color={colors.white} fontFamily="Poppins, sans-serif">
               Welcome to
             </Text>
-            {
-              <Image
-                src={require('../img/logo.png')}
-                width="160px"
-                padding="12px 0"
-              />
-            }
-            <Text color={colors.white}>{`Create your seller account in \n
-          just few steps to become a seller with us`}</Text>
-          </Box>
+           <Image
+              src={require('../img/logo.png')}
+              width="160px"
+              padding="12px 0"
+            />
+            <Text color={colors.white} fontFamily="Poppins, sans-serif">Create your seller account in
+          just few steps to become a seller with us</Text>
+          </Box>}
           <Box
             padding="50px"
             background={colors.white}
-            height="360px"
+            height={
+              {
+                base: '100vh', sm:'100vh', md: '640px', lg: '540px', xl: '500px',
+              }
+            }
             display="flex"
             flexDirection="column"
             justifyContent="center"
-            width="540px"
+            width={
+              {
+                base: '100vw', sm:'100vw' , md: '360px', lg: '360px', xl: '540px',
+              }
+            }
           >
-            <Text
-              color={colors.cornflowerBlue}
-              margin="14px 0px"
-              fontSize="30px"
-              fontWeight="bold"
-            >
+            <VStack alignItems="flex-start" fontFamily="Poppins, sans-serif" mb="30px">
+            <Text color={colors.cornflowerBlue} fontSize="26px" fontWeight="bold" >
               Login Now
             </Text>
-            <Text>
-              {`Don't have an account? `}
-              <Link>Sign up</Link>
+            <Text color={colors.infoGray} fontSize="15px">
+              Don't have an account ? <nbsp/>
+              <Link color={colors.cornflowerBlue} fontSize="15px">Sign up</Link>
             </Text>
-            <HStack margin="14px 0px">
-              <Icon as={FaFacebook} color={colors.iconGray} />
-              <Icon as={FaGoogle} color={colors.iconGray} />
-              <Icon as={FaLinkedin} color={colors.iconGray} />
+            </VStack>
+            <HStack marginBottom="20px" spacing='24px'>
+              <Icon as={FaFacebook} color={colors.iconGray} w={6} h={6} boxSize={7}/>
+              <Icon as={FaGoogle} color={colors.iconGray}  w={6} h={6} boxSize={7}/>
+              <Icon as={FaLinkedin} color={colors.iconGray}  w={6} h={6} boxSize={7}/>
             </HStack>
-            <form >
-              {/* <InputField
-              margin="14px 0px"
-              name="email"
-              icon={FaUser}
-              placeholder="Email"
-              type="email"
-              mb="10px"
-              register="...register('email')"
-            /> */}
 
-              {/* <input
-                name="email"
-                type="text"
-                {...register('email')}
-                className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-              />
-              <div className="invalid-feedback">{errors.email?.message}</div> */}
-              {/* <input
-              margin="14px 0px"
-              name="email"
+           <VStack alignItems="flex-start"><InputField
+              
+              setValue={setEmail}
               icon={FaUser}
               placeholder="Email"
               type="email"
               mb="10px"
-              register="...register('email')"
-            /> */}
-              {/* <InputField
+              width={
+                {
+                  base: '75vw', sm:'75vw' , md: '240px', lg: '260px', xl: '440px',
+                }
+              }
+              boxShadow="0px 0px 15px #b2ceff8a"
+            />
+            <InputField
               margin="14px 0px"
-              name="password"
+              setValue={setPassword}
               icon={FaKey}
               placeholder="Password"
               type="password"
-            
-            /> */}
-              {/* <input
-                name="password"
-                type="text"
-                {...register('password')}
-                className={`form-control ${
-                  errors.password ? 'is-invalid' : ''
-                }`}
-              /> */}
-              {/* <div className="invalid-feedback">{errors.password?.message}</div> */}
-
-              <div class="input-group mb-3">
-                <input
-                  name="email"
-                  type="text"
-                  {...register('email')}
-                  className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                />
-                <div className="invalid-feedback">{errors.email?.message}</div>
-              </div>
-
-              <div class="input-group mb-3">
-                <input
-                  name="password"
-                  type="text"
-                  {...register('password')}
-                  className={`form-control ${
-                    errors.password ? 'is-invalid' : ''
-                  }`}
-                />
-                <div className="invalid-feedback">
-                  {errors.password?.message}
-                </div>
-              </div>
-
-              <HStack justifyContent="space-between" margin="14px 0px">
-                <HStack>
-                  <Checkbox />
-                  <FormLabel>Remember Me</FormLabel>
-                </HStack>
-                {/* <Button type="submit" name="Login" handleOnClick={handleLogin} marginLeft="200px"/> */}
-                <button  onClick={handleSubmit(onSubmit)} className="btn btn-primary">
-            Register
-          </button>
+              width={
+                {
+                  base: '75vw', sm:'75vw' , md: '240px', lg: '260px', xl: '440px',
+                }
+              }
+              boxShadow="0px 0px 15px #b2ceff8a"
+            /></VStack>
+            <HStack justifyContent="space-between" margin="14px 0px">
+              <HStack>
+                <Checkbox />
+                <FormLabel>Remember Me</FormLabel>
+                
               </HStack>
-            </form>
+              <Button name="LOGIN" handleOnClick={handleOnClick} marginLeft="200px"></Button>
+            </HStack>
           </Box>
         </HStack>
       </PagesWrapper>
