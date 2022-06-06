@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input, Icon, HStack } from '@chakra-ui/react'
+import { Input, Icon, HStack, color } from '@chakra-ui/react'
 import { colors } from '../resources/colors'
 
 const InputField = ({ placeholder, setValue, icon, type, mb, width, boxShadow}) => {
@@ -8,8 +8,8 @@ const InputField = ({ placeholder, setValue, icon, type, mb, width, boxShadow}) 
     }
   return (
       <HStack mb={mb} width={width}>
-         <Icon as={icon} color={colors.iconGray} />
-       <Input onChange={handleSetValue} placeholder={placeholder} type={type} boxShadow={boxShadow}/>   
+         {icon && <Icon as={icon} color={colors.iconGray} />}
+       <Input onChange={handleSetValue} placeholder={placeholder} type={type} boxShadow={boxShadow} bg={colors.backgroundGray}/>   
       </HStack>
     
   )

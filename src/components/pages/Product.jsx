@@ -13,12 +13,15 @@ import {
 import { colors } from '../../resources/colors';
 import Button from '../Button';
 import { FaSearch, FaEdit, FaTrash } from 'react-icons/fa';
+import { rootPathNames } from '../config/pathNames';
+import Link from '../Link';
+
 
 const Product = () => {
   return (
     <Box bg={colors.backgroundGray} w="auto" p={4} ml="300px">
       <Flex color="white" justifyContent="flex-end" mb="16px">
-        <Button name="Add Product"></Button>
+        <Link pathName={rootPathNames.addProduct} name='Add Product' />
       </Flex>
       <Box bg={colors.white} borderRadius="lg">
         <Text fontSize="lg" color="black" ml="20px">

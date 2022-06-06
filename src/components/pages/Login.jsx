@@ -33,16 +33,17 @@ const Login = ({ setIsAuthenticated, setShowImg }) => {
   const loginInfo = JSON.stringify({ email, password });
 
   const handleLogin = async () => {
-    const response = await axios.post(`${loginApi}`, loginInfo, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const responseData = JSON.stringify(response.data);
-    localStorage.setItem('LoginData', responseData);
-    const localData = (JSON.parse(localStorage.getItem('LoginData')));
+    // const response = await axios.post(`${loginApi}`, loginInfo, {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // });
+    // const responseData = JSON.stringify(response.data);
+    // localStorage.setItem('LoginData', responseData);
+    // const localData = (JSON.parse(localStorage.getItem('LoginData')));
   
-  if(response.data.status === 'success') setIsAuthenticated(true);
+  // if(response.data.status === 'success') setIsAuthenticated(true);
+  setIsAuthenticated(true);
   };
 
   const handleOnClick = () => {
@@ -115,8 +116,8 @@ const Login = ({ setIsAuthenticated, setShowImg }) => {
               <Icon as={FaLinkedin} color={colors.iconGray}  w={6} h={6} boxSize={7}/>
             </HStack>
 
-           <VStack alignItems="flex-start"><InputField
-              
+           <VStack alignItems="flex-start">
+             <InputField
               setValue={setEmail}
               icon={FaUser}
               placeholder="Email"

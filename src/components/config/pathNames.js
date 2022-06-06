@@ -14,6 +14,7 @@ export const pathNames = {
   notices: '/notices',
   settings: '/settings',
   logout: '/logout',
+  addProduct:'/products/addproduct'
 };
 
 export const rootPathNames = {
@@ -32,4 +33,5 @@ export const rootPathNames = {
   notices: '/notices/*',
   settings: '/settings/*',
   logout: '/logout/*',
+  addProduct:'/products/addproduct/*'
 };
