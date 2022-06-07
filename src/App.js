@@ -8,6 +8,7 @@ import Homepage from './components/pages/HomePage';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import DesktopMenu from './components/Menu/DesktopMenu';
+import ReduxTesting from './components/pages/ReduxTesting'
 
 function App() {
   const navigateTo = useNavigate();
@@ -23,7 +24,12 @@ function App() {
         {isAuthenticated && <Header setShowLabel={setShowLabel}/>}
         {isAuthenticated && <DesktopMenu setIsAuthenticated={setIsAuthenticated} showLabel={showLabel}/>}
         {isAuthenticated && <RoutesWrapper/>}
-        {isAuthenticated && <Footer/>}
+        {isAuthenticated && <Footer/>} 
+ 
+ {/* added by me delete it. */}
+ 
+ {/* {isAuthenticated && <ReduxTesting/>}  */}
+
          
       </ChakraProvider>
   );

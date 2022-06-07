@@ -1,27 +1,86 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { Box,Text,HStack,Select,Image,FormLabel,VStack,Textarea,} from '@chakra-ui/react';
 import { colors } from '../../resources/colors';
 import InputField from '../InputField';
 import Button from '../Button';
 import { FaRupeeSign } from 'react-icons/fa';
 import { useState } from 'react';
-
+import {useDispatch,useSelector} from 'react-redux';
+import { actioncreator } from '../../state/action-creators/combinactioncreator';
+import {bindActionCreators} from "redux";
+import axios from 'axios';
 
 const AddProduct = () => {
+
+    const categoryApi = process.env.REACT_APP_CATEGORY_API;
+
+    console.log(categoryApi)
+
+  const dispatch = useDispatch()
+
+    const categoryValue = useSelector(state=>state);
+    const subCategoryValue = useSelector(state=>state);
+    const titleValue = useSelector(state=>state);
+    const salePriceValue = useSelector(state=>state);
+    const offerPriceValue = useSelector(state=>state);
+    const mrpValue = useSelector(state=>state);
+    const descriptionValue = useSelector(state=>state);
+    const additionalInfoTitleValue = useSelector(state=>state);
+    const additionalInforDescValue = useSelector(state=>state);
+    const salientFeaturesValue = useSelector(state=>state);
+    const returnPolicyValue = useSelector(state=>state);
+
+    const postData = {
+        categoryValue,
+        subCategoryValue,
+        titleValue,
+        salePriceValue,
+        offerPriceValue,
+        mrpValue,
+        descriptionValue,
+        additionalInfoTitleValue,
+        additionalInforDescValue,
+        salientFeaturesValue,
+        returnPolicyValue
+    }
+
+    
+    const {setCategoryValue, setSubCategoryValue, setTitleValue, setSalePrice, setOfferPrice, setMrpPrice, setDescriptionValue, setReturnPolicyValue,
+    setAdditionalInfoTitle, setAdditionalInfoDesc, setSalientFeatures} = bindActionCreators(actioncreator,dispatch);
+
+    const handlesetCategoryValue=(e) =>{
+        setCategoryValue(e.target.value)
+    }
+    
+    const handlesetSubCategoryValue=(e) =>{
+        setSubCategoryValue(e.target.value)
+    }
+
+    const getDescription = (e) =>{
+        setDescriptionValue(e.target.value)
+    }
+
+    const getReturnPolicy =(e)=>{
+        setReturnPolicyValue(e.target.value)
+        
+    }
+
+   console.log(categoryValue.addProductReducer)
+   
 
     const [inputFieldList, setInputField] = useState([]);
     const [salientFeature, setSalientFeature] = useState([]);
     const [showDescLabel, setShowDescLabel] = useState(false)
     const [showLabel, setShowLabel] = useState(false);
-    const [productValues, setProductValue] = useState({category:"", subCategory:"", title:""})
+    // const [productValues, setProductValue] = useState({category:"", subCategory:"", title:""})
 
 
     const handleOnClick = () => {
         setShowLabel(true)
         setInputField([...inputFieldList, [
             <HStack>
-                <InputField />
-                <InputField />
+                <InputField setValue={setAdditionalInfoTitle}/>
+                <InputField setValue={setAdditionalInfoDesc}/>
             </HStack>]])
     }
 
@@ -29,19 +88,30 @@ const AddProduct = () => {
     
     const salientOnClick = () => {
         setShowDescLabel(true)
-        setSalientFeature([...salientFeature, [<HStack><Textarea /></HStack>]])
+        setSalientFeature([...salientFeature, [<HStack><Textarea onChange={(e)=>setSalientFeatures(e.target.value)}/></HStack>]])
     }
 
-    const selectCategory = (e)=>setProductValue({...productValues, category:e.target.value })
-    
-    const selectSubCategory =(e)=>setProductValue({...productValues, subCategory:e.target.value})
+    const handleFormData=()=>{
+        console.log(postData)
+    }
 
-    const getTitle =(e) => console.log(e.target.value)
+    const fetchCategory =async() => {
+        const response = await fetch('http://13.233.1.96:9092/product/category/getAllCategories',{
+              headers: {
+                'Content-Type': 'application/json',
+              }})
+        console.log(response)
+    }
+
+    useEffect(() => {
+      
+        fetchCategory()
+      
+    }, [])
     
-    const getAllProduct =()=>console.log(productValues)
-    const titleValue = productValues.title;
-    console.log(productValues)
-        
+   
+   
+   
     return (
         <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
             <Box bg={colors.white} borderRadius="lg" height="auto" ml="280px" padding='20px' fontFamily='Poppins, sans-serif'>
@@ -51,7 +121,7 @@ const AddProduct = () => {
                 <HStack justifyContent='flex-start' alignItems="center" mt="40px">
                     <VStack alignItems="flex-start" >
                         <FormLabel>Select Category</FormLabel>
-                        <Select placeholder="Select Categories" width="350px" bg={colors.backgroundGray} onChange={selectCategory}>
+                        <Select placeholder="Select Categories" width="350px" bg={colors.backgroundGray} onChange={handlesetCategoryValue}>
                             <option value="One">One</option>
                             <option value="Two">Two</option>
                             <option value="Three">Three</option>
@@ -60,7 +130,7 @@ const AddProduct = () => {
 
                     <VStack alignItems="flex-start">
                         <FormLabel>Select Sub-Category</FormLabel>
-                        <Select placeholder="Select Sub-Categories" width="350px" bg={colors.backgroundGray} onChange={selectSubCategory}>
+                        <Select placeholder="Select Sub-Categories" width="350px" bg={colors.backgroundGray} onChange={handlesetSubCategoryValue}>
                             <option value="One">One</option>
                             <option value="Two">Two</option>
                             <option value="Three">Three</option>
@@ -68,7 +138,7 @@ const AddProduct = () => {
                     </VStack>
                     <VStack alignItems="flex-start">
                         <FormLabel>Title</FormLabel>
-                        <InputField placeholder='Title' width="350px" setValue={setProductValue} value={productValues} item={titleValue} />
+                        <InputField placeholder='Title' width="350px"  setValue={setTitleValue}/>
 
                     </VStack>
 
@@ -82,22 +152,22 @@ const AddProduct = () => {
                 <HStack mt='40px' spacing={5}>
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>Sale Price</FormLabel>
-                        <InputField width="100%" type="number" icon={FaRupeeSign} />
+                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={setSalePrice} />
                     </VStack>
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>Offer Price</FormLabel>
-                        <InputField width="100%" type="number" icon={FaRupeeSign} />
+                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={setOfferPrice}/>
                     </VStack>
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>MRP</FormLabel>
-                        <InputField width="100%" type="number" icon={FaRupeeSign} />
+                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={setMrpPrice}/>
                     </VStack>
                 </HStack>
 
                 <HStack mt='40px' flex='1'>
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel >Description</FormLabel>
-                        <Textarea bg={colors.backgroundGray} />
+                        <Textarea bg={colors.backgroundGray}  onChange={getDescription}/>
                     </VStack>
                 </HStack>
 
@@ -140,11 +210,11 @@ const AddProduct = () => {
                 <HStack mt='40px' flex='1'>
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>Return Policy</FormLabel>
-                        <Textarea bg={colors.backgroundGray} height="150px" />
+                        <Textarea bg={colors.backgroundGray} height="150px" onChange={getReturnPolicy} />
                     </VStack>
                 </HStack>
                 <HStack mt='40px'>
-                    <Button name="Add Product" handleOnClick={getAllProduct}></Button>
+                    <Button name="Add Product" handleOnClick={handleFormData}></Button>
                 </HStack>
 
 

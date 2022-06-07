@@ -5,15 +5,20 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
-
+import {Provider} from 'react-redux';
+import {store} from './state/store' 
 const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);
+
 
 root.render(
   <StrictMode>
     <BrowserRouter>
     <ColorModeScript />
+
+<Provider store={store}>
     <App />
+    </Provider>
     </BrowserRouter>
   </StrictMode>
 );

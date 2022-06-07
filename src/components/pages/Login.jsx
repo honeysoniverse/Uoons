@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import {useDispatch,useSelector} from 'react-redux';
+import { actioncreator } from '../../state/action-creators/combinactioncreator';
+import {bindActionCreators} from "redux";
 import {
   useBreakpointValue,
   Box,
@@ -26,11 +28,24 @@ import InputField from '../InputField';
 import Button from '../Button';
 
 const Login = ({ setIsAuthenticated, setShowImg }) => {
+  
+  const dispatch = useDispatch()
+
+  const passwordValue = useSelector(state=>state);
+  const emailValue = useSelector(state=>state);
+
+  const {setEmailValue}=bindActionCreators(actioncreator,dispatch);
+  const {setPasswordValue}=bindActionCreators(actioncreator,dispatch);
+ 
+const email = emailValue.loginReducer
+const password = passwordValue.loginReducer
+
+
   const isMdBreakpoint = useBreakpointValue({ base: false, md: true });
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  
   const loginApi = process.env.REACT_APP_AUTH_API;
   const loginInfo = JSON.stringify({ email, password });
+
 
   const handleLogin = async () => {
     // const response = await axios.post(`${loginApi}`, loginInfo, {
@@ -45,12 +60,6 @@ const Login = ({ setIsAuthenticated, setShowImg }) => {
   // if(response.data.status === 'success') setIsAuthenticated(true);
   setIsAuthenticated(true);
   };
-
-  const handleOnClick = () => {
-    handleLogin();
-  };
-
-  
 
   return (
     <>
@@ -118,7 +127,7 @@ const Login = ({ setIsAuthenticated, setShowImg }) => {
 
            <VStack alignItems="flex-start">
              <InputField
-              setValue={setEmail}
+             setValue={setEmailValue}
               icon={FaUser}
               placeholder="Email"
               type="email"
@@ -132,7 +141,7 @@ const Login = ({ setIsAuthenticated, setShowImg }) => {
             />
             <InputField
               margin="14px 0px"
-              setValue={setPassword}
+              setValue={setPasswordValue}
               icon={FaKey}
               placeholder="Password"
               type="password"
@@ -149,10 +158,11 @@ const Login = ({ setIsAuthenticated, setShowImg }) => {
                 <FormLabel>Remember Me</FormLabel>
                 
               </HStack>
-              <Button name="LOGIN" handleOnClick={handleOnClick} marginLeft="200px"></Button>
+              <Button name="LOGIN" handleOnClick={handleLogin} marginLeft="200px"></Button>
             </HStack>
           </Box>
         </HStack>
+    
       </PagesWrapper>
     </>
   );
