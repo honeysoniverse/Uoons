@@ -1,21 +1,5 @@
 import React from 'react'
-import {
-    Switch,
-    Flex,
-    Box,
-    Text,
-    HStack,
-    Icon,
-    Center,
-    Select,
-    Spacer,
-    Input,
-    Image,
-    FormLabel,
-    VStack,
-    Textarea,
-    useSafeLayoutEffect,
-} from '@chakra-ui/react';
+import { Box,Text,HStack,Select,Image,FormLabel,VStack,Textarea,} from '@chakra-ui/react';
 import { colors } from '../../resources/colors';
 import InputField from '../InputField';
 import Button from '../Button';
@@ -28,8 +12,8 @@ const AddProduct = () => {
     const [inputFieldList, setInputField] = useState([]);
     const [salientFeature, setSalientFeature] = useState([]);
     const [showDescLabel, setShowDescLabel] = useState(false)
-
     const [showLabel, setShowLabel] = useState(false);
+    const [productValues, setProductValue] = useState({category:"", subCategory:"", title:""})
 
 
     const handleOnClick = () => {
@@ -40,17 +24,24 @@ const AddProduct = () => {
                 <InputField />
             </HStack>]])
     }
-    const handleRemove = () => {
 
-        setInputField(inputFieldList.slice(0, -1))
-    }
-
+    const handleRemove = () =>setInputField(inputFieldList.slice(0, -1))
+    
     const salientOnClick = () => {
         setShowDescLabel(true)
         setSalientFeature([...salientFeature, [<HStack><Textarea /></HStack>]])
     }
 
+    const selectCategory = (e)=>setProductValue({...productValues, category:e.target.value })
+    
+    const selectSubCategory =(e)=>setProductValue({...productValues, subCategory:e.target.value})
 
+    const getTitle =(e) => console.log(e.target.value)
+    
+    const getAllProduct =()=>console.log(productValues)
+    const titleValue = productValues.title;
+    console.log(productValues)
+        
     return (
         <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
             <Box bg={colors.white} borderRadius="lg" height="auto" ml="280px" padding='20px' fontFamily='Poppins, sans-serif'>
@@ -60,24 +51,24 @@ const AddProduct = () => {
                 <HStack justifyContent='flex-start' alignItems="center" mt="40px">
                     <VStack alignItems="flex-start" >
                         <FormLabel>Select Category</FormLabel>
-                        <Select placeholder="Select Categories" width="350px" bg={colors.backgroundGray}>
-                            <option value="option1">One</option>
-                            <option value="option2">Two</option>
-                            <option value="option3">Three</option>
+                        <Select placeholder="Select Categories" width="350px" bg={colors.backgroundGray} onChange={selectCategory}>
+                            <option value="One">One</option>
+                            <option value="Two">Two</option>
+                            <option value="Three">Three</option>
                         </Select>
                     </VStack>
 
                     <VStack alignItems="flex-start">
                         <FormLabel>Select Sub-Category</FormLabel>
-                        <Select placeholder="Select Sub-Categories" width="350px" bg={colors.backgroundGray}>
-                            <option value="option1">One</option>
-                            <option value="option2">Two</option>
-                            <option value="option3">Three</option>
+                        <Select placeholder="Select Sub-Categories" width="350px" bg={colors.backgroundGray} onChange={selectSubCategory}>
+                            <option value="One">One</option>
+                            <option value="Two">Two</option>
+                            <option value="Three">Three</option>
                         </Select>
                     </VStack>
                     <VStack alignItems="flex-start">
                         <FormLabel>Title</FormLabel>
-                        <InputField placeholder='Title' width="350px" />
+                        <InputField placeholder='Title' width="350px" setValue={setProductValue} value={productValues} item={titleValue} />
 
                     </VStack>
 
@@ -153,7 +144,7 @@ const AddProduct = () => {
                     </VStack>
                 </HStack>
                 <HStack mt='40px'>
-                    <Button name="Add Product"></Button>
+                    <Button name="Add Product" handleOnClick={getAllProduct}></Button>
                 </HStack>
 
 
