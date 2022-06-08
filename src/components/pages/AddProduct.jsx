@@ -30,51 +30,50 @@ const AddProduct = () => {
     const salientFeaturesValue = useSelector(state=>state);
     const returnPolicyValue = useSelector(state=>state);
 
+    const categoryData=categoryValue.addProductReducer
+    const subCategoryData=subCategoryValue.addProductReducer
+    const titleData=titleValue.addProductReducer
+    const salePriceData=salePriceValue.addProductReducer
+    const offerPriceData=offerPriceValue.addProductReducer
+    const mrpPriceData=mrpValue.addProductReducer
+    const descriptionData=descriptionValue.addProductReducer
+    const additionalInfoTitleData=additionalInfoTitleValue.addProductReducer
+    const additionalInfoDescData=additionalInforDescValue.addProductReducer
+    const salientFeatureData=salientFeaturesValue.addProductReducer
+    const returnPolicyData=returnPolicyValue.addProductReducer
+
     const postData = {
-        categoryValue,
-        subCategoryValue,
-        titleValue,
-        salePriceValue,
-        offerPriceValue,
-        mrpValue,
-        descriptionValue,
-        additionalInfoTitleValue,
-        additionalInforDescValue,
-        salientFeaturesValue,
-        returnPolicyValue
+        categoryData,
+        subCategoryData,
+        titleData,
+        salePriceData,
+        offerPriceData,
+        mrpPriceData,
+        descriptionData,
+        additionalInfoTitleData,
+        additionalInfoDescData,
+        salientFeatureData,
+        returnPolicyData
     }
 
     
     const {setCategoryValue, setSubCategoryValue, setTitleValue, setSalePrice, setOfferPrice, setMrpPrice, setDescriptionValue, setReturnPolicyValue,
     setAdditionalInfoTitle, setAdditionalInfoDesc, setSalientFeatures} = bindActionCreators(actioncreator,dispatch);
 
-    const handlesetCategoryValue=(e) =>{
-        setCategoryValue(e.target.value)
-    }
+    const handlesetCategoryValue=(e) => setCategoryValue(e.target.value)
     
-    const handlesetSubCategoryValue=(e) =>{
-        setSubCategoryValue(e.target.value)
-    }
+    const handlesetSubCategoryValue=(e) =>setSubCategoryValue(e.target.value)
 
-    const getDescription = (e) =>{
-        setDescriptionValue(e.target.value)
-    }
+    const getDescription = (e) => setDescriptionValue(e.target.value)
 
-    const getReturnPolicy =(e)=>{
-        setReturnPolicyValue(e.target.value)
-        
-    }
+    const getReturnPolicy =(e)=>setReturnPolicyValue(e.target.value)
 
-   console.log(categoryValue.addProductReducer)
-   
 
     const [inputFieldList, setInputField] = useState([]);
     const [salientFeature, setSalientFeature] = useState([]);
     const [showDescLabel, setShowDescLabel] = useState(false)
     const [showLabel, setShowLabel] = useState(false);
-    // const [productValues, setProductValue] = useState({category:"", subCategory:"", title:""})
-
-
+  
     const handleOnClick = () => {
         setShowLabel(true)
         setInputField([...inputFieldList, [
@@ -91,12 +90,10 @@ const AddProduct = () => {
         setSalientFeature([...salientFeature, [<HStack><Textarea onChange={(e)=>setSalientFeatures(e.target.value)}/></HStack>]])
     }
 
-    const handleFormData=()=>{
-        console.log(postData)
-    }
+    const handleFormData=()=> console.log(postData)
 
     const fetchCategory =async() => {
-        const response = await fetch('http://13.233.1.96:9092/product/category/getAllCategories',{
+        const response = await axios.get('http://13.233.1.96:9092/product/category/getAllCategories',{
               headers: {
                 'Content-Type': 'application/json',
               }})
@@ -109,28 +106,25 @@ const AddProduct = () => {
       
     }, [])
     
-   
-   
-   
     return (
         <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
             <Box bg={colors.white} borderRadius="lg" height="auto" ml="280px" padding='20px' fontFamily='Poppins, sans-serif'>
                 <Text fontSize="18px">Add Product</Text>
                 <hr />
 
-                <HStack justifyContent='flex-start' alignItems="center" mt="40px">
-                    <VStack alignItems="flex-start" >
+                <HStack justifyContent='space-around'  mt="40px">
+                    <VStack>
                         <FormLabel>Select Category</FormLabel>
-                        <Select placeholder="Select Categories" width="350px" bg={colors.backgroundGray} onChange={handlesetCategoryValue}>
+                        <Select placeholder="Select Categories" bg={colors.backgroundGray} width="100%" onChange={handlesetCategoryValue}>
                             <option value="One">One</option>
                             <option value="Two">Two</option>
                             <option value="Three">Three</option>
                         </Select>
                     </VStack>
 
-                    <VStack alignItems="flex-start">
+                    <VStack alignItems="flex-start" >
                         <FormLabel>Select Sub-Category</FormLabel>
-                        <Select placeholder="Select Sub-Categories" width="350px" bg={colors.backgroundGray} onChange={handlesetSubCategoryValue}>
+                        <Select placeholder="Select Sub-Categories" width="100%" bg={colors.backgroundGray} onChange={handlesetSubCategoryValue}>
                             <option value="One">One</option>
                             <option value="Two">Two</option>
                             <option value="Three">Three</option>
@@ -138,12 +132,11 @@ const AddProduct = () => {
                     </VStack>
                     <VStack alignItems="flex-start">
                         <FormLabel>Title</FormLabel>
-                        <InputField placeholder='Title' width="350px"  setValue={setTitleValue}/>
-
+                        <InputField placeholder='Title' width="100%" setValue={setTitleValue}/>
+                        
                     </VStack>
-
-
                 </HStack>
+
                 <VStack alignItems='flex-start'>
 
                     <Image height="160px" width="160px" marginTop="50px" bg={colors.backgroundGray} />

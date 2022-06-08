@@ -45,6 +45,7 @@ const password = passwordValue.loginReducer
   
   const loginApi = process.env.REACT_APP_AUTH_API;
   const loginInfo = JSON.stringify({ email, password });
+  console.log(loginInfo)
 
 
   const handleLogin = async () => {

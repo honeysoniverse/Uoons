@@ -2,9 +2,16 @@
 const loginReducer = (state="", action) => {
     switch (action.type) {
       case "setPassword":
-        return(state = action.payload)
+        return {
+          ...state,
+          DataSuccess: action.payload
+        }
+          
       case "setEmail":
-          return (state = action.payload)
+        return {
+          ...state,
+          DataSuccess: action.payload
+        }
       default:
         return state;
     }
