@@ -37,29 +37,29 @@ const Login = ({ setIsAuthenticated, setShowImg }) => {
   const {setEmailValue}=bindActionCreators(actioncreator,dispatch);
   const {setPasswordValue}=bindActionCreators(actioncreator,dispatch);
  
-const email = emailValue.loginReducer
-const password = passwordValue.loginReducer
+const email = emailValue.loginReducer.email
+const password = passwordValue.loginReducer.password
 
 
   const isMdBreakpoint = useBreakpointValue({ base: false, md: true });
   
   const loginApi = process.env.REACT_APP_AUTH_API;
   const loginInfo = JSON.stringify({ email, password });
-  console.log(loginInfo)
+  // console.log(loginInfo)
 
 
   const handleLogin = async () => {
-    // const response = await axios.post(`${loginApi}`, loginInfo, {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // });
-    // const responseData = JSON.stringify(response.data);
-    // localStorage.setItem('LoginData', responseData);
-    // const localData = (JSON.parse(localStorage.getItem('LoginData')));
+    const response = await axios.post(`${loginApi}`, loginInfo, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const responseData = JSON.stringify(response.data);
+    localStorage.setItem('LoginData', responseData);
+    const localData = (JSON.parse(localStorage.getItem('LoginData')));
   
-  // if(response.data.status === 'success') setIsAuthenticated(true);
-  setIsAuthenticated(true);
+  if(response.data.status === 'success') setIsAuthenticated(true);
+  // setIsAuthenticated(true);
   };
 
   return (

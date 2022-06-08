@@ -1,28 +1,49 @@
-const addProductReducer = (state = "", action) => {
+const addProductReducer = (state = {
+    category: "",
+    subCategory: "",
+    title: "",
+    salePrice: "",
+    offerPrice: "",
+    mrpPrice: "",
+    description: "",
+    returnPolicy: "",
+    additionalInformationTitle: "",
+    additionalInformationDescription: "",
+    salientFeature: ""
+
+}, action) => {
     switch (action.type) {
 
         case "setCategory":
-            return (state =action.payload)
+            return state = { ...state, category: action.payload }
         case "setSubCategory":
-            return (state = action.payload)
+            return state = { ...state, subCategory: action.payload }
         case "setTitle":
-            return (state = action.payload)
+            return state = { ...state, title: action.payload }
+
         case "setSale":
-            return (state = action.payload)
+            return state = { ...state, salePrice: action.payload }
+
         case "setOffer":
-            return (state = action.payload)
+            return state = { ...state, offerPrice: action.payload }
+
         case "setMrp":
-            return (state = action.payload)
+            return state = { ...state, mrpPrice: action.payload }
+
         case "setDescription":
-            return (state = action.payload)
+            return state = { ...state, description: action.payload }
+
         case "setReturnPolicy":
-            return (state = action.payload)
+            return state = { ...state, returnPolicy: action.payload }
+
         case "setAdditionalInfoTitle":
-            return (state = action.payload)
+            return state = { ...state, additionalInformationTitle: action.payload }
+
         case "setAdditionalInfoDesc":
-            return (state = action.payload)
+            return state = { ...state, additionalInformationDescription: action.payload }
+
         case "setSalientFeatures":
-            return (state = action.payload)
+            return state = { ...state, salientFeature: action.payload }
         default:
             return state;
     }

@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import { Box,Text,HStack,Select,Image,FormLabel,VStack,Textarea,} from '@chakra-ui/react';
+import { Box,Text,HStack,Select,Image,FormLabel,VStack,Textarea} from '@chakra-ui/react';
 import { colors } from '../../resources/colors';
 import InputField from '../InputField';
 import Button from '../Button';
@@ -10,11 +10,25 @@ import { actioncreator } from '../../state/action-creators/combinactioncreator';
 import {bindActionCreators} from "redux";
 import axios from 'axios';
 
+
 const AddProduct = () => {
 
-    const categoryApi = process.env.REACT_APP_CATEGORY_API;
+    
+    const [inputFieldList, setInputField] = useState([]);
+    const [salientFeature, setSalientFeature] = useState([]);
+    const [showDescLabel, setShowDescLabel] = useState(false)
+    const [showLabel, setShowLabel] = useState(false);
+    const [categoryApiData, setCategoryApiData] = useState([])
+    const [subCategoryApiData, setSubCategoryApiData] = useState([])
+    const [categoryId, setCategoryId] = useState("")
 
-    console.log(categoryApi)
+
+    
+
+    const categoryApi = process.env.REACT_APP_CATEGORY_API;
+    const subCategoryApi = process.env.REACT_APP_SUB_CATEGORY_API;
+
+   
 
   const dispatch = useDispatch()
 
@@ -30,17 +44,17 @@ const AddProduct = () => {
     const salientFeaturesValue = useSelector(state=>state);
     const returnPolicyValue = useSelector(state=>state);
 
-    const categoryData=categoryValue.addProductReducer
-    const subCategoryData=subCategoryValue.addProductReducer
-    const titleData=titleValue.addProductReducer
-    const salePriceData=salePriceValue.addProductReducer
-    const offerPriceData=offerPriceValue.addProductReducer
-    const mrpPriceData=mrpValue.addProductReducer
-    const descriptionData=descriptionValue.addProductReducer
-    const additionalInfoTitleData=additionalInfoTitleValue.addProductReducer
-    const additionalInfoDescData=additionalInforDescValue.addProductReducer
-    const salientFeatureData=salientFeaturesValue.addProductReducer
-    const returnPolicyData=returnPolicyValue.addProductReducer
+    const categoryData=categoryValue.addProductReducer.category
+    const subCategoryData=subCategoryValue.addProductReducer.subCategory
+    const titleData=titleValue.addProductReducer.title
+    const salePriceData=salePriceValue.addProductReducer.salePrice
+    const offerPriceData=offerPriceValue.addProductReducer.offerPrice
+    const mrpPriceData=mrpValue.addProductReducer.mrpPrice
+    const descriptionData=descriptionValue.addProductReducer.description
+    const additionalInfoTitleData=additionalInfoTitleValue.addProductReducer.additionalInformationTitle
+    const additionalInfoDescData=additionalInforDescValue.addProductReducer.additionalInformationDescription
+    const salientFeatureData=salientFeaturesValue.addProductReducer.salientFeature
+    const returnPolicyData=returnPolicyValue.addProductReducer.returnPolicy
 
     const postData = {
         categoryData,
@@ -50,17 +64,25 @@ const AddProduct = () => {
         offerPriceData,
         mrpPriceData,
         descriptionData,
-        additionalInfoTitleData,
-        additionalInfoDescData,
+        additionalInformation: {
+            additionalInfoTitleData,
+            additionalInfoDescData
+            
+        },
+      
         salientFeatureData,
         returnPolicyData
-    }
-
-    
+    }    
     const {setCategoryValue, setSubCategoryValue, setTitleValue, setSalePrice, setOfferPrice, setMrpPrice, setDescriptionValue, setReturnPolicyValue,
     setAdditionalInfoTitle, setAdditionalInfoDesc, setSalientFeatures} = bindActionCreators(actioncreator,dispatch);
 
-    const handlesetCategoryValue=(e) => setCategoryValue(e.target.value)
+    const handlesetCategoryValue=async(e) => {
+         setCategoryValue(e.target.value); 
+        for (let i=0; i<categoryApiData.length; i++) {
+            if(e.target.value === categoryApiData[i].categoryName) setCategoryId(categoryApiData[i].catId)
+        }
+    }
+
     
     const handlesetSubCategoryValue=(e) =>setSubCategoryValue(e.target.value)
 
@@ -69,10 +91,6 @@ const AddProduct = () => {
     const getReturnPolicy =(e)=>setReturnPolicyValue(e.target.value)
 
 
-    const [inputFieldList, setInputField] = useState([]);
-    const [salientFeature, setSalientFeature] = useState([]);
-    const [showDescLabel, setShowDescLabel] = useState(false)
-    const [showLabel, setShowLabel] = useState(false);
   
     const handleOnClick = () => {
         setShowLabel(true)
@@ -92,19 +110,32 @@ const AddProduct = () => {
 
     const handleFormData=()=> console.log(postData)
 
+    //Fetch category
+
     const fetchCategory =async() => {
-        const response = await axios.get('http://13.233.1.96:9092/product/category/getAllCategories',{
+        const response = await axios.get(categoryApi,{
               headers: {
                 'Content-Type': 'application/json',
               }})
-        console.log(response)
+        setCategoryApiData(response.data.data)
+    }
+
+    //Fetch Sub-Category
+
+const fetchSubCatgeory = async()=>{
+
+    const response = await axios.get(`${subCategoryApi}/${categoryId}`,{
+        headers: {
+          'Content-Type': 'application/json',
+        }})
+        setSubCategoryApiData(response.data.data)
     }
 
     useEffect(() => {
       
         fetchCategory()
-      
-    }, [])
+        fetchSubCatgeory()
+    }, [categoryId])
     
     return (
         <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
@@ -116,18 +147,18 @@ const AddProduct = () => {
                     <VStack>
                         <FormLabel>Select Category</FormLabel>
                         <Select placeholder="Select Categories" bg={colors.backgroundGray} width="100%" onChange={handlesetCategoryValue}>
-                            <option value="One">One</option>
-                            <option value="Two">Two</option>
-                            <option value="Three">Three</option>
+                        { categoryApiData.map((item)=>{
+                            return <option value={item.categoryName} key={item.catId}>{item.categoryName}</option>
+                        })}
                         </Select>
                     </VStack>
 
                     <VStack alignItems="flex-start" >
                         <FormLabel>Select Sub-Category</FormLabel>
                         <Select placeholder="Select Sub-Categories" width="100%" bg={colors.backgroundGray} onChange={handlesetSubCategoryValue}>
-                            <option value="One">One</option>
-                            <option value="Two">Two</option>
-                            <option value="Three">Three</option>
+                            { subCategoryApiData?.map((item)=>{
+                                return <option value={item.subCategoryName} key={item.subCatId}>{item.subCategoryName}</option>
+                            })}
                         </Select>
                     </VStack>
                     <VStack alignItems="flex-start">

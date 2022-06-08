@@ -1,17 +1,13 @@
 
-const loginReducer = (state="", action) => {
+const loginReducer = (state={email:"",password:""}, action) => {
     switch (action.type) {
-      case "setPassword":
-        return {
-          ...state,
-          DataSuccess: action.payload
-        }
-          
       case "setEmail":
-        return {
-          ...state,
-          DataSuccess: action.payload
-        }
+        return   state={...state, email:action.payload}
+        
+        case "setPassword":
+        return   state={...state, password:action.payload}
+          
+          
       default:
         return state;
     }
