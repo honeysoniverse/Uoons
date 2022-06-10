@@ -237,10 +237,6 @@ const AddProduct = () => {
                     </VStack >
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>Title</FormLabel>
-                        <Input ref={formInputRef} onChange={grabVal}/>
-                        <Select ref={formInputRef} placeholder="select" onChange={grabVal}>
-                            <option value="hey" ref={formInputRef}>Hey</option>
-                            </Select>
                         <InputField placeholder='Title' setValue={setTitleValue} />
 
                     </VStack>
