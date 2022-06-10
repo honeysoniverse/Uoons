@@ -31,6 +31,12 @@ export const getMainMenu = () => [
     icon: FaProductHunt,
   },
   {
+    path: pathNames.categories,
+    label: 'Categories',
+    icon: FaProductHunt,
+  },
+
+  {
     path: pathNames.analytics,
     label: 'Analytics',
     icon: FaSlideshare,

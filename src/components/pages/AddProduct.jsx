@@ -14,7 +14,12 @@ import axios from 'axios';
 const AddProduct = () => {
     const inputFieldRef = React.useRef(null);
     const multiUploadInputRef = React.useRef(null);
+    const formInputRef = React.useReducer(null);
 
+    const grabVal = () => {
+        console.log(formInputRef.current.value)
+        console.log(formInputRef.current)
+    }
 
     const [inputFieldList, setInputField] = useState([]);
     const [salientFeature, setSalientFeature] = useState([]);
@@ -23,14 +28,17 @@ const AddProduct = () => {
     const [categoryApiData, setCategoryApiData] = useState([])
     const [subCategoryApiData, setSubCategoryApiData] = useState([])
     const [categoryId, setCategoryId] = useState("")
+    const [subCategoryId, setSubCategoryId] = useState("")
     const [file, setFile] = useState();
     const [multiFile, setMultiFile] = useState([])
-  
+
 
 
     const categoryApi = process.env.REACT_APP_CATEGORY_API;
     const subCategoryApi = process.env.REACT_APP_SUB_CATEGORY_API;
     const postDataApi = process.env.REACT_APP_POSTDATA_API;
+    const sellerId_LOC = localStorage.getItem("LoginData")
+    const sellerId = JSON.parse(sellerId_LOC).data.userId
 
     const dispatch = useDispatch()
 
@@ -41,40 +49,38 @@ const AddProduct = () => {
     const offerPriceValue = useSelector(state => state);
     const mrpValue = useSelector(state => state);
     const descriptionValue = useSelector(state => state);
+    const additionalInformationValue = useSelector(state => state);
     const additionalInfoTitleValue = useSelector(state => state);
     const additionalInforDescValue = useSelector(state => state);
     const salientFeaturesValue = useSelector(state => state);
     const returnPolicyValue = useSelector(state => state);
 
-    const categoryData = categoryValue.addProductReducer.category
-    const subCategoryData = subCategoryValue.addProductReducer.subCategory
-    const titleData = titleValue.addProductReducer.title
-    const salePriceData = salePriceValue.addProductReducer.salePrice
-    const offerPriceData = offerPriceValue.addProductReducer.offerPrice
-    const mrpPriceData = mrpValue.addProductReducer.mrpPrice
-    const descriptionData = descriptionValue.addProductReducer.description
-    const additionalInfoTitleData = additionalInfoTitleValue.addProductReducer.additionalInformationTitle
-    const additionalInfoDescData = additionalInforDescValue.addProductReducer.additionalInformationDescription
-    const salientFeatureData = salientFeaturesValue.addProductReducer.salientFeature
-    const returnPolicyData = returnPolicyValue.addProductReducer.returnPolicy
+    // const categoryData = categoryValue.addProductReducer.category
+    // const subCategoryData = subCategoryValue.addProductReducer.subCategory
+    const title = titleValue.addProductReducer.title
+    const sale_price = salePriceValue.addProductReducer.salePrice
+    const offer_price = offerPriceValue.addProductReducer.offerPrice
+    const MRP = mrpValue.addProductReducer.mrpPrice
+    const description = descriptionValue.addProductReducer.description
+    const additionalInformation = additionalInformationValue.addProductReducer.additionalInformation
+    // const additionalInfoDescTitle = additionalInfoTitleValue.addProductReducer.additionalInformationTitle
+    // const additionalInfoDescData = additionalInforDescValue.addProductReducer.additionalInformationDescription
+    const salientFeaturess = salientFeaturesValue.addProductReducer.salientFeature
+    const returnPolicy = returnPolicyValue.addProductReducer.returnPolicy
 
     const postData = {
-        categoryData,
-        subCategoryData,
-        titleData,
-        salePriceData,
-        offerPriceData,
-        mrpPriceData,
-        descriptionData,
-        additionalInformation: {
-            additionalInfoTitleData,
-            additionalInfoDescData
-
-        },
-
-        salientFeatureData,
-        returnPolicyData
+        // categoryData,
+        // subCategoryData,
+        title,
+        sale_price,
+        offer_price,
+        MRP,
+        description,
+        additionalInformation,
+        salientFeaturess,
+        returnPolicy
     }
+    // console.log(postData)
     const { setCategoryValue, setSubCategoryValue, setTitleValue, setSalePrice, setOfferPrice, setMrpPrice, setDescriptionValue, setReturnPolicyValue,
         setAdditionalInfoTitle, setAdditionalInfoDesc, setSalientFeatures } = bindActionCreators(actioncreator, dispatch);
 
@@ -86,7 +92,13 @@ const AddProduct = () => {
     }
 
 
-    const handlesetSubCategoryValue = (e) => setSubCategoryValue(e.target.value)
+    const handlesetSubCategoryValue = async (e) => {
+        setSubCategoryValue(e.target.value)
+        for (let i = 0; i < subCategoryApiData.length; i++) {
+            console.log()
+            if (e.target.value === subCategoryApiData[i].subCategoryName) setSubCategoryId(subCategoryApiData[i].subcatId)
+        }
+    }
 
     const getDescription = (e) => setDescriptionValue(e.target.value)
 
@@ -102,6 +114,7 @@ const AddProduct = () => {
                 <InputField setValue={setAdditionalInfoDesc} />
             </HStack>]])
     }
+    console.log(inputFieldList)
 
     const handleRemove = () => setInputField(inputFieldList.slice(0, -1))
 
@@ -111,33 +124,11 @@ const AddProduct = () => {
     }
 
     //POST API CALL
-    const saveProduct = async () => {
-        
-        console.log(imagesArray)
-        const response = await axios.post(`${postDataApi}`, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: postData,
-        })
-        console.log(response)
-        // const responseData = JSON.stringify(response.data);
 
-        const formData = new FormData();
-        formData.append('mainImage', file);
-
-		formData.append('multiImage', multiFile);
-
-	// const imageRes = await axios.post('https://freeimage.host/api/1/upload?key=<YOUR_API_KEY>',
-	// 		{
-	// 			body: formData,
-	// 		})
-
-    }
 
     const handleFormData = () => {
         console.log(postData)
-         saveProduct()
+        saveProduct()
     }
 
     //Fetch category
@@ -155,7 +146,7 @@ const AddProduct = () => {
 
     const fetchSubCatgeory = async () => {
 
-        const response = await axios.get(`${subCategoryApi}/${categoryId}`, {
+        const response = await axios.get(`${subCategoryApi}${categoryId}`, {
             headers: {
                 'Content-Type': 'application/json',
             }
@@ -177,27 +168,47 @@ const AddProduct = () => {
     const multiFileUpload = () => {
         multiUploadInputRef.current.click()
     }
- 
-    const images = [];
-    const imagesArray = [];
+
+    let images = [];
+    let imagesArray = [];
 
     const handleMultiSelected = (e) => {
         images.push(e.target.files)
-        for (let i = 0; i < e.target.files.length; i++) {
-            imagesArray.push(URL.createObjectURL(e.target.files[i]));
-        
+        for (let i = 0; i < images[0].length; i++) {
+            imagesArray.push(URL.createObjectURL(images[0][i]));
         }
-    console.log(imagesArray)
-}
+        setMultiFile(imagesArray)
+        // console.log(imagesArray)
+    }
 
-console.log(multiFile)
+    console.log(multiFile)
 
     useEffect(() => {
 
         fetchCategory()
         fetchSubCatgeory()
-        
+
     }, [categoryId])
+
+    const saveProduct = async () => {
+
+        const response = await axios.post(`${postDataApi}/${categoryId}/${subCategoryId}/${sellerId}`, JSON.stringify(postData), {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+        )
+        console.log(response)
+        // const responseData = JSON.stringify(response.data);
+
+        const formData = new FormData();
+        formData.append('mainImage', file);
+
+        formData.append('multiImage', multiFile);
+        // for (var [key, value] of formData.entries()) { 
+        //     console.log(key, value);
+        //   }
+    }
 
 
     return (
@@ -226,6 +237,10 @@ console.log(multiFile)
                     </VStack >
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>Title</FormLabel>
+                        <Input ref={formInputRef} onChange={grabVal}/>
+                        <Select ref={formInputRef} placeholder="select" onChange={grabVal}>
+                            <option value="hey" ref={formInputRef}>Hey</option>
+                            </Select>
                         <InputField placeholder='Title' setValue={setTitleValue} />
 
                     </VStack>
@@ -240,11 +255,12 @@ console.log(multiFile)
                     </Box>
                     <Box>
                         <ChakraButton height="100px" width="300px" border="1px dashed gray" fontSize="14px" onClick={multiFileUpload}>+ Add File</ChakraButton>
-                        <Input type="file" style={{ display: 'none' }} ref={multiUploadInputRef} onChange={handleMultiSelected} accept="image/*" />
-                        {/* {imagesArray?.map((item)=>{
-                            <Image src={item.multiFile} height="200px" width="200px" objectFit="cover" />
-
-                        })} */}
+                        <Input type="file" style={{ display: 'none' }} ref={multiUploadInputRef} onChange={handleMultiSelected} accept="image/*" multiple />
+                        <ul>
+                            {multiFile?.map((item) => {
+                                return <Image src={item} height="200px" width="200px" objectFit="cover" />
+                            })}
+                        </ul>
                     </Box>
                 </HStack>
 

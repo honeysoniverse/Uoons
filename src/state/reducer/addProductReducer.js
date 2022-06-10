@@ -7,8 +7,10 @@ const addProductReducer = (state = {
     mrpPrice: "",
     description: "",
     returnPolicy: "",
-    additionalInformationTitle: "",
-    additionalInformationDescription: "",
+    additionalInformation: [{
+        additionalInfoDescTitle: "",
+        additionalInfoDescData: "",
+    }],
     salientFeature: ""
 
 }, action) => {
@@ -37,10 +39,24 @@ const addProductReducer = (state = {
             return state = { ...state, returnPolicy: action.payload }
 
         case "setAdditionalInfoTitle":
-            return state = { ...state, additionalInformationTitle: action.payload }
+            return state = { ...state, 
+                additionalInformation: [
+                ...state.additionalInformation, 
+                {
+                    additionalInfoDescTitle: state.additionalInfoDescTitle,
+                    action: action.payload
 
-        case "setAdditionalInfoDesc":
-            return state = { ...state, additionalInformationDescription: action.payload }
+                }
+            ]} 
+
+        // case "setAdditionalInfoDesc":
+        //     return state = { ...state, additionalInformation: [
+        //         ...state.additionalInformation, {
+        //             additionalInfoDescTitle: additionalInfoDescTitle,
+        //             additionalInfoDescData: action.payload
+
+        //         }
+        //     ]} 
 
         case "setSalientFeatures":
             return state = { ...state, salientFeature: action.payload }
