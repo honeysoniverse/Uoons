@@ -28,17 +28,15 @@ const Categories = () => {
     const imageFieldRef = useRef(null);
 
     const postCategoryData = {
-        "catId": 0,
-        "categoryName": "",
-        "image": "",
-        "show": false,
-        "sellerId": 3
+       
+        "categoryName": ""
+        
     }
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [getCategoryApi, setGetCategoryApi] = useState([])
     const [categoryTitle, setCategoryTitle] = useState('')
-    const [categoryImageUpload, setCategoryImageUpload] = useState()
+    const [categoryImageUpload, setCategoryImageUpload] = useState("")
     const [postCategoryApi, setPostCategoryApi] = useState(postCategoryData)
 
 
@@ -65,19 +63,20 @@ const Categories = () => {
 
     }
   
-    const saveCategory = async()=>{
+    const saveCategory = async(e)=>{
     
         console.log("save category");
         console.log(postCategoryApi)
-
+        console.log(e.target.files[0])
         const formData = new FormData();
         formData.append("categoryImageUpload", categoryImageUpload)
+        formData.append("image",e.target.files[0])
         console.log(typeof formData)
 
         const response = await axios.post(`${postCategory}/${sellerId}`, postCategoryApi, formData, {
             headers: {
               'Content-Type': 'application/json',
-            },
+            }
           });
           console.log(response)
     }
