@@ -14,12 +14,18 @@ import axios from 'axios';
 const AddProduct = () => {
     const inputFieldRef = React.useRef(null);
     const multiUploadInputRef = React.useRef(null);
-    const formInputRef = React.useReducer(null);
 
-    const grabVal = () => {
-        console.log(formInputRef.current.value)
-        console.log(formInputRef.current)
+    const initProductState = {
+        description:"abc",
+        salientFeaturess:[],
+        returnPolicy:"abc",
+        title:"abc",
+        MRP:10,
+        offer_price:10,
+        sale_price:10,
+        additionalInformation:[]
     }
+   
 
     const [inputFieldList, setInputField] = useState([]);
     const [salientFeature, setSalientFeature] = useState([]);
@@ -31,7 +37,7 @@ const AddProduct = () => {
     const [subCategoryId, setSubCategoryId] = useState("")
     const [file, setFile] = useState();
     const [multiFile, setMultiFile] = useState([])
-
+    const [productDetail, setProductDetail]= useState(initProductState)
 
 
     const categoryApi = process.env.REACT_APP_CATEGORY_API;
@@ -42,47 +48,46 @@ const AddProduct = () => {
 
     const dispatch = useDispatch()
 
-    const categoryValue = useSelector(state => state);
-    const subCategoryValue = useSelector(state => state);
-    const titleValue = useSelector(state => state);
-    const salePriceValue = useSelector(state => state);
-    const offerPriceValue = useSelector(state => state);
-    const mrpValue = useSelector(state => state);
-    const descriptionValue = useSelector(state => state);
-    const additionalInformationValue = useSelector(state => state);
-    const additionalInfoTitleValue = useSelector(state => state);
-    const additionalInforDescValue = useSelector(state => state);
-    const salientFeaturesValue = useSelector(state => state);
-    const returnPolicyValue = useSelector(state => state);
+    // const categoryValue = useSelector(state => state);
+    // const subCategoryValue = useSelector(state => state);
+    // const titleValue = useSelector(state => state);
+    // const salePriceValue = useSelector(state => state);
+    // const offerPriceValue = useSelector(state => state);
+    // const mrpValue = useSelector(state => state);
+    // const descriptionValue = useSelector(state => state);
+    // const additionalInformationValue = useSelector(state => state);
+    // const additionalInfoTitleValue = useSelector(state => state);
+    // const additionalInforDescValue = useSelector(state => state);
+    // const salientFeaturesValue = useSelector(state => state);
+    // const returnPolicyValue = useSelector(state => state);
 
     // const categoryData = categoryValue.addProductReducer.category
     // const subCategoryData = subCategoryValue.addProductReducer.subCategory
-    const title = titleValue.addProductReducer.title
-    const sale_price = salePriceValue.addProductReducer.salePrice
-    const offer_price = offerPriceValue.addProductReducer.offerPrice
-    const MRP = mrpValue.addProductReducer.mrpPrice
-    const description = descriptionValue.addProductReducer.description
-    const additionalInformation = additionalInformationValue.addProductReducer.additionalInformation
-    // const additionalInfoDescTitle = additionalInfoTitleValue.addProductReducer.additionalInformationTitle
-    // const additionalInfoDescData = additionalInforDescValue.addProductReducer.additionalInformationDescription
-    const salientFeaturess = salientFeaturesValue.addProductReducer.salientFeature
-    const returnPolicy = returnPolicyValue.addProductReducer.returnPolicy
+    // const title = titleValue.addProductReducer.title
+    // const sale_price = salePriceValue.addProductReducer.salePrice
+    // const offer_price = offerPriceValue.addProductReducer.offerPrice
+    // const MRP = mrpValue.addProductReducer.mrpPrice
+    // const description = descriptionValue.addProductReducer.description
+    // const additionalInformation = additionalInformationValue.addProductReducer.additionalInformation
+    // // const additionalInfoDescTitle = additionalInfoTitleValue.addProductReducer.additionalInformationTitle
+    // // const additionalInfoDescData = additionalInforDescValue.addProductReducer.additionalInformationDescription
+    // const salientFeaturess = salientFeaturesValue.addProductReducer.salientFeature
+    // const returnPolicy = returnPolicyValue.addProductReducer.returnPolicy
 
-    const postData = {
-        // categoryData,
-        // subCategoryData,
-        title,
-        sale_price,
-        offer_price,
-        MRP,
-        description,
-        additionalInformation,
-        salientFeaturess,
-        returnPolicy
-    }
+    // const postData = {
+    //     // categoryData,
+    //     // subCategoryData,
+    //     title,
+    //     sale_price,
+    //     offer_price,
+    //     MRP,
+    //     description,
+    //     additionalInformation,
+    //     salientFeaturess,
+    //     returnPolicy
+    // }
     // console.log(postData)
-    const { setCategoryValue, setSubCategoryValue, setTitleValue, setSalePrice, setOfferPrice, setMrpPrice, setDescriptionValue, setReturnPolicyValue,
-        setAdditionalInfoTitle, setAdditionalInfoDesc, setSalientFeatures } = bindActionCreators(actioncreator, dispatch);
+    const { setCategoryValue, setSubCategoryValue } = bindActionCreators(actioncreator, dispatch);
 
     const handlesetCategoryValue = async (e) => {
         setCategoryValue(e.target.value);
@@ -100,34 +105,67 @@ const AddProduct = () => {
         }
     }
 
-    const getDescription = (e) => setDescriptionValue(e.target.value)
+    const getDescription = (e) => setProductDetail(prev =>({...prev, description:e.target.value}))
+    const getTitle = (e) => setProductDetail(prev=>({...prev, title:e}))
+    const getReturnPolicy = (e) => setProductDetail(prev =>({...prev, returnPolicy:e.target.value}))
+    const getMRP = (e) => setProductDetail(prev =>({...prev, MRP:e}))
+    const getSalePrice= (e) => setProductDetail(prev =>({...prev, sale_price:e}))
+    const getOfferPrice= (e) => setProductDetail(prev =>({...prev, offer_price:e}))
+    const getAdditionalInfoTitle = (title, index) =>{
+        let updatedAdditionalInfo = [...productDetail.additionalInformation];
+        updatedAdditionalInfo[index].getAdditionalInfoTitle = title;
+        setProductDetail(prev =>({...prev, additionalInformation:updatedAdditionalInfo}));
+    }
 
-    const getReturnPolicy = (e) => setReturnPolicyValue(e.target.value)
+    const getAdditionalInfoDesc = (title, index) =>{
+        let updatedAdditionalInfo = [...productDetail.additionalInformation];
+        updatedAdditionalInfo[index].additionalInfoDescData = title;
+        setProductDetail(prev=>({...prev, additionalInformation:updatedAdditionalInfo}))
+    }
 
 
 
     const handleOnClick = () => {
         setShowLabel(true)
-        setInputField([...inputFieldList, [
-            <HStack>
-                <InputField setValue={setAdditionalInfoTitle} />
-                <InputField setValue={setAdditionalInfoDesc} />
-            </HStack>]])
+        let id=0;
+        setProductDetail(prevState => ({...prevState, 
+        additionalInformation: [...prevState.additionalInformation,{
+            id:id++,
+            additionalInfoDescData:"",
+            additionalInfoDescTitle:""
+        }]
+    }));
     }
-    console.log(inputFieldList)
+    
 
-    const handleRemove = () => setInputField(inputFieldList.slice(0, -1))
+    const handleRemove = () => {
+        if(productDetail.additionalInformation.length<=1){
+            setShowLabel(false)
+        }
+        let updatedAdditionalInfo = [...productDetail.additionalInformation];
+        updatedAdditionalInfo.splice(-1);
+        setProductDetail(prev =>({...prev, additionalInformation:updatedAdditionalInfo}))
+    }
 
     const salientOnClick = () => {
         setShowDescLabel(true)
-        setSalientFeature([...salientFeature, [<HStack><Textarea onChange={(e) => setSalientFeatures(e.target.value)} /></HStack>]])
+       setProductDetail(prevState=>({
+        ...prevState,
+        salientFeaturess:[...prevState.salientFeaturess,""]
+       }));
+    }
+
+    const getSalientFeature = (e, index)=>{
+        let updatedAreas = [...productDetail.salientFeaturess];
+        updatedAreas[index] = e.target.value;
+        setProductDetail(prev=>({...prev, salientFeaturess:updatedAreas}))
     }
 
     //POST API CALL
 
 
     const handleFormData = () => {
-        console.log(postData)
+       
         saveProduct()
     }
 
@@ -181,7 +219,7 @@ const AddProduct = () => {
         // console.log(imagesArray)
     }
 
-    console.log(multiFile)
+    // console.log(multiFile)
 
     useEffect(() => {
 
@@ -192,14 +230,15 @@ const AddProduct = () => {
 
     const saveProduct = async () => {
 
-        const response = await axios.post(`${postDataApi}/${categoryId}/${subCategoryId}/${sellerId}`, JSON.stringify(postData), {
+        const response = await axios.post(`${postDataApi}/${categoryId}/${subCategoryId}/${sellerId}`, productDetail, {
             headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             }
         }
         )
         console.log(response)
-        // const responseData = JSON.stringify(response.data);
+        // const responseData = (response.data);
 
         const formData = new FormData();
         formData.append('mainImage', file);
@@ -237,14 +276,13 @@ const AddProduct = () => {
                     </VStack >
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>Title</FormLabel>
-                        <InputField placeholder='Title' setValue={setTitleValue} />
+                        <InputField placeholder='Title' setValue={getTitle} />
 
                     </VStack>
                 </HStack>
 
                 <HStack mt="40px" justifyContent="space-evenly">
                     <Box>
-
                         <ChakraButton height="100px" width="300px" border="1px dashed gray" fontSize="14px" onClick={fileUpload}>Add File</ChakraButton>
                         <Input type="file" style={{ display: 'none' }} ref={inputFieldRef} onChange={handleSelectedFile} accept="image/*" />
                         {file ? <Image src={file} height="200px" width="200px" objectFit="cover" /> : null}
@@ -263,15 +301,15 @@ const AddProduct = () => {
                 <HStack mt='40px' spacing={5}>
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>Sale Price</FormLabel>
-                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={setSalePrice} />
+                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={getSalePrice} />
                     </VStack>
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>Offer Price</FormLabel>
-                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={setOfferPrice} />
+                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={getOfferPrice} />
                     </VStack>
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>MRP</FormLabel>
-                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={setMrpPrice} />
+                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={getMRP} />
                     </VStack>
                 </HStack>
 
@@ -294,7 +332,12 @@ const AddProduct = () => {
                                 <FormLabel mt="8px">Title</FormLabel>
 
                                 <FormLabel >Description</FormLabel></HStack>}
-                            {inputFieldList.map(input => input)}
+                            {productDetail.additionalInformation.map((item, index)=>{
+                                <HStack>
+                                    <InputField setValue={(title)=>getAdditionalInfoTitle(title, index)}/>
+                                    <InputField setValue={(data)=>getAdditionalInfoDesc(data, index)}/>
+                                </HStack>
+                            })}
                         </VStack>
 
                     </VStack>
@@ -311,7 +354,9 @@ const AddProduct = () => {
                             {showDescLabel && <FormLabel mt="8px">Description</FormLabel>}
 
                             <VStack flex="1">
-                                {salientFeature.map(input => input)}
+                                {productDetail.salientFeaturess.map((value, index)=>
+                                  <HStack><Textarea onChange={(value)=>getSalientFeature(value, index)}/></HStack>
+                                )}
                             </VStack>
                         </VStack>
                     </VStack>

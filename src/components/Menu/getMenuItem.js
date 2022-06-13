@@ -10,7 +10,7 @@ import {
   FaFoursquare,
   FaClipboardList,
   FaSlidersH,
-  FaSignOutAlt
+  FaListAlt
 } from 'react-icons/fa';
 import { pathNames } from '../config/pathNames';
 
@@ -33,7 +33,7 @@ export const getMainMenu = () => [
   {
     path: pathNames.categories,
     label: 'Categories',
-    icon: FaProductHunt,
+    icon: FaListAlt,
   },
 
   {

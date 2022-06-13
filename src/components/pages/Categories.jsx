@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-    Box, Text, HStack, Select, Center, Spacer, Input, Flex, Icon,
+    Box, Text, HStack, Select, Center, Spacer, Input, Flex, Icon, Button as ChakraButton, Image,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -13,27 +13,78 @@ import { colors } from '../../resources/colors';
 import InputField from '../InputField';
 import Button from '../Button';
 import { FaSearch, FaEdit, FaTrash } from 'react-icons/fa';
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { actioncreator } from '../../state/action-creators/combinactioncreator';
-import { bindActionCreators } from "redux";
+import { useState, useEffect} from 'react';
+import {useRef} from 'react';
+
 import axios from 'axios';
 
 
 const Categories = () => {
 
+    const postCategory = process.env.REACT_APP_POSTCATEGORY_API;
+    const sellerId_LOC = localStorage.getItem("LoginData");
+    const sellerId = JSON.parse(sellerId_LOC).data.userId;
+
+    const imageFieldRef = useRef(null);
+
+    const postCategoryData = {
+        "catId": 0,
+        "categoryName": "",
+        "image": "",
+        "show": false,
+        "sellerId": 3
+    }
+
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [getCategoryApi, setGetCategoryApi] = useState([])
+    const [categoryTitle, setCategoryTitle] = useState('')
+    const [categoryImageUpload, setCategoryImageUpload] = useState()
+    const [postCategoryApi, setPostCategoryApi] = useState(postCategoryData)
 
 
     const categoryApiData = async()=>{
         const response = await axios.get("",{})
 
     } 
+    
+    const getCategoryTitle = (e) =>{
+        setPostCategoryApi({ ...postCategoryData, categoryName: e })
+        setCategoryTitle(e)
+    }
+
+    // console.log(categoryTitle)
+
+    const categoryFileUpload = ()=>{
+        imageFieldRef.current.click();
+    }
+
+    const handleSelectedCategoryFile = (e) => {
+        console.log(e.target.files[0])
+        setCategoryImageUpload(e.target.files[0]);
+        setPostCategoryApi({ ...postCategoryData, image: e.target.files[0] })
+
+    }
+  
+    const saveCategory = async()=>{
+    
+        console.log("save category");
+        console.log(postCategoryApi)
+
+        const formData = new FormData();
+        formData.append("categoryImageUpload", categoryImageUpload)
+        console.log(typeof formData)
+
+        const response = await axios.post(`${postCategory}/${sellerId}`, postCategoryApi, formData, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          console.log(response)
+    }
 
 
     useEffect(() => {
-
+        saveCategory()
     }, [])
 
 
@@ -109,6 +160,7 @@ const Categories = () => {
                         <Icon as={FaTrash} ml="10px" cursor="pointer"/>
                     </Box>
                 </Flex>
+
                 {/* modal dialogie box */}
 
                 <Modal isOpen={isOpen} onClose={onClose}>
@@ -119,15 +171,17 @@ const Categories = () => {
                         <ModalCloseButton />
                         <ModalBody>
                             <Text>Title</Text>
-                            <InputField />
-                            <Box width="40%" mt="10px" height="140px" bg={colors.backgroundGray}>
-                                <Center>No Image</Center>
-                            </Box>
+                            <InputField setValue={getCategoryTitle} />
+                            <Box>
+                        <ChakraButton height="100px" width="300px" border="1px dashed gray" fontSize="14px" onClick={categoryFileUpload}>Add File</ChakraButton>
+                        <Input type="file" style={{ display: 'none' }} ref={imageFieldRef} onChange={handleSelectedCategoryFile} accept="image/*" />
+                         <Image src={categoryImageUpload} height="200px" width="200px" objectFit="cover" />
+                         </Box>
                         </ModalBody>
                         <hr />
                         <ModalFooter>
 
-                            <Button name="Save"></Button>&nbsp;&nbsp;
+                            <Button name="Save" handleOnClick={saveCategory}></Button>&nbsp;&nbsp;
                             <Button name="Close" handleOnClick={onClose}></Button>
 
                         </ModalFooter>
