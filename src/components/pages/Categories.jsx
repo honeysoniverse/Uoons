@@ -27,30 +27,30 @@ const Categories = () => {
 
     const imageFieldRef = useRef(null);
 
-    const postCategoryData = {
+    // const postCategoryData = {
        
-        "categoryName": ""
+    //     "categoryName": "",
         
-    }
+    // }
+    
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [getCategoryApi, setGetCategoryApi] = useState([])
-    const [categoryTitle, setCategoryTitle] = useState('')
+    const [categoryTitle, setCategoryTitle] = useState("")
     const [categoryImageUpload, setCategoryImageUpload] = useState("")
-    const [postCategoryApi, setPostCategoryApi] = useState(postCategoryData)
-
+    const [postCategoryApi, setPostCategoryApi] = useState("")
+   console.log(categoryTitle)
 
     const categoryApiData = async()=>{
         const response = await axios.get("",{})
 
     } 
     
-    const getCategoryTitle = (e) =>{
-        setPostCategoryApi({ ...postCategoryData, categoryName: e })
-        setCategoryTitle(e)
-    }
+    // const getCategoryTitle = (e) =>{
+    //     setPostCategoryApi({ ...postCategoryApi, categoryName: e})
+    // }
 
-    // console.log(categoryTitle)
+    
 
     const categoryFileUpload = ()=>{
         imageFieldRef.current.click();
@@ -59,32 +59,39 @@ const Categories = () => {
     const handleSelectedCategoryFile = (e) => {
         console.log(e.target.files[0])
         setCategoryImageUpload(e.target.files[0]);
-        setPostCategoryApi({ ...postCategoryData, image: e.target.files[0] })
+        setPostCategoryApi({image: e.target.files[0]})
 
     }
   
     const saveCategory = async(e)=>{
-    
+
+      
+         
         console.log("save category");
         console.log(postCategoryApi)
-        console.log(e.target.files[0])
+        
         const formData = new FormData();
         formData.append("categoryImageUpload", categoryImageUpload)
-        formData.append("image",e.target.files[0])
-        console.log(typeof formData)
-
-        const response = await axios.post(`${postCategory}/${sellerId}`, postCategoryApi, formData, {
+        const postData ={
+            categoryName:categoryTitle,
+            image: formData
+        }
+  console.log(JSON.stringify
+    (postData))
+        const response = await axios.post(`${postCategory}/${sellerId}`, JSON.stringify
+        (postData), {
             headers: {
-              'Content-Type': 'application/json',
-            }
+              'Content-Type': 'multipart/form-data',
+              'Accept':'application/json'
+            },
           });
           console.log(response)
     }
 
 
-    useEffect(() => {
-        saveCategory()
-    }, [])
+    // useEffect(() => {
+    //     saveCategory()
+    // }, [])
 
 
     return (
@@ -170,10 +177,10 @@ const Categories = () => {
                         <ModalCloseButton />
                         <ModalBody>
                             <Text>Title</Text>
-                            <InputField setValue={getCategoryTitle} />
+                            <InputField setValue={setCategoryTitle}  value={categoryTitle}/>
                             <Box>
                         <ChakraButton height="100px" width="300px" border="1px dashed gray" fontSize="14px" onClick={categoryFileUpload}>Add File</ChakraButton>
-                        <Input type="file" style={{ display: 'none' }} ref={imageFieldRef} onChange={handleSelectedCategoryFile} accept="image/*" />
+                        <Input type="file" style={{ display: 'none' }} ref={imageFieldRef} onChange={handleSelectedCategoryFile}  />
                          <Image src={categoryImageUpload} height="200px" width="200px" objectFit="cover" />
                          </Box>
                         </ModalBody>

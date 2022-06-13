@@ -10,21 +10,20 @@ import { actioncreator } from '../../state/action-creators/combinactioncreator';
 import { bindActionCreators } from "redux";
 import axios from 'axios';
 
-
 const AddProduct = () => {
     const inputFieldRef = React.useRef(null);
     const multiUploadInputRef = React.useRef(null);
 
     const initProductState = {
-        description:"abc",
+        description: "abc",
         salientFeaturess:[],
-        returnPolicy:"abc",
-        title:"abc",
+        returnPolicy: "abc",
+        title: "abc",
         MRP:10,
-        offer_price:10,
+        offer_price: 10,
         sale_price:10,
         additionalInformation:[]
-    }
+        }
 
 
     const [inputFieldList, setInputField] = useState([]);
@@ -37,7 +36,8 @@ const AddProduct = () => {
     const [subCategoryId, setSubCategoryId] = useState("")
     const [file, setFile] = useState();
     const [multiFile, setMultiFile] = useState([])
-    const [productDetail, setProductDetail]= useState(initProductState)
+    const [productDetail, setProductDetail] = useState(initProductState)
+
 
 
     const categoryApi = process.env.REACT_APP_CATEGORY_API;
@@ -57,7 +57,7 @@ const AddProduct = () => {
     // const descriptionValue = useSelector(state => state);
     // const additionalInformationValue = useSelector(state => state);
     // const additionalInfoTitleValue = useSelector(state => state);
-    // const additionalInforDescValue = useSelector(state => state);
+    // const additionalInfoDescValue = useSelector(state => state);
     // const salientFeaturesValue = useSelector(state => state);
     // const returnPolicyValue = useSelector(state => state);
 
@@ -69,8 +69,8 @@ const AddProduct = () => {
     // const MRP = mrpValue.addProductReducer.mrpPrice
     // const description = descriptionValue.addProductReducer.description
     // const additionalInformation = additionalInformationValue.addProductReducer.additionalInformation
-    // // const additionalInfoDescTitle = additionalInfoTitleValue.addProductReducer.additionalInformationTitle
-    // // const additionalInfoDescData = additionalInforDescValue.addProductReducer.additionalInformationDescription
+    // const additionalInfoDescTitle = additionalInfoTitleValue.addProductReducer.additionalInformationTitle
+    // const additionalInfoDescData = additionalInfoDescValue.addProductReducer.additionalInformationDescription
     // const salientFeaturess = salientFeaturesValue.addProductReducer.salientFeature
     // const returnPolicy = returnPolicyValue.addProductReducer.returnPolicy
 
@@ -83,6 +83,8 @@ const AddProduct = () => {
     //     MRP,
     //     description,
     //     additionalInformation,
+    //     additionalInfoDescTitle,
+    //     additionalInfoDescData,
     //     salientFeaturess,
     //     returnPolicy
     // }
@@ -96,47 +98,43 @@ const AddProduct = () => {
         }
     }
 
-
     const handlesetSubCategoryValue = async (e) => {
         setSubCategoryValue(e.target.value)
         for (let i = 0; i < subCategoryApiData.length; i++) {
-            console.log()
             if (e.target.value === subCategoryApiData[i].subCategoryName) setSubCategoryId(subCategoryApiData[i].subcatId)
         }
     }
 
-    const getDescription = (e) => setProductDetail(prev =>({...prev, description:e.target.value}))
-    const getTitle = (e) => setProductDetail(prev=>({...prev, title:e}))
-    const getReturnPolicy = (e) => setProductDetail(prev =>({...prev, returnPolicy:e.target.value}))
-    const getMRP = (e) => setProductDetail(prev =>({...prev, MRP:e}))
-    const getSalePrice= (e) => setProductDetail(prev =>({...prev, sale_price:e}))
-    const getOfferPrice= (e) => setProductDetail(prev =>({...prev, offer_price:e}))
-    const getAdditionalInfoTitle = (title, index) =>{
-        let updatedAdditionalInfo = [...productDetail.additionalInformation];
-        updatedAdditionalInfo[index].getAdditionalInfoTitle = title;
-        setProductDetail(prev =>({...prev, additionalInformation:updatedAdditionalInfo}));
+    const getDescription = (e) =>  setProductDetail(prev => ({...prev, description: e.target.value}))
+    const getTitle = (e) =>  setProductDetail(prev => ({...prev, title: e}))
+    const getReturnPolicy = (e) => setProductDetail(prev => ({...prev, returnPolicy: e.target.value}))
+    const getMRP = (mrp) =>  setProductDetail(prev => ({...prev, MRP: mrp}))
+    const getSalePrice = (salePrice) =>  setProductDetail(prev => ({...prev, sale_price: salePrice}))
+    const getOfferPrice = (offerPrice) =>  setProductDetail(prev => ({...prev, offer_price: offerPrice}))
+    const getAdditionalInfoTitle = (title, index) =>  {
+             let updatedAdditionalInfo = [...productDetail.additionalInformation];
+             updatedAdditionalInfo[index].additionalInfoDescTitle = title;
+             setProductDetail(prev => ({...prev, additionalInformation: updatedAdditionalInfo}));
     }
 
-    const getAdditionalInfoDesc = (title, index) =>{
+    const getAdditionalInfoDesc = (title, index) =>  {
         let updatedAdditionalInfo = [...productDetail.additionalInformation];
         updatedAdditionalInfo[index].additionalInfoDescData = title;
-        setProductDetail(prev=>({...prev, additionalInformation:updatedAdditionalInfo}))
+         setProductDetail(prev => ({...prev, additionalInformation: updatedAdditionalInfo}));
     }
-
 
 
     const handleOnClick = () => {
         setShowLabel(true)
-        let id=0;
-        setProductDetail(prevState => ({...prevState, 
-        additionalInformation: [...prevState.additionalInformation,{
-            id:id++,
-            additionalInfoDescData:"",
-            additionalInfoDescTitle:""
-        }]
-    }));
+        // let id = 0;
+        setProductDetail( prevState => ({...prevState,
+            additionalInformation:  [...prevState.additionalInformation,  {
+                // id:id++,
+                additionalInfoDescData: "",
+                additionalInfoDescTitle:""
+                }]
+         }));
     }
-
 
     const handleRemove = () => {
         if(productDetail.additionalInformation.length<=1){
@@ -144,30 +142,25 @@ const AddProduct = () => {
         }
         let updatedAdditionalInfo = [...productDetail.additionalInformation];
         updatedAdditionalInfo.splice(-1);
-        setProductDetail(prev =>({...prev, additionalInformation:updatedAdditionalInfo}))
+        setProductDetail(prev => ({...prev, additionalInformation: updatedAdditionalInfo}));
+       
     }
 
     const salientOnClick = () => {
         setShowDescLabel(true)
-       setProductDetail(prevState=>({
-        ...prevState,
-        salientFeaturess:[...prevState.salientFeaturess,""]
-       }));
-    }
+        setProductDetail( prevState => ({...prevState,
+            salientFeaturess:  [...prevState.salientFeaturess,'']
+         }));
+      }
 
-    const getSalientFeature = (e, index)=>{
-        let updatedAreas = [...productDetail.salientFeaturess];
-        updatedAreas[index] = e.target.value;
-        setProductDetail(prev=>({...prev, salientFeaturess:updatedAreas}))
+  const  getSalientFeature = (e, index) => {
+    let updatedAreas = [...productDetail.salientFeaturess];
+    updatedAreas[index] = e.target.value;
+    setProductDetail(prev => ({...prev, salientFeaturess: updatedAreas}));
     }
-
     //POST API CALL
 
-
-    const handleFormData = () => {
-
-        saveProduct()
-    }
+    const handleFormData = () =>  saveProduct() 
 
     //Fetch category
 
@@ -198,7 +191,7 @@ const AddProduct = () => {
     }
 
     const handleSelectedFile = (e) => {
-        console.log(e.target.files[0])
+      //  console.log(e.target.files[0])
         setFile(URL.createObjectURL(e.target.files[0]));
     }
 
@@ -219,7 +212,7 @@ const AddProduct = () => {
         // console.log(imagesArray)
     }
 
-    // console.log(multiFile)
+   // console.log(multiFile)
 
     useEffect(() => {
 
@@ -229,16 +222,19 @@ const AddProduct = () => {
     }, [categoryId])
 
     const saveProduct = async () => {
+        console.log(">>>>>postData",productDetail)
+        console.log(typeof productDetail.sale_price)
+        console.log(typeof initProductState.sale_price)
 
         const response = await axios.post(`${postDataApi}/${categoryId}/${subCategoryId}/${sellerId}`, productDetail, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
-            }
+            },
         }
         )
         console.log(response)
-        // const responseData = (response.data);
+        // const responseData = JSON.stringify(response.data);
 
         const formData = new FormData();
         formData.append('mainImage', file);
@@ -283,6 +279,7 @@ const AddProduct = () => {
 
                 <HStack mt="40px" justifyContent="space-evenly">
                     <Box>
+
                         <ChakraButton height="100px" width="300px" border="1px dashed gray" fontSize="14px" onClick={fileUpload}>Add File</ChakraButton>
                         <Input type="file" style={{ display: 'none' }} ref={inputFieldRef} onChange={handleSelectedFile} accept="image/*" />
                         {file ? <Image src={file} height="200px" width="200px" objectFit="cover" /> : null}
@@ -332,12 +329,12 @@ const AddProduct = () => {
                                 <FormLabel mt="8px">Title</FormLabel>
 
                                 <FormLabel >Description</FormLabel></HStack>}
-                            {productDetail.additionalInformation.map((item, index)=>{
-                                <HStack>
-                                    <InputField setValue={(title)=>getAdditionalInfoTitle(title, index)}/>
-                                    <InputField setValue={(data)=>getAdditionalInfoDesc(data, index)}/>
-                                </HStack>
-                            })}
+                            {productDetail.additionalInformation.map((item, index) =>
+                             <HStack>
+                             <InputField setValue={(title)=> getAdditionalInfoTitle(title,index)} />
+                             <InputField setValue={(data) => getAdditionalInfoDesc(data, index)} />
+                         </HStack>
+                            )}
                         </VStack>
 
                     </VStack>
@@ -354,9 +351,9 @@ const AddProduct = () => {
                             {showDescLabel && <FormLabel mt="8px">Description</FormLabel>}
 
                             <VStack flex="1">
-                                {productDetail.salientFeaturess.map((value, index)=>
-                                  <HStack><Textarea onChange={(value)=>getSalientFeature(value, index)}/></HStack>
-                                )}
+                                {productDetail.salientFeaturess.map((value, index) => 
+                                    <HStack><Textarea onChange={(value) => getSalientFeature(value,index)} /></HStack>
+                                    )}
                             </VStack>
                         </VStack>
                     </VStack>
@@ -379,4 +376,4 @@ const AddProduct = () => {
     )
 }
 
-export default AddProduct 
+export default AddProduct
