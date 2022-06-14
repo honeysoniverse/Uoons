@@ -22,6 +22,7 @@ import axios from 'axios';
 const Categories = () => {
 
     const postCategory = process.env.REACT_APP_POSTCATEGORY_API;
+    const getAllCategory = process.env.REACT_APP_GETALLCATEGORY_API;
     const sellerId_LOC = localStorage.getItem("LoginData");
     const sellerId = JSON.parse(sellerId_LOC).data.userId;
 
@@ -40,9 +41,13 @@ const Categories = () => {
     const [showSuccessText, setShowSucessText] = useState(false)
 
 
-    const categoryApiData = async () => {
-        const response = await axios.get("", {})
-
+    const getCategoryData = async () => {
+        const response = await axios.get(`${getAllCategory}/${sellerId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        setGetCategoryApi(response.data.data)
     }
 
     const getCategoryTitle = (e) => {
@@ -74,7 +79,7 @@ const Categories = () => {
         console.log(formData)
     
         
-        const response = await fetch(`${postCategory}/${sellerId}`,
+        const response = await fetch(`${postCategory}${sellerId}`,
         {
             method: 'POST',
             body:formData 
@@ -86,6 +91,10 @@ const Categories = () => {
         }
     
     }
+
+    useEffect(()=>{
+        getCategoryData()
+    },[])
 
   
     return (
@@ -135,19 +144,20 @@ const Categories = () => {
                     </Box>
                 </HStack>
                 <Flex>
-                    <Box w="20%" p="2%">
-                        <Center>
+                   
+                <ul> 
+                    
 
-                            <Box bgColor="#fff"
-                                width="100px"
-                                height="100px"
-                                borderRadius="12px"
-                                boxShadow="0px 0px 20px #dfdfdf">
-                            </Box>
+                            {getCategoryApi.map((currElem, index, arr)=>{
+                                
+                                
+                                return ( <li> <Box w="20%" p="2%">
+                                    <Center>
+                                <Box><img src={currElem.image}/></Box>
                         </Center>
                     </Box>
                     <Box w="20%" p="2%" color="black">
-                        <Center>Atta</Center>
+                        <Center>{currElem.categoryName}</Center>
                     </Box>
                     <Box w="20%" p="2%" color="black">
                         <Center><Button name="View Products"></Button></Center>
@@ -158,7 +168,10 @@ const Categories = () => {
                     <Box w="20%" p="3%">
 
                         <Icon as={FaTrash} ml="10px" cursor="pointer" />
-                    </Box>
+                        </Box>
+                         </li> )})}
+                        </ul>
+                    
                 </Flex>
 
                 {/* modal dialogie box */}

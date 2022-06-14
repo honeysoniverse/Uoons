@@ -223,13 +223,14 @@ const AddProduct = () => {
     }, [categoryId])
 
     const saveProduct = async () => {
-        console.log(">>>>>postData",productDetail)
-        console.log(typeof productDetail.sale_price)
-        console.log(typeof initProductState.sale_price)
+        // console.log(">>>>>postData",productDetail)
+        // console.log(typeof productDetail.sale_price)
+        // console.log(typeof initProductState.sale_price)
 
         const formData = new FormData();
         formData.append('mainImage', file);
         formData.append('multiImage', multiFile);
+        console.log(formData)
 
         const response = await axios.post(`${postDataApi}/${categoryId}/${subCategoryId}/${sellerId}`, productDetail, formData, {
             headers: {
