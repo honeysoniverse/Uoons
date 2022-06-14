@@ -22,7 +22,9 @@ const AddProduct = () => {
         MRP:10,
         offer_price: 10,
         sale_price:10,
-        additionalInformation:[]
+        additionalInformation:[],
+        image:"",
+        multipleImage:'',
         }
 
 
@@ -111,6 +113,7 @@ const AddProduct = () => {
     const getMRP = (mrp) =>  setProductDetail(prev => ({...prev, MRP: mrp}))
     const getSalePrice = (salePrice) =>  setProductDetail(prev => ({...prev, sale_price: salePrice}))
     const getOfferPrice = (offerPrice) =>  setProductDetail(prev => ({...prev, offer_price: offerPrice}))
+    
     const getAdditionalInfoTitle = (title, index) =>  {
              let updatedAdditionalInfo = [...productDetail.additionalInformation];
              updatedAdditionalInfo[index].additionalInfoDescTitle = title;
@@ -126,10 +129,8 @@ const AddProduct = () => {
 
     const handleOnClick = () => {
         setShowLabel(true)
-        // let id = 0;
         setProductDetail( prevState => ({...prevState,
             additionalInformation:  [...prevState.additionalInformation,  {
-                // id:id++,
                 additionalInfoDescData: "",
                 additionalInfoDescTitle:""
                 }]
@@ -226,7 +227,11 @@ const AddProduct = () => {
         console.log(typeof productDetail.sale_price)
         console.log(typeof initProductState.sale_price)
 
-        const response = await axios.post(`${postDataApi}/${categoryId}/${subCategoryId}/${sellerId}`, productDetail, {
+        const formData = new FormData();
+        formData.append('mainImage', file);
+        formData.append('multiImage', multiFile);
+
+        const response = await axios.post(`${postDataApi}/${categoryId}/${subCategoryId}/${sellerId}`, productDetail, formData, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -236,13 +241,10 @@ const AddProduct = () => {
         console.log(response)
         // const responseData = JSON.stringify(response.data);
 
-        const formData = new FormData();
-        formData.append('mainImage', file);
-
-        formData.append('multiImage', multiFile);
-        // for (var [key, value] of formData.entries()) { 
-        //     console.log(key, value);
-        //   }
+       
+        for (var [key, value] of formData.entries()) { 
+            console.log(key, value);
+          }
     }
 
 

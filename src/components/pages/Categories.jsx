@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-    Box, Text, HStack, Select, Center, Spacer, Input, Flex, Icon, Button as ChakraButton, Image,
+    Box, Text, HStack, Select, Center, Spacer, Input, Flex, Icon, Button as ChakraButton, Image, VStack,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -13,8 +13,8 @@ import { colors } from '../../resources/colors';
 import InputField from '../InputField';
 import Button from '../Button';
 import { FaSearch, FaEdit, FaTrash } from 'react-icons/fa';
-import { useState, useEffect} from 'react';
-import {useRef} from 'react';
+import { useState, useEffect } from 'react';
+import { useRef } from 'react';
 
 import axios from 'axios';
 
@@ -27,73 +27,67 @@ const Categories = () => {
 
     const imageFieldRef = useRef(null);
 
-    // const postCategoryData = {
-       
-    //     "categoryName": "",
-        
-    // }
-    
+    const postCategoryData = {
+
+        category: ""
+    }
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [getCategoryApi, setGetCategoryApi] = useState([])
     const [categoryTitle, setCategoryTitle] = useState("")
     const [categoryImageUpload, setCategoryImageUpload] = useState("")
-    const [postCategoryApi, setPostCategoryApi] = useState("")
-   console.log(categoryTitle)
+    const [postCategoryApi, setPostCategoryApi] = useState(postCategoryData)
+    const [showSuccessText, setShowSucessText] = useState(false)
 
-    const categoryApiData = async()=>{
-        const response = await axios.get("",{})
 
-    } 
-    
-    // const getCategoryTitle = (e) =>{
-    //     setPostCategoryApi({ ...postCategoryApi, categoryName: e})
-    // }
+    const categoryApiData = async () => {
+        const response = await axios.get("", {})
 
-    
+    }
 
-    const categoryFileUpload = ()=>{
+    const getCategoryTitle = (e) => {
+        setCategoryTitle(e)
+        setPostCategoryApi({ ...postCategoryApi, category: e})
+    }
+
+
+
+    const categoryFileUpload = () => {
         imageFieldRef.current.click();
     }
 
     const handleSelectedCategoryFile = (e) => {
-        console.log(e.target.files[0])
-        setCategoryImageUpload(e.target.files[0]);
-        setPostCategoryApi({image: e.target.files[0]})
+        setCategoryImageUpload(e.target.files[0])
 
     }
-  
-    const saveCategory = async(e)=>{
+    
 
-      
-         
-        console.log("save category");
+    const saveCategory = async () => {
+
         console.log(postCategoryApi)
-        
+
         const formData = new FormData();
-        formData.append("categoryImageUpload", categoryImageUpload)
-        const postData ={
-            categoryName:categoryTitle,
-            image: formData
+        formData.append("image", categoryImageUpload)
+        formData.append('category', new Blob([JSON.stringify(categoryTitle)], {
+            type: "application/json"
+        }));
+        console.log(formData)
+    
+        
+        const response = await fetch(`${postCategory}/${sellerId}`,
+        {
+            method: 'POST',
+            body:formData 
+        });
+        console.log(response)
+
+        if(response.status===200){
+            setShowSucessText(true)
         }
-  console.log(JSON.stringify
-    (postData))
-        const response = await axios.post(`${postCategory}/${sellerId}`, JSON.stringify
-        (postData), {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              'Accept':'application/json'
-            },
-          });
-          console.log(response)
+    
     }
 
-
-    // useEffect(() => {
-    //     saveCategory()
-    // }, [])
-
-
+  
     return (
 
         <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
@@ -159,11 +153,11 @@ const Categories = () => {
                         <Center><Button name="View Products"></Button></Center>
                     </Box>
                     <Center w="20%" p="2%" color="black">
-                        <Center><Icon as={FaEdit} ml="40px" cursor="pointer"/></Center>
+                        <Center><Icon as={FaEdit} ml="40px" cursor="pointer" /></Center>
                     </Center>
                     <Box w="20%" p="3%">
 
-                        <Icon as={FaTrash} ml="10px" cursor="pointer"/>
+                        <Icon as={FaTrash} ml="10px" cursor="pointer" />
                     </Box>
                 </Flex>
 
@@ -177,15 +171,18 @@ const Categories = () => {
                         <ModalCloseButton />
                         <ModalBody>
                             <Text>Title</Text>
-                            <InputField setValue={setCategoryTitle}  value={categoryTitle}/>
-                            <Box>
-                        <ChakraButton height="100px" width="300px" border="1px dashed gray" fontSize="14px" onClick={categoryFileUpload}>Add File</ChakraButton>
-                        <Input type="file" style={{ display: 'none' }} ref={imageFieldRef} onChange={handleSelectedCategoryFile}  />
-                         <Image src={categoryImageUpload} height="200px" width="200px" objectFit="cover" />
-                         </Box>
+                            <InputField setValue={getCategoryTitle} value={categoryTitle} />
+
+                            <HStack justifyContent="space-around">
+                                <ChakraButton height="50px" width="100px" fontSize="14px" onClick={categoryFileUpload} mt="40px">Upload Image</ChakraButton>
+                                <Input type="file" style={{ display: 'none' }} ref={imageFieldRef} onChange={handleSelectedCategoryFile} accept="image/png, image/jpeg" />
+                                {categoryImageUpload !== "" && <Image src={URL.createObjectURL(categoryImageUpload)} height="200px" width="200px" objectFit="cover" />}
+                            </HStack>
+
                         </ModalBody>
                         <hr />
                         <ModalFooter>
+                            {showSuccessText && <Text>Category saved succesfully</Text>}
 
                             <Button name="Save" handleOnClick={saveCategory}></Button>&nbsp;&nbsp;
                             <Button name="Close" handleOnClick={onClose}></Button>
