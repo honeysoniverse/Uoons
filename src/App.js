@@ -10,11 +10,13 @@ import Footer from './components/Footer';
 import DesktopMenu from './components/Menu/DesktopMenu';
 import ReduxTesting from './components/pages/ReduxTesting'
 
+
 function App() {
   const navigateTo = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showLabel, setShowLabel] = useState(true)
   const [showImg, setShowImg] = useState(true)
+  const[categoryId, setCategoryId] = useState('')
  const redirect = () => {
     navigateTo(pathNames.homepage)
   }
@@ -23,14 +25,13 @@ function App() {
         {!isAuthenticated && <Login setIsAuthenticated={setIsAuthenticated} setShowImg={setShowImg}/>}
         {isAuthenticated && <Header setShowLabel={setShowLabel}/>}
         {isAuthenticated && <DesktopMenu setIsAuthenticated={setIsAuthenticated} showLabel={showLabel}/>}
-        {isAuthenticated && <RoutesWrapper/>}
+        {isAuthenticated && <RoutesWrapper setCategoryId={setCategoryId} categoryId={categoryId}/>}
         {isAuthenticated && <Footer/>} 
  
  {/* added by me delete it. */}
  
  {/* {isAuthenticated && <ReduxTesting/>}  */}
-
-         
+     
       </ChakraProvider>
   );
 }

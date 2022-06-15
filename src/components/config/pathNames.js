@@ -35,5 +35,6 @@ export const rootPathNames = {
   notices: '/notices/*',
   settings: '/settings/*',
   logout: '/logout/*',
-  addProduct:'/products/addproduct/*'
+  addProduct:'/products/addproduct/*',
+  viewProduct:'/prducts/viewproduct/*'
 };

@@ -7,22 +7,28 @@ import {
     ModalHeader,
     ModalFooter,
     ModalBody,
-    ModalCloseButton, useDisclosure
+    ModalCloseButton, useDisclosure,
+    OrderedList,
 } from '@chakra-ui/react';
+import { rootPathNames } from '../config/pathNames';
 import { colors } from '../../resources/colors';
 import InputField from '../InputField';
 import Button from '../Button';
 import { FaSearch, FaEdit, FaTrash } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import { useRef } from 'react';
-
+import Link from '../Link';
 import axios from 'axios';
+import {useNavigate} from "react-router-dom";
 
 
-const Categories = () => {
+const Categories = ({setCategoryId}) => {
+    const navigate = useNavigate();
 
     const postCategory = process.env.REACT_APP_POSTCATEGORY_API;
     const getAllCategory = process.env.REACT_APP_GETALLCATEGORY_API;
+    // const getCategoryImage = process.env.REACT_APP_GETCATEGORYIMGAGE_API;
+    
     const sellerId_LOC = localStorage.getItem("LoginData");
     const sellerId = JSON.parse(sellerId_LOC).data.userId;
 
@@ -39,8 +45,9 @@ const Categories = () => {
     const [categoryImageUpload, setCategoryImageUpload] = useState("")
     const [postCategoryApi, setPostCategoryApi] = useState(postCategoryData)
     const [showSuccessText, setShowSucessText] = useState(false)
+ 
 
-
+// Get all category (get Call)
     const getCategoryData = async () => {
         const response = await axios.get(`${getAllCategory}/${sellerId}`, {
             headers: {
@@ -49,6 +56,12 @@ const Categories = () => {
         })
         setGetCategoryApi(response.data.data)
     }
+
+    //Get all category image by category id (get call)
+
+    // const getCategoryImageData = async()=>{
+    //     const response =await axios.get(`${getCategoryImage}/${categoryId}`)
+    // }
 
     const getCategoryTitle = (e) => {
         setCategoryTitle(e)
@@ -79,7 +92,7 @@ const Categories = () => {
         console.log(formData)
     
         
-        const response = await fetch(`${postCategory}${sellerId}`,
+        const response = await fetch(`${postCategory}/${sellerId}`,
         {
             method: 'POST',
             body:formData 
@@ -90,6 +103,12 @@ const Categories = () => {
             setShowSucessText(true)
         }
     
+    }
+
+    const viewOnClick =(cat)=>{
+        console.log("view on click")
+      setCategoryId(cat)
+      navigate(rootPathNames.viewProduct)
     }
 
     useEffect(()=>{
@@ -145,22 +164,24 @@ const Categories = () => {
                 </HStack>
                 <Flex>
                    
-                <ul> 
-                    
-
+                <OrderedList>
                             {getCategoryApi.map((currElem, index, arr)=>{
                                 
-                                
-                                return ( <li> <Box w="20%" p="2%">
+                                return (  <>
+                                <HStack>
+                                <Box w="20%" p="2%">
                                     <Center>
-                                <Box><img src={currElem.image}/></Box>
+                                <Box><img src={`http://13.233.1.96:9092/product/category/categoryImage/${currElem.catId}`}/></Box>
                         </Center>
                     </Box>
                     <Box w="20%" p="2%" color="black">
+
                         <Center>{currElem.categoryName}</Center>
                     </Box>
                     <Box w="20%" p="2%" color="black">
-                        <Center><Button name="View Products"></Button></Center>
+                        <Center>
+                            <Button handleOnClick={()=>viewOnClick(currElem.catId)} name='View Product'></Button>
+                        </Center>
                     </Box>
                     <Center w="20%" p="2%" color="black">
                         <Center><Icon as={FaEdit} ml="40px" cursor="pointer" /></Center>
@@ -169,9 +190,11 @@ const Categories = () => {
 
                         <Icon as={FaTrash} ml="10px" cursor="pointer" />
                         </Box>
-                         </li> )})}
-                        </ul>
-                    
+                        </HStack>
+                        </>
+ 
+                         )})}
+                         </OrderedList>
                 </Flex>
 
                 {/* modal dialogie box */}
@@ -195,11 +218,12 @@ const Categories = () => {
                         </ModalBody>
                         <hr />
                         <ModalFooter>
-                            {showSuccessText && <Text>Category saved succesfully</Text>}
+                            <HStack spacing={8} width="100%">
+                            {showSuccessText && <Text color={colors.green}>Category saved succesfully</Text>}
 
-                            <Button name="Save" handleOnClick={saveCategory}></Button>&nbsp;&nbsp;
+                            <Button name="Save" handleOnClick={saveCategory}></Button>
                             <Button name="Close" handleOnClick={onClose}></Button>
-
+                            </HStack>
                         </ModalFooter>
                     </ModalContent>
                 </Modal>

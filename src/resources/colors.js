@@ -4,5 +4,6 @@ export const colors = {
     infoGray: '#828285',
     iconGray: '#495057',
     backgroundGray: '#F2F4F8',
-    black: '#000000'
+    black: '#000000',
+    green:"#00b200",
 }

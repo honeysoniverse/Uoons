@@ -232,7 +232,7 @@ const AddProduct = () => {
         formData.append('multiImage', multiFile);
         console.log(formData)
 
-        const response = await axios.post(`${postDataApi}/${categoryId}/${subCategoryId}/${sellerId}`, productDetail, formData, {
+        const response = await axios.post(`${postDataApi}/${categoryId}/${categoryId}/${sellerId}`, productDetail, formData, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
