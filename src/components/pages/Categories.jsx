@@ -87,7 +87,9 @@ const Categories = ({setCategoryId}) => {
         const formData = new FormData();
         formData.append("image", categoryImageUpload)
         formData.append('category', new Blob([JSON.stringify(categoryTitle)], {
+
             type: "application/json"
+            
         }));
         console.log(formData)
     

@@ -22,9 +22,7 @@ const AddProduct = () => {
         MRP:10,
         offer_price: 10,
         sale_price:10,
-        additionalInformation:[],
-        image:"",
-        multipleImage:'',
+        additionalInformation:[]
         }
 
 
@@ -110,9 +108,9 @@ const AddProduct = () => {
     const getDescription = (e) =>  setProductDetail(prev => ({...prev, description: e.target.value}))
     const getTitle = (e) =>  setProductDetail(prev => ({...prev, title: e}))
     const getReturnPolicy = (e) => setProductDetail(prev => ({...prev, returnPolicy: e.target.value}))
-    const getMRP = (mrp) =>  setProductDetail(prev => ({...prev, MRP: mrp}))
-    const getSalePrice = (salePrice) =>  setProductDetail(prev => ({...prev, sale_price: salePrice}))
-    const getOfferPrice = (offerPrice) =>  setProductDetail(prev => ({...prev, offer_price: offerPrice}))
+    const getMRP = (e) =>  setProductDetail(prev => ({...prev, MRP: e}))
+    const getSalePrice = (e) =>  setProductDetail(prev => ({...prev, sale_price: e}))
+    const getOfferPrice = (e) =>  setProductDetail(prev => ({...prev, offer_price: e}))
     
     const getAdditionalInfoTitle = (title, index) =>  {
              let updatedAdditionalInfo = [...productDetail.additionalInformation];
@@ -193,7 +191,7 @@ const AddProduct = () => {
 
     const handleSelectedFile = (e) => {
       //  console.log(e.target.files[0])
-        setFile(URL.createObjectURL(e.target.files[0]));
+        setFile(e.target.files[0]);
     }
 
     //Multiple file upload
@@ -207,10 +205,10 @@ const AddProduct = () => {
     const handleMultiSelected = (e) => {
         images.push(e.target.files)
         for (let i = 0; i < images[0].length; i++) {
-            imagesArray.push(URL.createObjectURL(images[0][i]));
+            imagesArray.push(images[0][i]);
         }
         setMultiFile(imagesArray)
-        // console.log(imagesArray)
+        console.log(imagesArray)
     }
 
    // console.log(multiFile)
@@ -223,29 +221,39 @@ const AddProduct = () => {
     }, [categoryId])
 
     const saveProduct = async () => {
-        // console.log(">>>>>postData",productDetail)
-        // console.log(typeof productDetail.sale_price)
-        // console.log(typeof initProductState.sale_price)
 
         const formData = new FormData();
-        formData.append('mainImage', file);
-        formData.append('multiImage', multiFile);
-        console.log(formData)
+        formData.append('product', new Blob([JSON.stringify(productDetail)], {
 
-        const response = await axios.post(`${postDataApi}/${categoryId}/${categoryId}/${sellerId}`, productDetail, formData, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
+            type: "application/json"
+            
+        }));
+        formData.append('mainimages', file);
+
+          for (let i = 0; i < images[0].length; i++) {
+            formData.append('images', images[0][i]);
+        }
+
+        // console.log(formData)
+        //      for (var [key, value] of formData.entries()) { 
+        //     console.log(key, value);
+        //   }
+
+        const response = await axios.post(`${postDataApi}/${categoryId}/${subCategoryId}/${sellerId}`, formData ,{
+
+            // headers: {
+               
+            //     'Content-Type': 'image/png'
+            // }
         }
         )
         console.log(response)
         // const responseData = JSON.stringify(response.data);
 
        
-        for (var [key, value] of formData.entries()) { 
-            console.log(key, value);
-          }
+    //     for (var [key, value] of formData.entries()) { 
+    //         console.log(key, value);
+    //       }
     }
 
 
@@ -285,14 +293,14 @@ const AddProduct = () => {
 
                         <ChakraButton height="100px" width="300px" border="1px dashed gray" fontSize="14px" onClick={fileUpload}>Add File</ChakraButton>
                         <Input type="file" style={{ display: 'none' }} ref={inputFieldRef} onChange={handleSelectedFile} accept="image/*" />
-                        {file ? <Image src={file} height="200px" width="200px" objectFit="cover" /> : null}
+                        {file ? <Image src={URL.createObjectURL(file)} height="200px" width="200px" objectFit="cover" /> : null}
                     </Box>
                     <Box>
                         <ChakraButton height="100px" width="300px" border="1px dashed gray" fontSize="14px" onClick={multiFileUpload}>+ Add File</ChakraButton>
                         <Input type="file" style={{ display: 'none' }} ref={multiUploadInputRef} onChange={handleMultiSelected} accept="image/*" multiple />
                         <ul>
                             {multiFile?.map((item) => {
-                                return <Image src={item} height="200px" width="200px" objectFit="cover" />
+                                return <Image src={URL.createObjectURL(item)} height="200px" width="200px" objectFit="cover" />
                             })}
                         </ul>
                     </Box>
