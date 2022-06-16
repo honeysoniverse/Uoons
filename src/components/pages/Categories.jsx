@@ -27,16 +27,21 @@ const Categories = ({setCategoryId}) => {
 
     const postCategory = process.env.REACT_APP_POSTCATEGORY_API;
     const getAllCategory = process.env.REACT_APP_GETALLCATEGORY_API;
-    // const getCategoryImage = process.env.REACT_APP_GETCATEGORYIMGAGE_API;
+    const postSubCategory = process.env.REACT_APP_POSTSUBCATEGORY_API;
     
     const sellerId_LOC = localStorage.getItem("LoginData");
     const sellerId = JSON.parse(sellerId_LOC).data.userId;
 
     const imageFieldRef = useRef(null);
+    const subImageFieldRef = useRef(null);
 
     const postCategoryData = {
 
         category: ""
+    }
+
+    const postSubCategoryData = {
+        subcategory: ""
     }
 
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -45,6 +50,10 @@ const Categories = ({setCategoryId}) => {
     const [categoryImageUpload, setCategoryImageUpload] = useState("")
     const [postCategoryApi, setPostCategoryApi] = useState(postCategoryData)
     const [showSuccessText, setShowSucessText] = useState(false)
+    const [showSubCategoryDialogueBox, setShowSubCategoryDialogueBox] = useState(false)
+    const [subCategoryTitle, setSubCategoryTitle] = useState('')
+    const [subCategoryImageUpload, setSubCategoryImageUpload] = useState("")
+    const [postSubCategoryApi, setPostSubCategoryApi] = useState(postSubCategoryData)
  
 
 // Get all category (get Call)
@@ -69,7 +78,6 @@ const Categories = ({setCategoryId}) => {
     }
 
 
-
     const categoryFileUpload = () => {
         imageFieldRef.current.click();
     }
@@ -78,7 +86,24 @@ const Categories = ({setCategoryId}) => {
         setCategoryImageUpload(e.target.files[0])
 
     }
-    
+
+    const getSubCategoryTitle = (e) => {
+        setSubCategoryTitle(e)
+        setPostSubCategoryApi({ ...postSubCategoryApi, subcategory: e})
+    }
+
+    const subCategoryFileUpload = () => {
+        subImageFieldRef.current.click();
+    }
+
+    const handleSelectedSubCategoryFile = (e) => {
+        setSubCategoryImageUpload(e.target.files[0])
+
+    }
+
+
+     
+    //POST API for category
 
     const saveCategory = async () => {
 
@@ -103,9 +128,35 @@ const Categories = ({setCategoryId}) => {
 
         if(response.status===200){
             setShowSucessText(true)
+            setShowSubCategoryDialogueBox(true)
         }
     
     }
+
+    //POST API for sub-category
+   
+    const saveSubCategory = async () => {
+
+        const formData = new FormData();
+        formData.append("image", subCategoryImageUpload)
+        formData.append('subcategory', new Blob([JSON.stringify(subCategoryTitle)], {
+
+            type: "application/json"
+            
+        }));
+        console.log(formData)
+    
+        
+        const response = await fetch(`${postSubCategory}/1/${sellerId}`,
+        {
+            method: 'POST',
+            body:formData 
+        });
+        console.log(response)
+    
+    }
+
+
 
     const viewOnClick =(cat)=>{
         console.log("view on click")
@@ -199,7 +250,7 @@ const Categories = ({setCategoryId}) => {
                          </OrderedList>
                 </Flex>
 
-                {/* modal dialogie box */}
+                {/* modal dialogie box for category*/}
 
                 <Modal isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />
@@ -229,6 +280,35 @@ const Categories = ({setCategoryId}) => {
                         </ModalFooter>
                     </ModalContent>
                 </Modal>
+
+                {/* Modal dialogoue box for sub category */}
+
+               {showSubCategoryDialogueBox && <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>Add Sub Category</ModalHeader>
+                        <hr />
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <Text>Title</Text>
+                            <InputField setValue={getSubCategoryTitle} />
+
+                            <HStack justifyContent="space-around">
+                                <ChakraButton height="50px" width="100px" fontSize="14px" onClick={subCategoryFileUpload} mt="40px">Upload Image</ChakraButton>
+                                <Input type="file" style={{ display: 'none' }} ref={subImageFieldRef} onChange={handleSelectedSubCategoryFile} accept="image/png, image/jpeg" />
+                                <Image height="200px" width="200px"  objectFit="cover" />
+                            </HStack>
+
+                        </ModalBody>
+                        <hr />
+                        <ModalFooter>
+                            <HStack spacing={8} width="100%">
+                            <Button name="Save" handleOnClick={saveSubCategory}></Button>
+                            <Button name="Close" handleOnClick={onClose}></Button>
+                            </HStack>
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>}
             </Box>
         </Box>
 

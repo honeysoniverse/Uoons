@@ -2,17 +2,12 @@ import React,{useState, useEffect} from 'react'
 
 import {
     Box, Text, HStack, Select, Center, Spacer, Input, Flex, Icon, Button,
-    Image,
-    VStack,
-    OrderedList,
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
-    TableCaption,
     TableContainer,
 } from '@chakra-ui/react';
 import { colors } from '../../resources/colors';
@@ -27,12 +22,7 @@ const ViewProduct = ({categoryId}) => {
     const sellerId_LOC = localStorage.getItem("LoginData");
     const sellerId = JSON.parse(sellerId_LOC).data.userId;
 
-    // const handlesetCategoryValue = async (e) => {
-    //     setCategoryValue(e.target.value);
-    //     for (let i = 0; i < viewProductApi.length; i++) {
-    //         if (e.target.value === viewProductApi[i].categoryName) setCategoryId(viewProductApi[i].catId)
-    //     }
-    // }
+    
 
     const viewProductData = async () =>{
         const response = await axios.get(`${viewProduct}/${categoryId}/${sellerId}`, {
@@ -72,7 +62,6 @@ const ViewProduct = ({categoryId}) => {
                     <Table variant='striped'>
                         <Thead bg={colors.cornflowerBlue} >
                             <Tr>
-
                         <Th color={colors.white}>Product</Th>
                         <Th color={colors.white}>Maximum Retail Price</Th>
                         <Th color={colors.white}>Sale Price</Th>

@@ -43,6 +43,7 @@ const AddProduct = () => {
     const categoryApi = process.env.REACT_APP_CATEGORY_API;
     const subCategoryApi = process.env.REACT_APP_SUB_CATEGORY_API;
     const postDataApi = process.env.REACT_APP_POSTDATA_API;
+    
     const sellerId_LOC = localStorage.getItem("LoginData")
     const sellerId = JSON.parse(sellerId_LOC).data.userId
 
@@ -108,9 +109,9 @@ const AddProduct = () => {
     const getDescription = (e) =>  setProductDetail(prev => ({...prev, description: e.target.value}))
     const getTitle = (e) =>  setProductDetail(prev => ({...prev, title: e}))
     const getReturnPolicy = (e) => setProductDetail(prev => ({...prev, returnPolicy: e.target.value}))
-    const getMRP = (e) =>  setProductDetail(prev => ({...prev, MRP: (Number(e).toFixed(2))}))
-    const getSalePrice = (e) =>  setProductDetail(prev => ({...prev, sale_price: (Number(e).toFixed(2))}))
-    const getOfferPrice = (e) =>  setProductDetail(prev => ({...prev, offer_price: (Number(e).toFixed(2))}))
+    const getMRP = (e) =>  setProductDetail(prev => ({...prev, MRP: parseFloat(e)}))
+    const getSalePrice = (e) =>  setProductDetail(prev => ({...prev, sale_price: parseFloat(e)}))
+    const getOfferPrice = (e) =>  setProductDetail(prev => ({...prev, offer_price: parseFloat(e)}))
     console.log(productDetail.MRP);
     console.log(typeof productDetail.sale_price)
     console.log(typeof productDetail.offer_price)
@@ -213,6 +214,8 @@ const AddProduct = () => {
         setMultiFile(imagesArray)
     
     }
+
+  
  
     useEffect(() => {
 
@@ -220,6 +223,8 @@ const AddProduct = () => {
         fetchSubCatgeory()
 
     }, [categoryId])
+
+    //Post product api
 
     const saveProduct = async () => {
 

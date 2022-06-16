@@ -3,21 +3,51 @@ import {
   Flex,
   Box,
   Text,
-  HStack,
+Image,
   Icon,
   Center,
   Select,
   Spacer,
   Input,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer
 } from '@chakra-ui/react';
 import { colors } from '../../resources/colors';
 import Button from '../Button';
 import { FaSearch, FaEdit, FaTrash } from 'react-icons/fa';
 import { rootPathNames } from '../config/pathNames';
 import Link from '../Link';
-
+import {useState, useEffect} from 'react';
+import axios from 'axios';
 
 const Product = () => {
+  const [productData, setProductData] = useState([])
+
+  const getAllProduct = process.env.REACT_APP_GETALLPRODUCT_API;
+  const sellerId_LOC = localStorage.getItem("LoginData")
+  const sellerId = JSON.parse(sellerId_LOC).data.userId
+
+  //Get all product by seller id
+
+  const allProductData = async()=>{
+    const response = await axios.get(`${getAllProduct}/${sellerId}`, {
+      headers: {
+          'Content-Type': 'application/json',
+      }})
+      console.log(response.data.data)
+      setProductData(response.data.data)
+
+  }
+  
+  useEffect(()=>{
+    allProductData()
+  },[])
+
   return (
     <Box bg={colors.backgroundGray} w="auto" p={4} ml="300px">
       <Flex color="white" justifyContent="flex-end" mb="16px">
@@ -43,65 +73,42 @@ const Product = () => {
          <Center> <Icon as={FaSearch} mr="10px" /></Center>
           <Input placeholder="Basic usage"  w="32%" />
         </Flex>
-        <HStack
-          w="96%"
-          color={colors.white}
-          bg={colors.cornflowerBlue}
-          marginTop="16px"
-          p="1%"
-          ml="20px"
-        >
-          <Box w="23%">
-            <Center>Image</Center>
-          </Box>
-          <Box w="23%">
-            <Center>Title</Center>
-          </Box>
-          <Box w="23%">
-            <Center>Unit Price</Center>
-          </Box>
-          <Box w="23%">
-            <Center>In Stock</Center>
-          </Box>
-          <Box w="23%">
-            <Center>Category</Center>
-          </Box>
-          <Box w="23%">
-            <Center>Action</Center>
-          </Box>
-        </HStack>
-        <Flex>
-          <Box w="20%" p="2%">
-            <Center>
-              
-              <Box w="30%" h="30px" boxShadow="xl" bg={colors.white}>
-                Box
-              </Box>
-            </Center>
-          </Box>
-          <Box w="20%" p="2%" color="black">
-            <Center>Ras El Hanout</Center>
-          </Box>
-          <Box w="20%" p="2%" color="black">
-            <Center>10.00 Gram -₹ 7.90</Center>
-          </Box>
-          <Box w="20%" p="2%">
-            <Center>
-              {' '}
-              <Switch size="lg" />
-            </Center>
-          </Box>
-          <Center w="20%" p="2%" color="black">
-            <Center>Seasoning</Center>
-          </Center>
-          <Box w="20%" p="3%">
-          <Icon as={FaEdit} ml="40px" />
-          <Icon as={FaTrash} ml="10px" />
-          </Box>
-        </Flex>
+           <TableContainer mt="40px" >
+                    <Table variant='striped'>
+                        <Thead bg={colors.cornflowerBlue} >
+                            <Tr>
+                        <Th color={colors.white}>Image</Th>
+                        <Th color={colors.white}>Product</Th>
+                        <Th color={colors.white}>Maximum Retail Price</Th>
+                        <Th color={colors.white}>Sale Price</Th>
+                        <Th color={colors.white}>Offer Price</Th>
+            
+                </Tr>
+                </Thead>
+                
+
+                        {productData?.map((currElem, index, array)=>{
+                        
+                            return (<>
+                            <Tbody>
+                            <Tr>
+                              <Td><Image width='50px' height="50px" src={`http://13.233.1.96:9092/product/item/productmainImage/${currElem.productId}`}/></Td>
+                                <Td>{currElem.title}</Td>
+                                <Td>{currElem.MRP}</Td>
+                                <Td>{currElem.salePrice}</Td>
+                                <Td>{currElem.offerPrice}</Td>
+                             </Tr>
+                            </Tbody>
+                        </>
+                            )
+                        })}  
+                        
+                </Table>
+                </TableContainer>
+      
       </Box>
-    </Box>
+</Box>
   );
-};
+  }
 
 export default Product;
