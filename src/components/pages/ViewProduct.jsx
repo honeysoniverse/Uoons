@@ -15,6 +15,7 @@ import { FaSearch } from 'react-icons/fa';
 import axios from 'axios';
 
 const ViewProduct = ({categoryId}) => { 
+    console.log(categoryId)
 
     const [viewProductApi, setViewProductApi] = useState([])
 
@@ -69,22 +70,21 @@ const ViewProduct = ({categoryId}) => {
             
                 </Tr>
                 </Thead>
-                
-
+                <Tbody>
                         {viewProductApi?.map((currElem, index, array)=>{
                             return (<>
-                            <Tbody>
-                            <Tr>
+                           
+                            <Tr key={index}>
                                 <Td>{currElem.title}</Td>
                                 <Td>{currElem.MRP}</Td>
                                 <Td>{currElem.salePrice}</Td>
                                 <Td>{currElem.offerPrice}</Td>
                              </Tr>
-                            </Tbody>
+                            
                         </>
                             )
                         })}  
-                        
+                        </Tbody>
                 </Table>
                 </TableContainer>
             </Box>

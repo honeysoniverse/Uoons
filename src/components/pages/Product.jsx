@@ -74,7 +74,7 @@ const Product = () => {
           <Input placeholder="Basic usage"  w="32%" />
         </Flex>
            <TableContainer mt="40px" >
-                    <Table variant='striped'>
+                    <Table variant='striped' colorScheme="gray">
                         <Thead bg={colors.cornflowerBlue} >
                             <Tr>
                         <Th color={colors.white}>Image</Th>
@@ -85,24 +85,20 @@ const Product = () => {
             
                 </Tr>
                 </Thead>
-                
-
+                <Tbody>
                         {productData?.map((currElem, index, array)=>{
-                        
-                            return (<>
-                            <Tbody>
-                            <Tr>
+                            return (
+                            <>
+                            <Tr key={index}>
                               <Td><Image width='50px' height="50px" src={`http://13.233.1.96:9092/product/item/productmainImage/${currElem.productId}`}/></Td>
-                                <Td>{currElem.title}</Td>
-                                <Td>{currElem.MRP}</Td>
-                                <Td>{currElem.salePrice}</Td>
-                                <Td>{currElem.offerPrice}</Td>
-                             </Tr>
-                            </Tbody>
+                              <Td>{currElem.title}</Td>
+                              <Td>{currElem.MRP}</Td>
+                              <Td>{currElem.salePrice}</Td>
+                              <Td>{currElem.offerPrice}</Td>
+                            </Tr>    
                         </>
-                            )
-                        })}  
-                        
+                     ) } ) } 
+                        </Tbody>
                 </Table>
                 </TableContainer>
       

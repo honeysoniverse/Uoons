@@ -11,7 +11,7 @@ const ProductPage = lazy(() => import('./pages/Product'));
 const AddProduct = lazy(()=> import('./pages/AddProduct'));
 const Categories = lazy(()=> import('./pages/Categories'));
 const ViewProducts = lazy(()=>import('./pages/ViewProduct'))
-const RoutesWrapper = ({setCategoryId, categoryId}) => (
+const RoutesWrapper = ({setCategoryId, categoryId, setCatId, catId}) => (
   <Suspense fallback={<Spinner/>}>
     <Routes>
       <Route
@@ -28,7 +28,7 @@ const RoutesWrapper = ({setCategoryId, categoryId}) => (
       />
         <Route
         path={rootPathNames.categories}
-        element={<ProtectedRoute component={Categories} isProtected={false} setCategoryId={setCategoryId}/>}
+        element={<ProtectedRoute component={Categories} isProtected={false} setCategoryId={setCategoryId} categoryId={categoryId}/>}
       />
        <Route
         path={rootPathNames.addProduct}

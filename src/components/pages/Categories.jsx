@@ -8,7 +8,13 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton, useDisclosure,
-    OrderedList,
+    Table,
+    Thead,
+    Tbody,
+    Tr,
+    Th,
+    Td,
+    TableContainer
 } from '@chakra-ui/react';
 import { rootPathNames } from '../config/pathNames';
 import { colors } from '../../resources/colors';
@@ -22,7 +28,9 @@ import axios from 'axios';
 import {useNavigate} from "react-router-dom";
 
 
-const Categories = ({setCategoryId}) => {
+const Categories = ({setCategoryId, categoryId}) => {
+  
+
     const navigate = useNavigate();
 
     const postCategory = process.env.REACT_APP_POSTCATEGORY_API;
@@ -53,7 +61,7 @@ const Categories = ({setCategoryId}) => {
     const [showSubCategoryDialogueBox, setShowSubCategoryDialogueBox] = useState(false)
     const [subCategoryTitle, setSubCategoryTitle] = useState('')
     const [subCategoryImageUpload, setSubCategoryImageUpload] = useState("")
-    const [postSubCategoryApi, setPostSubCategoryApi] = useState(postSubCategoryData)
+    const [postSubCategoryApi, setPostSubCategoryApi] = useState(postSubCategoryData);
  
 
 // Get all category (get Call)
@@ -124,11 +132,15 @@ const Categories = ({setCategoryId}) => {
             method: 'POST',
             body:formData 
         });
-        console.log(response)
+        const parsedData = await response.json()
+       
 
         if(response.status===200){
+            
             setShowSucessText(true)
             setShowSubCategoryDialogueBox(true)
+            console.log(parsedData)
+            setCategoryId(parsedData.data.catId)
         }
     
     }
@@ -147,13 +159,17 @@ const Categories = ({setCategoryId}) => {
         console.log(formData)
     
         
-        const response = await fetch(`${postSubCategory}/1/${sellerId}`,
+        const response = await fetch(`${postSubCategory}/${categoryId}/${sellerId}`,
         {
             method: 'POST',
             body:formData 
         });
-        console.log(response)
-    
+        const parsedSubCatData = await response.json()
+
+        if(response.status === 200){
+            alert("Sub Category added successfully")
+        }
+        console.log(parsedSubCatData)
     }
 
 
@@ -191,64 +207,36 @@ const Categories = ({setCategoryId}) => {
                         <Input placeholder="search" w="50%" />
                     </Flex>
                 </HStack>
-                <HStack
-                    w="96%"
-                    color={colors.white}
-                    bg={colors.cornflowerBlue}
-                    marginTop="16px"
-                    p="1%"
-                    ml="20px"
-                >
-                    <Box w="23%">
-                        <Center>Image</Center>
-                    </Box>
-                    <Box w="23%">
-                        <Center>Title</Center>
-                    </Box>
-                    <Box w="23%">
-                        <Center>Product</Center>
-                    </Box>
-                    <Box w="23%">
-                        <Center>Edit</Center>
-                    </Box>
-                    <Box w="23%">
-                        <Center>Delete</Center>
-                    </Box>
-                </HStack>
-                <Flex>
-                   
-                <OrderedList>
-                            {getCategoryApi.map((currElem, index, arr)=>{
-                                
-                                return (  <>
-                                <HStack>
-                                <Box w="20%" p="2%">
-                                    <Center>
-                                <Box><img src={`http://13.233.1.96:9092/product/category/categoryImage/${currElem.catId}`}/></Box>
-                        </Center>
-                    </Box>
-                    <Box w="20%" p="2%" color="black">
+    {/* /////////////////////////////////////////////////////// */}
 
-                        <Center>{currElem.categoryName}</Center>
-                    </Box>
-                    <Box w="20%" p="2%" color="black">
-                        <Center>
-                            <Button handleOnClick={()=>viewOnClick(currElem.catId)} name='View Product'></Button>
-                        </Center>
-                    </Box>
-                    <Center w="20%" p="2%" color="black">
-                        <Center><Icon as={FaEdit} ml="40px" cursor="pointer" /></Center>
-                    </Center>
-                    <Box w="20%" p="3%">
-
-                        <Icon as={FaTrash} ml="10px" cursor="pointer" />
-                        </Box>
-                        </HStack>
+                <TableContainer mt="40px" >
+                    <Table variant='striped' colorScheme="gray">
+                        <Thead bg={colors.cornflowerBlue} >
+                            <Tr>
+                        <Th color={colors.white}>Image</Th>
+                        <Th color={colors.white}>Title</Th>
+                        <Th color={colors.white}>Product</Th>
+                        <Th color={colors.white}>Edit</Th>
+                        <Th color={colors.white}>Delete</Th>
+            
+                </Tr>
+                </Thead>
+                <Tbody>
+                {getCategoryApi.map((currElem, index, arr)=>{
+                            return (
+                            <>
+                            <Tr key={index}>
+                              <Td><img height="50px" width="50px" src={`http://13.233.1.96:9092/product/category/categoryImage/${currElem.catId}`}/></Td>
+                              <Td>{currElem.categoryName}</Td>
+                              <Td> <Button handleOnClick={()=>viewOnClick(currElem.catId)} name='View Product'></Button></Td>
+                              <Td><Icon as={FaEdit} ml="40px" cursor="pointer" /></Td>
+                              <Td><Icon as={FaTrash} ml="10px" cursor="pointer" /></Td>
+                            </Tr>    
                         </>
- 
-                         )})}
-                         </OrderedList>
-                </Flex>
+                     ) } ) } 
+                        </Tbody>
+                </Table>
+                </TableContainer>
 
                 {/* modal dialogie box for category*/}
 
@@ -296,7 +284,7 @@ const Categories = ({setCategoryId}) => {
                             <HStack justifyContent="space-around">
                                 <ChakraButton height="50px" width="100px" fontSize="14px" onClick={subCategoryFileUpload} mt="40px">Upload Image</ChakraButton>
                                 <Input type="file" style={{ display: 'none' }} ref={subImageFieldRef} onChange={handleSelectedSubCategoryFile} accept="image/png, image/jpeg" />
-                                <Image height="200px" width="200px"  objectFit="cover" />
+                                <Image src ={subCategoryImageUpload}height="200px" width="200px"  objectFit="cover" />
                             </HStack>
 
                         </ModalBody>

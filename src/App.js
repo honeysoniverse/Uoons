@@ -17,6 +17,8 @@ function App() {
   const [showLabel, setShowLabel] = useState(true)
   const [showImg, setShowImg] = useState(true)
   const[categoryId, setCategoryId] = useState('')
+
+  
  const redirect = () => {
     navigateTo(pathNames.homepage)
   }

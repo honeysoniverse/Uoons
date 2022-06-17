@@ -13,7 +13,7 @@ const Header = ({setShowLabel}) => {
   }
   return (
 
-    <HStack justifyContent="space-evenly" boxShadow="md" position="sticky" top="0" bg={colors.white}>
+    <HStack justifyContent="space-evenly" boxShadow="md" position="sticky" top="0" bg={colors.white} zIndex="1"> 
       <HStack justifyContent='space-evenly' flex="1">
         <Image
           src={require('./img/logo_dashboard.png')}
