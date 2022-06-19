@@ -175,7 +175,7 @@ const Categories = ({setCategoryId, categoryId}) => {
 
 
     const viewOnClick =(cat)=>{
-        console.log("view on click")
+        console.log("view on click f")
       setCategoryId(cat)
       navigate(rootPathNames.viewProduct)
     }
