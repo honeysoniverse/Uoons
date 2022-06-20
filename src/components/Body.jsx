@@ -4,7 +4,7 @@ import { colors } from '../resources/colors';
 
 const Body = () => {
   return (
-      <div style={{marginLeft:"21%"}}>
+      <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
     <VStack bg={colors.backgroundGray} alignItems="flex-start" paddingLeft='40px'>
     <Text fontSize='2xl' fontFamily="Poppins, sans-serif" mt="20px">Welcome, Darren</Text>
     <Text fontFamily="Poppins, sans-serif" color="rgb(148, 163, 175)" fontSize='sm'>Let's get your business started in view steps</Text>
@@ -28,7 +28,7 @@ const Body = () => {
   <Box boxShadow='base' p='20' rounded='md' bg={colors.white}></Box>
   <Box boxShadow='base' p='20' rounded='md' bg={colors.white}></Box>
 </SimpleGrid>
-    </div>
+    </Box>
   )
 }
 

@@ -14,6 +14,7 @@ const Link = ({ name, pathName}) => {
     borderRadius='8px'
     padding='8px 12px'
     to={pathName}
+   
     >
         {name}
         </LinkComp>

@@ -49,7 +49,7 @@ const Product = () => {
   },[])
 
   return (
-    <Box bg={colors.backgroundGray} w="auto" p={4} ml="300px">
+    <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
       <Flex color="white" justifyContent="flex-end" mb="16px">
         <Link pathName={rootPathNames.addProduct} name='Add Product' />
       </Flex>

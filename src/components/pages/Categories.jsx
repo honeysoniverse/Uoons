@@ -14,7 +14,8 @@ import {
     Tr,
     Th,
     Td,
-    TableContainer
+    TableContainer,
+    useBreakpointValue
 } from '@chakra-ui/react';
 import { rootPathNames } from '../config/pathNames';
 import { colors } from '../../resources/colors';
@@ -26,6 +27,8 @@ import { useRef } from 'react';
 import Link from '../Link';
 import axios from 'axios';
 import {useNavigate} from "react-router-dom";
+import Pagination from './Pagination';
+
 
 
 const Categories = ({setCategoryId, categoryId}) => {
@@ -51,18 +54,28 @@ const Categories = ({setCategoryId, categoryId}) => {
     const postSubCategoryData = {
         subcategory: ""
     }
-
+    
+    const isMdBreakpoint = useBreakpointValue({ base: false, md: true });
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [getCategoryApi, setGetCategoryApi] = useState([])
     const [categoryTitle, setCategoryTitle] = useState("")
     const [categoryImageUpload, setCategoryImageUpload] = useState("")
     const [postCategoryApi, setPostCategoryApi] = useState(postCategoryData)
     const [showSuccessText, setShowSucessText] = useState(false)
+    const [showCategoryDialogueBox, setShowCategoryDialogueBox] = useState(false)
     const [showSubCategoryDialogueBox, setShowSubCategoryDialogueBox] = useState(false)
     const [subCategoryTitle, setSubCategoryTitle] = useState('')
     const [subCategoryImageUpload, setSubCategoryImageUpload] = useState("")
     const [postSubCategoryApi, setPostSubCategoryApi] = useState(postSubCategoryData);
- 
+    const [showPerPage] = useState(10);
+    const [pagination, setPagination] = useState({
+		start:0,
+		end:showPerPage
+	})
+
+	const onPaginationChange = (start, end) => {
+		setPagination({start : start, end : end});
+	}
 
 // Get all category (get Call)
     const getCategoryData = async () => {
@@ -138,9 +151,11 @@ const Categories = ({setCategoryId, categoryId}) => {
         if(response.status===200){
             
             setShowSucessText(true)
+            
             setShowSubCategoryDialogueBox(true)
             console.log(parsedData)
             setCategoryId(parsedData.data.catId)
+            setCategoryImageUpload("")
         }
     
     }
@@ -168,6 +183,8 @@ const Categories = ({setCategoryId, categoryId}) => {
 
         if(response.status === 200){
             alert("Sub Category added successfully")
+            setShowSubCategoryDialogueBox(false)
+        
         }
         console.log(parsedSubCatData)
     }
@@ -192,19 +209,22 @@ const Categories = ({setCategoryId, categoryId}) => {
                 <Button name='Add Category' handleOnClick={onOpen}></Button>
             </Flex>
 
-            <Box bg={colors.white} borderRadius="lg" height="auto" ml="280px" padding='20px' fontFamily='Poppins, sans-serif'>
+            <Box bg={colors.white} borderRadius="lg" height="auto" marginLeft="280px" padding='20px' fontFamily='Poppins, sans-serif'>
                 <Text fontSize="18px">Categories</Text>
                 <hr />
-                <HStack>
-                    <Flex marginTop="25px" ml="20px">
-                        <Select placeholder="10" w="20%">
+                <HStack justifyContent='flex-start' >
+                    <Flex marginTop="25px" >
+                        <Box>
+                        <Select placeholder="10" w="100%">
                             <option value="10">10</option>
                             <option value="9">9</option>
                             <option value="8">8</option>
                         </Select>
-                        <Spacer />
-                        <Center><Icon as={FaSearch} mr="10px" /></Center>
-                        <Input placeholder="search" w="50%" />
+                        </Box>
+                        {/* <Box ml="100px">
+                            <Icon as={FaSearch} mr="10px" />
+                        <Input placeholder="search"  width="100%"/>
+                       </Box> */}
                     </Flex>
                 </HStack>
     {/* /////////////////////////////////////////////////////// */}
@@ -222,7 +242,7 @@ const Categories = ({setCategoryId, categoryId}) => {
                 </Tr>
                 </Thead>
                 <Tbody>
-                {getCategoryApi.map((currElem, index, arr)=>{
+                {getCategoryApi.reverse().slice(pagination.start, pagination.end).map((currElem, index, arr)=>{
                             return (
                             <>
                             <Tr key={index}>
@@ -235,7 +255,12 @@ const Categories = ({setCategoryId, categoryId}) => {
                         </>
                      ) } ) } 
                         </Tbody>
+                        
                 </Table>
+           
+						<Pagination showPerPage={showPerPage} 
+						onPaginationChange={onPaginationChange} 
+				        total={getCategoryApi.length}/>
                 </TableContainer>
 
                 {/* modal dialogie box for category*/}
