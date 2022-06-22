@@ -168,7 +168,7 @@ const AddProduct = () => {
     //Fetch category
 
     const fetchCategory = async () => {
-        const response = await axios.get(categoryApi, {
+        const response = await axios.get(categoryApi+"?pageNo=0&pageSize=10", {
             headers: {
                 'Content-Type': 'application/json',
             }
@@ -180,7 +180,7 @@ const AddProduct = () => {
 
     const fetchSubCatgeory = async () => {
 
-        const response = await axios.get(`${subCategoryApi}${categoryId}`, {
+        const response = await axios.get(`${subCategoryApi}${categoryId}?pageNo=0&pageSize=10`, {
             headers: {
                 'Content-Type': 'application/json',
             }

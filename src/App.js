@@ -27,7 +27,7 @@ function App() {
         {!isAuthenticated && <Login setIsAuthenticated={setIsAuthenticated} setShowImg={setShowImg}/>}
         {isAuthenticated && <Header setShowLabel={setShowLabel}/>}
         {isAuthenticated && <DesktopMenu setIsAuthenticated={setIsAuthenticated} showLabel={showLabel}/>}
-        {isAuthenticated && <RoutesWrapper setCategoryId={setCategoryId} categoryId={categoryId}/>}
+        {isAuthenticated && <RoutesWrapper setCategoryId={setCategoryId} categoryId={categoryId} showLabel={showLabel}/>}
         {isAuthenticated && <Footer/>} 
  
  {/* added by me delete it. */}

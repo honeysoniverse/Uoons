@@ -30,89 +30,36 @@ import {useNavigate} from "react-router-dom";
 import Pagination from './Pagination';
 
 
-
-const Categories = ({setCategoryId, categoryId, showLabel}) => {
+const SubCategories =({setCategoryId, categoryId, showLabel}) => {
   
 
     const navigate = useNavigate();
 
-    const postCategory = process.env.REACT_APP_POSTCATEGORY_API;
-    const getAllCategory = process.env.REACT_APP_GETALLCATEGORY_API;
+    
+    const getAllCategories = process.env.REACT_APP_GETALLCATEGORY_API;
     const postSubCategory = process.env.REACT_APP_POSTSUBCATEGORY_API;
     
     const sellerId_LOC = localStorage.getItem("LoginData");
     const sellerId = JSON.parse(sellerId_LOC).data.userId;
 
-    const imageFieldRef = useRef(null);
-    const subImageFieldRef = useRef(null);
-
-    const postCategoryData = {
-
-        category: ""
-    }
-
     const postSubCategoryData = {
         subcategory: ""
     }
-    
-    const isMdBreakpoint = useBreakpointValue({ base: false, md: true });
+  
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [getCategoryApi, setGetCategoryApi] = useState([])
-    const [categoryTitle, setCategoryTitle] = useState("")
-    const [categoryImageUpload, setCategoryImageUpload] = useState("")
-    const [postCategoryApi, setPostCategoryApi] = useState(postCategoryData)
+    const [getCategoriesApi, setGetCategoriesApi] = useState([])
     const [showSuccessText, setShowSucessText] = useState(false)
-    // const [showCategoryDialogueBox, setShowCategoryDialogueBox] = useState(true)
     const [showSubCategoryDialogueBox, setShowSubCategoryDialogueBox] = useState(false)
     const [subCategoryTitle, setSubCategoryTitle] = useState('')
     const [subCategoryImageUpload, setSubCategoryImageUpload] = useState("")
     const [postSubCategoryApi, setPostSubCategoryApi] = useState(postSubCategoryData);
-    const [showPerPage] = useState(5);
-    const [pagination, setPagination] = useState({
-		start:0,
-		end:showPerPage
-	})
 
-	const onPaginationChange = (start, end) => {
-		setPagination({start : start, end : end});
-	}
-
-// Get all category (get Call)
-    const getCategoryData = async () => {
-        const response = await axios.get(`${getAllCategory}/${sellerId}?pageNo=0&pageSize=10`, {
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        setGetCategoryApi(response.data.data)
-    }
-
-    //Get all category image by category id (get call)
-
-    // const getCategoryImageData = async()=>{
-    //     const response =await axios.get(`${getCategoryImage}/${categoryId}`)
-    // }
-
-    const getCategoryTitle = (e) => {
-        setCategoryTitle(e)
-        setPostCategoryApi({ ...postCategoryApi, category: e})
-    }
-
-
-    const categoryFileUpload = () => {
-        imageFieldRef.current.click();
-    }
-
-    const handleSelectedCategoryFile = (e) => {
-        setCategoryImageUpload(e.target.files[0])
-
-    }
-
+    const subImageFieldRef = useRef(null);
+   
     const getSubCategoryTitle = (e) => {
         setSubCategoryTitle(e)
         setPostSubCategoryApi({ ...postSubCategoryApi, subcategory: e})
     }
-
     const subCategoryFileUpload = () => {
         subImageFieldRef.current.click();
     }
@@ -122,43 +69,18 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
 
     }
 
+// Get all category (get Call)
 
-     
-    //POST API for category
-
-    const saveCategory = async () => {
-
-        console.log(postCategoryApi)
-
-        const formData = new FormData();
-        formData.append("image", categoryImageUpload)
-        formData.append('category', new Blob([JSON.stringify(categoryTitle)], {
-
-            type: "application/json"
-            
-        }));
-        console.log(formData)
-    
-        
-        const response = await fetch(`${postCategory}/${sellerId}`,
-        {
-            method: 'POST',
-            body:formData 
-        });
-        const parsedData = await response.json()
-       
-
-        if(response.status===200){
-            
-            setShowSucessText(true)
-            setShowSubCategoryDialogueBox(true)
-            console.log(parsedData)
-            setCategoryId(parsedData.data.catId)
-            
-            setCategoryImageUpload("")
-        }
-    
+    const getCategoriesData = async () => {
+        const response = await axios.get(`${getAllCategories}/${sellerId}?pageNo=0&pageSize=10`, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        console.log(response)
+        setGetCategoriesApi(response.data.data)
     }
+
 
     //POST API for sub-category
    
@@ -192,23 +114,19 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
 
 
     const viewOnClick =(cat)=>{
-        
+        onOpen()
       setCategoryId(cat)
-      navigate(rootPathNames.viewProduct)
+     
     }
 
     useEffect(()=>{
-        getCategoryData()
+        getCategoriesData()
     },[])
 
-  
+
     return (
 
         <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
-            <Flex color="white" justifyContent="flex-end" mb="16px" >
-                <Button name='Add Category' handleOnClick={onOpen}></Button>
-            </Flex>
-
             <Box bg={colors.white} borderRadius="lg" height="auto" marginLeft={showLabel?"280px":"100px"} padding='20px' fontFamily='Poppins, sans-serif'>
                 <Text fontSize="18px">Categories</Text>
                 <hr />
@@ -221,10 +139,6 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
                             <option value="8">8</option>
                         </Select>
                         </Box>
-                        {/* <Box ml="100px">
-                            <Icon as={FaSearch} mr="10px" />
-                        <Input placeholder="search"  width="100%"/>
-                       </Box> */}
                     </Flex>
                 </HStack>
     {/* /////////////////////////////////////////////////////// */}
@@ -235,70 +149,38 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
                             <Tr>
                         <Th color={colors.white} fontSize="14px">Image</Th>
                         <Th color={colors.white} fontSize="14px">Title</Th>
-                        <Th color={colors.white} fontSize="14px">View Product</Th>
+                        <Th color={colors.white} fontSize="14px">Add Sub-Category</Th>
                         <Th color={colors.white} fontSize="14px">Edit</Th>
                         <Th color={colors.white} fontSize="14px">Delete</Th>
             
                 </Tr>
                 </Thead>
-                <Tbody fontWeight="" justifyContent="space-around" letterSpacing="2px">
-                {getCategoryApi.reverse().slice(pagination.start, pagination.end).map((currElem, index, arr)=>{
+                <Tbody fontWeight="500" justifyContent="space-around" letterSpacing="2px">
+                {getCategoriesApi.map((currElem, index, arr)=>{
                             return (
                             <>
                             <Tr key={index}>
                               <Td><Image height="70px" width="70px" 
-                              src={`http://13.233.1.96:9092/product/category/categoryImage/${currElem.catId}`} 
+                              src={`http://13.233.1.96:9092/product/category/categoryImage/${currElem.catId}`}
                               boxShadow="xl" borderRadius="10px"/></Td>
                               <Td>{currElem.categoryName}</Td>
-                              <Td><Icon as={FaEye} onClick={()=>viewOnClick(currElem.catId)} cursor="pointer" ml="40px" /></Td>
+                              <Td><Button name='+'  handleOnClick={()=>viewOnClick(currElem.catId)}></Button></Td>
                               <Td><Icon as={FaEdit} fill="blue" ml="10px" cursor="pointer" height="50px" /></Td>
                               <Td><Icon as={FaTrashAlt} fill="red" ml="10px" cursor="pointer" height="50px"/></Td>
                             </Tr>    
                         </>
-                     ) } ) } 
+                      ) } ) }  
                         </Tbody>
                         
                 </Table>
            
-						<Pagination showPerPage={showPerPage} 
-						onPaginationChange={onPaginationChange} 
-				        total={getCategoryApi.length}/>
+						
                 </TableContainer>
 
-                {/* modal dialogie box for category*/}
-
-                <Modal isOpen={isOpen} onClose={onClose}>
-                    <ModalOverlay />
-                    <ModalContent>
-                        <ModalHeader>Add Category</ModalHeader>
-                        <hr />
-                        <ModalCloseButton />
-                        <ModalBody>
-                            <Text>Title</Text>
-                            <InputField setValue={getCategoryTitle} value={categoryTitle} />
-
-                            <HStack justifyContent="space-around">
-                                <ChakraButton height="50px" width="100px" fontSize="14px" onClick={categoryFileUpload} mt="40px">Upload Image</ChakraButton>
-                                <Input type="file" style={{ display: 'none' }} ref={imageFieldRef} onChange={handleSelectedCategoryFile} accept="image/png, image/jpeg" />
-                                {categoryImageUpload !== "" && <Image src={URL.createObjectURL(categoryImageUpload)} height="200px" width="200px" objectFit="cover" />}
-                            </HStack>
-
-                        </ModalBody>
-                        <hr />
-                        <ModalFooter>
-                            <HStack spacing={8} width="100%">
-                            {showSuccessText && <Text color={colors.green}>Category saved succesfully</Text>}
-
-                            <Button name="Save" handleOnClick={saveCategory}></Button>
-                            <Button name="Close" handleOnClick={onClose}></Button>
-                            </HStack>
-                        </ModalFooter>
-                    </ModalContent>
-                </Modal>
 
                 {/* Modal dialogoue box for sub category */}
 
-               {showSubCategoryDialogueBox && <Modal isOpen={isOpen} onClose={onClose}>
+                <Modal isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />
                     <ModalContent>
                         <ModalHeader>Add Sub Category</ModalHeader>
@@ -323,7 +205,7 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
                             </HStack>
                         </ModalFooter>
                     </ModalContent>
-                </Modal>}
+                </Modal>
             </Box>
         </Box>
 
@@ -331,4 +213,4 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
     )
 }
 
-export default Categories
+export default SubCategories

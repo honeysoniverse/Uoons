@@ -10,8 +10,9 @@ const OrdersPage = lazy(() => import('./pages/Orders'));
 const ProductPage = lazy(() => import('./pages/Product'));
 const AddProduct = lazy(()=> import('./pages/AddProduct'));
 const Categories = lazy(()=> import('./pages/Categories'));
-const ViewProducts = lazy(()=>import('./pages/ViewProduct'))
-const RoutesWrapper = ({setCategoryId, categoryId, setCatId, catId}) => (
+const SubCategories = lazy(()=>import('./pages/SubCategories'))
+const ViewProducts = lazy(()=>import('./pages/ViewProduct'));
+const RoutesWrapper = ({setCategoryId, categoryId, showLabel}) => (
   <Suspense fallback={<Spinner/>}>
     <Routes>
       <Route
@@ -24,11 +25,15 @@ const RoutesWrapper = ({setCategoryId, categoryId, setCatId, catId}) => (
       />
         <Route
         path={rootPathNames.products}
-        element={<ProtectedRoute component={ProductPage} isProtected={false} />}
+        element={<ProtectedRoute component={ProductPage} isProtected={false} showLabel={showLabel}/>}
       />
         <Route
         path={rootPathNames.categories}
-        element={<ProtectedRoute component={Categories} isProtected={false} setCategoryId={setCategoryId} categoryId={categoryId}/>}
+        element={<ProtectedRoute component={Categories} isProtected={false} setCategoryId={setCategoryId} categoryId={categoryId} showLabel={showLabel}/>}
+      />
+      <Route
+        path={rootPathNames.subCategories}
+        element={<ProtectedRoute component={SubCategories} isProtected={false} setCategoryId={setCategoryId} categoryId={categoryId} showLabel={showLabel}/>}
       />
        <Route
         path={rootPathNames.addProduct}
@@ -36,7 +41,7 @@ const RoutesWrapper = ({setCategoryId, categoryId, setCatId, catId}) => (
       />
       <Route
         path={rootPathNames.viewProduct}
-        element={<ProtectedRoute component={ViewProducts} isProtected={false} categoryId={categoryId}/>}
+        element={<ProtectedRoute component={ViewProducts} isProtected={false} categoryId={categoryId} showLabel={showLabel}/>}
       />
       
     </Routes>

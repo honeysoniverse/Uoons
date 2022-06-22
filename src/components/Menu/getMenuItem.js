@@ -35,6 +35,11 @@ export const getMainMenu = () => [
     label: 'Categories',
     icon: FaListAlt,
   },
+  {
+    path: pathNames.subCategories,
+    label: 'Sub-Categories',
+    icon: FaListAlt,
+  },
 
   {
     path: pathNames.analytics,
