@@ -1,50 +1,58 @@
 import React, { useState, useEffect } from "react";
-import { Flex, Link, List, ListItem } from '@chakra-ui/react'
-import { colors } from "../../resources/colors";
+import { Flex, Link, List, ListItem } from '@chakra-ui/react';
 import Button from "../Button";
-import { CPseudoBox } from '@chakra-ui/vue'
-const Pagination = ({ showPerPage, onPaginationChange, total }) => {
-  const [counter, setCounter] = useState(1);
 
-  useEffect(() => {
-    const value = showPerPage * counter;
-    onPaginationChange(value - showPerPage, value);
-  }, [counter]);
+const Pagination = ({ showPerPage , total, currentPage }) => {
+  const [counter, setCounter] = useState(0);
+
+ const onHandleButtonClick = (value) => {
+  setCounter(value)
+  currentPage(value)
+ }
 
   const onButtonClick = (type) => {
     if (type === "prev") {
-      if (counter === 1) {
-        setCounter(1);
+      if (counter === 0) {
+        currentPage(0);
+        setCounter(0)
       } else {
-        setCounter(counter - 1);
+       
+        currentPage(counter - 1);
+        setCounter(counter - 1)
       }
     } else if (type === "next") {
-      if (Math.ceil(total / showPerPage) === counter) {
-        setCounter(counter);
+      console.log(">>>counter",counter)
+      console.log(">>>Math.ceil(total / showPerPage)",Math.ceil(total / showPerPage))
+      if (counter === Math.ceil(total / showPerPage)-1) {
+        currentPage(counter);
+        setCounter(0)
       } else {
-        setCounter(counter + 1);
+        currentPage(counter + 1);
+        setCounter(counter + 1)
       }
     }
   };
   return (
     <>
       <Flex justifyContent="space-evenly" p="10">
-        <Link href="#" onClick={() => onButtonClick("prev")}>Previous</Link>
+        <Button name="<<">
+        <Link href="#" onClick={() => onButtonClick("prev")} style={{textDecoration:"none"}}></Link>
 
+        </Button>
+       
         {new Array(Math.ceil(total / showPerPage)).fill("").map((el, index) => (
-          <List>
+          <List key={index}>
             <ListItem>
-              <Link href="#" onClick={() => setCounter(index + 1)}>
+              <Link href="#" onClick={() => onHandleButtonClick(index)} style={{textDecoration:"none"}}>
                 <Button name={index+1}></Button>
             </Link>
             </ListItem>
           </List>
         ))}
-        <List>
-          <ListItem>
-            <Link href="#" onClick={() => onButtonClick("next")}>Next</Link>
-          </ListItem>
-        </List>
+        <Button name=">>">
+        <Link href="#" onClick={() => onButtonClick("next")} style={{textDecoration:"none"}}></Link>
+        </Button>
+           
       </Flex>
     </>
   );

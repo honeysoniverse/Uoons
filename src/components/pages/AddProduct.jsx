@@ -15,19 +15,16 @@ const AddProduct = () => {
     const multiUploadInputRef = React.useRef(null);
 
     const initProductState = {
-        description: "abc",
+        description: "",
         salientFeaturess:[],
-        returnPolicy: "abc",
-        title: "abc",
+        returnPolicy: "",
+        title: "",
         MRP:0,
         offer_price: 0,
         sale_price:0,
         additionalInformation:[]
         }
 
-
-    const [inputFieldList, setInputField] = useState([]);
-    const [salientFeature, setSalientFeature] = useState([]);
     const [showDescLabel, setShowDescLabel] = useState(false)
     const [showLabel, setShowLabel] = useState(false);
     const [categoryApiData, setCategoryApiData] = useState([])
@@ -37,6 +34,7 @@ const AddProduct = () => {
     const [file, setFile] = useState();
     const [multiFile, setMultiFile] = useState([])
     const [productDetail, setProductDetail] = useState(initProductState)
+    const [showSuccessText, setShowSeccessText] = useState(false)
 
 
 
@@ -47,60 +45,15 @@ const AddProduct = () => {
     const sellerId_LOC = localStorage.getItem("LoginData")
     const sellerId = JSON.parse(sellerId_LOC).data.userId
 
-    const dispatch = useDispatch()
-
-    // const categoryValue = useSelector(state => state);
-    // const subCategoryValue = useSelector(state => state);
-    // const titleValue = useSelector(state => state);
-    // const salePriceValue = useSelector(state => state);
-    // const offerPriceValue = useSelector(state => state);
-    // const mrpValue = useSelector(state => state);
-    // const descriptionValue = useSelector(state => state);
-    // const additionalInformationValue = useSelector(state => state);
-    // const additionalInfoTitleValue = useSelector(state => state);
-    // const additionalInfoDescValue = useSelector(state => state);
-    // const salientFeaturesValue = useSelector(state => state);
-    // const returnPolicyValue = useSelector(state => state);
-
-    // const categoryData = categoryValue.addProductReducer.category
-    // const subCategoryData = subCategoryValue.addProductReducer.subCategory
-    // const title = titleValue.addProductReducer.title
-    // const sale_price = salePriceValue.addProductReducer.salePrice
-    // const offer_price = offerPriceValue.addProductReducer.offerPrice
-    // const MRP = mrpValue.addProductReducer.mrpPrice
-    // const description = descriptionValue.addProductReducer.description
-    // const additionalInformation = additionalInformationValue.addProductReducer.additionalInformation
-    // const additionalInfoDescTitle = additionalInfoTitleValue.addProductReducer.additionalInformationTitle
-    // const additionalInfoDescData = additionalInfoDescValue.addProductReducer.additionalInformationDescription
-    // const salientFeaturess = salientFeaturesValue.addProductReducer.salientFeature
-    // const returnPolicy = returnPolicyValue.addProductReducer.returnPolicy
-
-    // const postData = {
-    //     // categoryData,
-    //     // subCategoryData,
-    //     title,
-    //     sale_price,
-    //     offer_price,
-    //     MRP,
-    //     description,
-    //     additionalInformation,
-    //     additionalInfoDescTitle,
-    //     additionalInfoDescData,
-    //     salientFeaturess,
-    //     returnPolicy
-    // }
-    // console.log(postData)
-    const { setCategoryValue, setSubCategoryValue } = bindActionCreators(actioncreator, dispatch);
-
     const handlesetCategoryValue = async (e) => {
-        setCategoryValue(e.target.value);
+      
         for (let i = 0; i < categoryApiData.length; i++) {
             if (e.target.value === categoryApiData[i].categoryName) setCategoryId(categoryApiData[i].catId)
         }
     }
 
     const handlesetSubCategoryValue = async (e) => {
-        setSubCategoryValue(e.target.value)
+       
         for (let i = 0; i < subCategoryApiData.length; i++) {
             if (e.target.value === subCategoryApiData[i].subCategoryName) setSubCategoryId(subCategoryApiData[i].subcatId)
         }
@@ -161,6 +114,7 @@ const AddProduct = () => {
     updatedAreas[index] = e.target.value;
     setProductDetail(prev => ({...prev, salientFeaturess: updatedAreas}));
     }
+
     //POST API CALL
 
     const handleFormData = () =>  saveProduct() 
@@ -250,11 +204,22 @@ const AddProduct = () => {
         }
         )
         console.log(response)
+        if(response.status === 200){
+               setShowSeccessText(true);
+               setCategoryApiData([])
+               setSubCategoryApiData([])
+            //    setProductDetail(...initProductState)
+               setTimeout(()=>{
+                setShowSeccessText(false)
+               },3000)
+           
+        }
     }
 
     return (
         <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
             <Box bg={colors.white} borderRadius="lg" height="auto" ml="280px" padding='20px' fontFamily='Poppins, sans-serif'>
+               {showSuccessText && <Text color={colors.green}>Product Added Successfully</Text>}
                 <Text fontSize="18px">Add Product</Text>
                 <hr />
 

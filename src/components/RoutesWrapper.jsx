@@ -17,7 +17,7 @@ const RoutesWrapper = ({setCategoryId, categoryId, showLabel}) => (
     <Routes>
       <Route
         path={rootPathNames.homepage}
-        element={<ProtectedRoute component={HomePage} isProtected={false} />}
+        element={<ProtectedRoute component={HomePage} isProtected={false} showLabel={showLabel}/>}
       />
        <Route
         path={rootPathNames.orders}

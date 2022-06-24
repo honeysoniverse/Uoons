@@ -25,38 +25,67 @@ import { rootPathNames } from '../config/pathNames';
 import Link from '../Link';
 import {useState, useEffect} from 'react';
 import axios from 'axios';
+import Loader from "react-js-loader";
 
 const Product = ({showLabel}) => {
   const [productData, setProductData] = useState([])
-
-  const getAllProduct = process.env.REACT_APP_GETALLPRODUCT_API;
-  const sellerId_LOC = localStorage.getItem("LoginData")
-  const sellerId = JSON.parse(sellerId_LOC).data.userId
+  const [productDataCount, setProductDataCount] = useState(0)
   const [showPerPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(0)
+  const [isLoading, setLoading] = useState(false)
   const [pagination, setPagination] = useState({
   start:0,
   end:showPerPage
 })
 
-const onPaginationChange = (start, end) => {
-  setPagination({start : start, end : end});
-}
+
+const getAllProduct = process.env.REACT_APP_GET_ALL_PRODUCT_WITH_PAGINATION_API;
+
+const sellerId_LOC = localStorage.getItem("LoginData")
+const sellerId = JSON.parse(sellerId_LOC).data.userId
+
+
 
   //Get all product by seller id
-
+ // http://13.233.1.96:9092/product/item/getAllProductWithPagination?pageNo=0&pageSize=5
   const allProductData = async()=>{
-    const response = await axios.get(`${getAllProduct}/${sellerId}?pageNo=0&pageSize=10`, {
+    const response = await axios.get(`${getAllProduct}/${sellerId}?pageNo=${currentPage}&pageSize=5`, {
       headers: {
           'Content-Type': 'application/json',
       }})
-      console.log(response.data.data)
-      setProductData(response.data.data)
+      console.log(response.data.data.productResponseDtoList)
 
+      console.log('>>>>allProductData',response.data.data.totalNoOfProduct)//39
+
+      setProductDataCount(response.data.data.totalNoOfProduct)
+
+       setProductData(response.data.data.productResponseDtoList)
+
+      setLoading(false)
   }
+
+  // const allProductDataCount = async()=>{
+   
+  //   const response = await axios.get(`${getAllProductCount}/${sellerId}`, {
+  //     headers: {
+  //         'Content-Type': 'application/json',
+  //     }})
+  //     console.log('>>>>allProductData',response.data.data)
+      
+  //     setLoading(false)
+  // }
+
+  // useEffect(()=>{
+  //   setLoading(true)
+  //   allProductDataCount()
+  // },[])
   
   useEffect(()=>{
+    setLoading(true)
     allProductData()
-  },[])
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>run",currentPage)
+  },[currentPage])
+  
 
   return (
     <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
@@ -83,8 +112,8 @@ const onPaginationChange = (start, end) => {
          <Center> <Icon as={FaSearch} mr="10px" /></Center>
           <Input placeholder="Basic usage"  w="32%" />
         </Flex>
-           <TableContainer mt="40px" >
-                    <Table variant='striped' colorScheme="gray">
+         <TableContainer mt="40px" >
+            {!isLoading?<Table variant='striped' colorScheme="gray">
                         <Thead bg={colors.cornflowerBlue} >
                             <Tr>
                         <Th color={colors.white} fontSize="14px">Image</Th>
@@ -96,7 +125,7 @@ const onPaginationChange = (start, end) => {
                 </Tr>
                 </Thead>
                 <Tbody fontWeight="500" justifyContent="space-around" letterSpacing="2px">
-                        {productData?.reverse().slice(pagination.start, pagination.end).map((currElem, index, array)=>{
+                        {productData?.map((currElem, index, array)=>{
                             return (
                             <>
                             <Tr key={index}>
@@ -111,12 +140,15 @@ const onPaginationChange = (start, end) => {
                         </>
                      ) } ) } 
                         </Tbody>
-                        <Pagination showPerPage={showPerPage} 
-					            	onPaginationChange={onPaginationChange} 
-				                total={productData.length}/>
-                </Table>
-                
+                     
+                </Table>: <Loader type="spinner-default" bgColor={colors.cornflowerBlue} title={"box-rotate-y"} color={'#FFFFFF'} size={50}/>}
+                <Pagination
+                        showPerPage={showPerPage} 
+				                total={productDataCount}
+                        currentPage={setCurrentPage}
+                        />
                 </TableContainer>
+          
       
       </Box>
 </Box>

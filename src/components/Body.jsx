@@ -2,9 +2,9 @@ import React from 'react'
 import { Text, VStack, SimpleGrid, Box, Container} from '@chakra-ui/react';
 import { colors } from '../resources/colors';
 
-const Body = ({showLabel}) => {
+const Body = () => {
   return (
-      <Box bg={colors.backgroundGray} p={6} >
+      <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
     <VStack bg={colors.backgroundGray} alignItems="flex-start" paddingLeft='40px'>
     <Text fontSize='2xl' fontFamily="Poppins, sans-serif" mt="20px">Welcome, Darren</Text>
     <Text fontFamily="Poppins, sans-serif" color="rgb(148, 163, 175)" fontSize='sm'>Let's get your business started in view steps</Text>

@@ -37,7 +37,7 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
     const navigate = useNavigate();
 
     const postCategory = process.env.REACT_APP_POSTCATEGORY_API;
-    const getAllCategory = process.env.REACT_APP_GETALLCATEGORY_API;
+    const getAllCategory = process.env.REACT_APP_GET_ALL_CATEGORY_WITH_PAGINATION_API;
     const postSubCategory = process.env.REACT_APP_POSTSUBCATEGORY_API;
     
     const sellerId_LOC = localStorage.getItem("LoginData");
@@ -67,11 +67,13 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
     const [subCategoryTitle, setSubCategoryTitle] = useState('')
     const [subCategoryImageUpload, setSubCategoryImageUpload] = useState("")
     const [postSubCategoryApi, setPostSubCategoryApi] = useState(postSubCategoryData);
+    const [categoryDataCount, setCategoryDataCount] = useState(0)
     const [showPerPage] = useState(5);
+    const [currentPage, setCurrentPage] = useState(0)
     const [pagination, setPagination] = useState({
-		start:0,
-		end:showPerPage
-	})
+        start:0,
+        end:showPerPage
+      })
 
 	const onPaginationChange = (start, end) => {
 		setPagination({start : start, end : end});
@@ -79,12 +81,13 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
 
 // Get all category (get Call)
     const getCategoryData = async () => {
-        const response = await axios.get(`${getAllCategory}/${sellerId}?pageNo=0&pageSize=10`, {
+        const response = await axios.get(`${getAllCategory}/${sellerId}?pageNo=${currentPage}&pageSize=5`, {
             headers: {
                 'Content-Type': 'application/json',
             }
         })
-        setGetCategoryApi(response.data.data)
+        setGetCategoryApi(response.data.data.categoryResponseList)
+        setCategoryDataCount(response.data.data.totalNoOfCategory)
     }
 
     //Get all category image by category id (get call)
@@ -199,7 +202,7 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
 
     useEffect(()=>{
         getCategoryData()
-    },[])
+    },[currentPage])
 
   
     return (
@@ -234,7 +237,7 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
                         <Thead bg={colors.cornflowerBlue}>
                             <Tr>
                         <Th color={colors.white} fontSize="14px">Image</Th>
-                        <Th color={colors.white} fontSize="14px">Title</Th>
+                        <Th color={colors.white} fontSize="14px">Category</Th>
                         <Th color={colors.white} fontSize="14px">View Product</Th>
                         <Th color={colors.white} fontSize="14px">Edit</Th>
                         <Th color={colors.white} fontSize="14px">Delete</Th>
@@ -261,8 +264,8 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
                 </Table>
            
 						<Pagination showPerPage={showPerPage} 
-						onPaginationChange={onPaginationChange} 
-				        total={getCategoryApi.length}/>
+						 currentPage={setCurrentPage}
+				          total={categoryDataCount}/>
                 </TableContainer>
 
                 {/* modal dialogie box for category*/}

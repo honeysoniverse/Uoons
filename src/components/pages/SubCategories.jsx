@@ -33,10 +33,10 @@ import Pagination from './Pagination';
 const SubCategories =({setCategoryId, categoryId, showLabel}) => {
   
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     
-    const getAllCategories = process.env.REACT_APP_GETALLCATEGORY_API;
+    const getAllCategories = process.env.REACT_APP_GET_ALL_CATEGORY_WITH_PAGINATION_API;
     const postSubCategory = process.env.REACT_APP_POSTSUBCATEGORY_API;
     
     const sellerId_LOC = localStorage.getItem("LoginData");
@@ -53,6 +53,17 @@ const SubCategories =({setCategoryId, categoryId, showLabel}) => {
     const [subCategoryTitle, setSubCategoryTitle] = useState('')
     const [subCategoryImageUpload, setSubCategoryImageUpload] = useState("")
     const [postSubCategoryApi, setPostSubCategoryApi] = useState(postSubCategoryData);
+    const [categoryDataCount, setCategoryDataCount] = useState(0)
+    const [showPerPage] = useState(5);
+    const [currentPage, setCurrentPage] = useState(0)
+    const [pagination, setPagination] = useState({
+        start:0,
+        end:showPerPage
+      })
+
+	const onPaginationChange = (start, end) => {
+		setPagination({start : start, end : end});
+	}
 
     const subImageFieldRef = useRef(null);
    
@@ -72,13 +83,15 @@ const SubCategories =({setCategoryId, categoryId, showLabel}) => {
 // Get all category (get Call)
 
     const getCategoriesData = async () => {
-        const response = await axios.get(`${getAllCategories}/${sellerId}?pageNo=0&pageSize=10`, {
+        const response = await axios.get(`${getAllCategories}/${sellerId}?pageNo=${currentPage}&pageSize=5`, {
             headers: {
                 'Content-Type': 'application/json',
             }
         })
         console.log(response)
-        setGetCategoriesApi(response.data.data)
+        setGetCategoriesApi(response.data.data.categoryResponseList)
+        setCategoryDataCount(response.data.data.totalNoOfCategory)
+      
     }
 
 
@@ -119,9 +132,13 @@ const SubCategories =({setCategoryId, categoryId, showLabel}) => {
      
     }
 
+    const editOnClick =()=>{
+        console.log("edit on click")
+    }
+
     useEffect(()=>{
         getCategoriesData()
-    },[])
+    },[currentPage])
 
 
     return (
@@ -148,7 +165,7 @@ const SubCategories =({setCategoryId, categoryId, showLabel}) => {
                         <Thead bg={colors.cornflowerBlue}>
                             <Tr>
                         <Th color={colors.white} fontSize="14px">Image</Th>
-                        <Th color={colors.white} fontSize="14px">Title</Th>
+                        <Th color={colors.white} fontSize="14px">Category</Th>
                         <Th color={colors.white} fontSize="14px">Add Sub-Category</Th>
                         <Th color={colors.white} fontSize="14px">Edit</Th>
                         <Th color={colors.white} fontSize="14px">Delete</Th>
@@ -165,7 +182,7 @@ const SubCategories =({setCategoryId, categoryId, showLabel}) => {
                               boxShadow="xl" borderRadius="10px"/></Td>
                               <Td>{currElem.categoryName}</Td>
                               <Td><Button name='+'  handleOnClick={()=>viewOnClick(currElem.catId)}></Button></Td>
-                              <Td><Icon as={FaEdit} fill="blue" ml="10px" cursor="pointer" height="50px" /></Td>
+                              <Td onClick={editOnClick}><Icon as={FaEdit} fill="blue" ml="10px" cursor="pointer" height="50px"/></Td>
                               <Td><Icon as={FaTrashAlt} fill="red" ml="10px" cursor="pointer" height="50px"/></Td>
                             </Tr>    
                         </>
@@ -174,6 +191,9 @@ const SubCategories =({setCategoryId, categoryId, showLabel}) => {
                         
                 </Table>
            
+						<Pagination showPerPage={showPerPage} 
+						 currentPage={setCurrentPage}
+				          total={categoryDataCount}/>
 						
                 </TableContainer>
 
