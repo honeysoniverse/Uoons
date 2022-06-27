@@ -28,6 +28,7 @@ import Link from '../Link';
 import axios from 'axios';
 import {useNavigate} from "react-router-dom";
 import Pagination from './Pagination';
+import Loader from "react-js-loader";
 
 
 
@@ -74,6 +75,8 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
         start:0,
         end:showPerPage
       })
+    const [isLoading, setLoading] = useState(false)
+      
 
 	const onPaginationChange = (start, end) => {
 		setPagination({start : start, end : end});
@@ -86,8 +89,10 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
                 'Content-Type': 'application/json',
             }
         })
+        console.log(response)
         setGetCategoryApi(response.data.data.categoryResponseList)
         setCategoryDataCount(response.data.data.totalNoOfCategory)
+        setLoading(false)
     }
 
     //Get all category image by category id (get call)
@@ -192,8 +197,6 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
         console.log(parsedSubCatData)
     }
 
-
-
     const viewOnClick =(cat)=>{
         
       setCategoryId(cat)
@@ -201,8 +204,17 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
     }
 
     useEffect(()=>{
+        setLoading(true)
         getCategoryData()
     },[currentPage])
+
+
+    const edit = (catId) =>{
+        console.log("edit category clicked")
+        setCategoryId(catId)
+        navigate(rootPathNames.editCategory)
+
+    }
 
   
     return (
@@ -233,7 +245,7 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
     {/* /////////////////////////////////////////////////////// */}
 
                 <TableContainer mt="40px" fontSize="16px">
-                    <Table variant='striped' colorScheme="gray" >
+                {!isLoading?<Table variant='striped' colorScheme="gray" >
                         <Thead bg={colors.cornflowerBlue}>
                             <Tr>
                         <Th color={colors.white} fontSize="14px">Image</Th>
@@ -245,7 +257,7 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
                 </Tr>
                 </Thead>
                 <Tbody fontWeight="" justifyContent="space-around" letterSpacing="2px">
-                {getCategoryApi.reverse().slice(pagination.start, pagination.end).map((currElem, index, arr)=>{
+                {getCategoryApi.reverse().slice(pagination.start, pagination.end).map((currElem, index)=>{
                             return (
                             <>
                             <Tr key={index}>
@@ -254,14 +266,15 @@ const Categories = ({setCategoryId, categoryId, showLabel}) => {
                               boxShadow="xl" borderRadius="10px"/></Td>
                               <Td>{currElem.categoryName}</Td>
                               <Td><Icon as={FaEye} onClick={()=>viewOnClick(currElem.catId)} cursor="pointer" ml="40px" /></Td>
-                              <Td><Icon as={FaEdit} fill="blue" ml="10px" cursor="pointer" height="50px" /></Td>
+                              {/* <Td><Icon as={FaEdit} fill="blue" ml="10px" cursor="pointer" height="50px" /></Td> */}
+                              <Td><Button handleOnClick={()=>edit(currElem.catId)} name="Edit"></Button></Td>
                               <Td><Icon as={FaTrashAlt} fill="red" ml="10px" cursor="pointer" height="50px"/></Td>
                             </Tr>    
                         </>
                      ) } ) } 
                         </Tbody>
                         
-                </Table>
+                </Table>: <Loader type="spinner-default" bgColor={colors.cornflowerBlue} title={"box-rotate-y"} color={'#FFFFFF'} size={50}/>}
            
 						<Pagination showPerPage={showPerPage} 
 						 currentPage={setCurrentPage}

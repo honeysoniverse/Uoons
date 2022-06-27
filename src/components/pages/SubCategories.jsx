@@ -182,7 +182,7 @@ const SubCategories =({setCategoryId, categoryId, showLabel}) => {
                               boxShadow="xl" borderRadius="10px"/></Td>
                               <Td>{currElem.categoryName}</Td>
                               <Td><Button name='+'  handleOnClick={()=>viewOnClick(currElem.catId)}></Button></Td>
-                              <Td onClick={editOnClick}><Icon as={FaEdit} fill="blue" ml="10px" cursor="pointer" height="50px"/></Td>
+                              <Td><Icon as={FaEdit} fill="blue" ml="10px" cursor="pointer" height="50px"/></Td>
                               <Td><Icon as={FaTrashAlt} fill="red" ml="10px" cursor="pointer" height="50px"/></Td>
                             </Tr>    
                         </>

@@ -11,6 +11,7 @@ const Pagination = ({ showPerPage , total, currentPage }) => {
  }
 
   const onButtonClick = (type) => {
+    console.log("clicked")
     if (type === "prev") {
       if (counter === 0) {
         currentPage(0);
@@ -35,24 +36,14 @@ const Pagination = ({ showPerPage , total, currentPage }) => {
   return (
     <>
       <Flex justifyContent="space-evenly" p="10">
-        <Button name="<<">
-        <Link href="#" onClick={() => onButtonClick("prev")} style={{textDecoration:"none"}}></Link>
-
-        </Button>
+        <Button name="prev" handleOnClick={() => onButtonClick("prev")}></Button>
        
         {new Array(Math.ceil(total / showPerPage)).fill("").map((el, index) => (
           <List key={index}>
-            <ListItem>
-              <Link href="#" onClick={() => onHandleButtonClick(index)} style={{textDecoration:"none"}}>
-                <Button name={index+1}></Button>
-            </Link>
-            </ListItem>
+              <Button handleOnClick={() => onHandleButtonClick(index)} name={index+1}></Button>
           </List>
         ))}
-        <Button name=">>">
-        <Link href="#" onClick={() => onButtonClick("next")} style={{textDecoration:"none"}}></Link>
-        </Button>
-           
+        <Button name="next" handleOnClick={() => onButtonClick("next")}></Button>    
       </Flex>
     </>
   );

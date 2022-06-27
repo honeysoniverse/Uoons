@@ -16,7 +16,8 @@ export const pathNames = {
   notices: '/notices',
   settings: '/settings',
   logout: '/logout',
-  addProduct:'/products/addproduct'
+  addProduct:'/products/addproduct',
+  editCategory :'categories/editcategory'
 };
 
 export const rootPathNames = {
@@ -38,5 +39,6 @@ export const rootPathNames = {
   settings: '/settings/*',
   logout: '/logout/*',
   addProduct:'/products/addproduct/*',
-  viewProduct:'/prducts/viewproduct/*'
+  viewProduct:'/prducts/viewproduct/*',
+  editCategory: '/categories/editcategory/*'
 };

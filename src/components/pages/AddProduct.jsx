@@ -169,7 +169,15 @@ const AddProduct = () => {
     
     }
 
-  
+        //Clearing data after submiting
+        
+        const clearData = () =>{
+            setCategoryApiData([])
+            setSubCategoryApiData([])
+            setProductDetail({...initProductState})
+            setFile()
+            setMultiFile([])
+           }
  
     useEffect(() => {
 
@@ -192,12 +200,7 @@ const AddProduct = () => {
           
           for (let i = 0; i < multiFile.length; i++) {
             formData.append('images', multiFile[i])}
-        
 
-        // console.log(formData)
-        //      for (var [key, value] of formData.entries()) { 
-        //     console.log(key, value);
-        //   }
 
         const response = await axios.post(`${postDataApi}/${categoryId}/${subCategoryId}/${sellerId}`, formData ,{
 
@@ -206,9 +209,7 @@ const AddProduct = () => {
         console.log(response)
         if(response.status === 200){
                setShowSeccessText(true);
-               setCategoryApiData([])
-               setSubCategoryApiData([])
-            //    setProductDetail(...initProductState)
+               clearData()
                setTimeout(()=>{
                 setShowSeccessText(false)
                },3000)
@@ -243,7 +244,7 @@ const AddProduct = () => {
                     </VStack >
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>Title</FormLabel>
-                        <InputField placeholder='Title' setValue={getTitle} />
+                        <InputField placeholder='Title' setValue={getTitle} value={productDetail.title}/>
 
                     </VStack>
                 </HStack>
@@ -269,22 +270,22 @@ const AddProduct = () => {
                 <HStack mt='40px' spacing={5}>
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>Sale Price</FormLabel>
-                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={getSalePrice} />
+                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={getSalePrice} value={productDetail.sale_price} />
                     </VStack>
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>Offer Price</FormLabel>
-                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={getOfferPrice} />
+                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={getOfferPrice} value={productDetail.offer_price} />
                     </VStack>
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>MRP</FormLabel>
-                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={getMRP} />
+                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={getMRP} value={productDetail.MRP} />
                     </VStack>
                 </HStack>
 
                 <HStack mt='40px' flex='1'>
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel >Description</FormLabel>
-                        <Textarea bg={colors.backgroundGray} onChange={getDescription} />
+                        <Textarea bg={colors.backgroundGray} onChange={getDescription} value={productDetail.description} />
                     </VStack>
                 </HStack>
 
@@ -302,8 +303,8 @@ const AddProduct = () => {
                                 <FormLabel >Description</FormLabel></HStack>}
                             {productDetail.additionalInformation.map((item, index) =>
                              <HStack>
-                             <InputField setValue={(title)=> getAdditionalInfoTitle(title,index)} />
-                             <InputField setValue={(data) => getAdditionalInfoDesc(data, index)} />
+                             <InputField setValue={(title)=> getAdditionalInfoTitle(title,index)} value={productDetail.additionalInfoDescTitle}/>
+                             <InputField setValue={(data) => getAdditionalInfoDesc(data, index)} value={productDetail.additionalInfoDescData}/>
                          </HStack>
                             )}
                         </VStack>
@@ -314,7 +315,7 @@ const AddProduct = () => {
                         <HStack >
 
                             <FormLabel>Salient Features</FormLabel>
-                            <Button name='+' handleOnClick={salientOnClick}></Button>
+                            <Button name='+' handleOnClick={salientOnClick} ></Button>
                         </HStack>
 
                         <VStack>
@@ -323,7 +324,7 @@ const AddProduct = () => {
 
                             <VStack flex="1">
                                 {productDetail.salientFeaturess.map((value, index) => 
-                                    <HStack><Textarea onChange={(value) => getSalientFeature(value,index)} /></HStack>
+                                    <HStack><Textarea onChange={(value) => getSalientFeature(value,index)} value={productDetail.salientFeaturess}/></HStack>
                                     )}
                             </VStack>
                         </VStack>
@@ -334,7 +335,7 @@ const AddProduct = () => {
                 <HStack mt='40px' flex='1'>
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>Return Policy</FormLabel>
-                        <Textarea bg={colors.backgroundGray} height="150px" onChange={getReturnPolicy} />
+                        <Textarea bg={colors.backgroundGray} height="150px" onChange={getReturnPolicy} value={productDetail.returnPolicy}/>
                     </VStack>
                 </HStack>
                 <HStack mt='40px'>

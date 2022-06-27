@@ -5,6 +5,7 @@ import {  rootPathNames } from './config/pathNames';
 import ProtectedRoute from './ProtectedRoute';
 
 
+
 const HomePage = lazy(() => import('./pages/HomePage'));
 const OrdersPage = lazy(() => import('./pages/Orders'));
 const ProductPage = lazy(() => import('./pages/Product'));
@@ -12,6 +13,8 @@ const AddProduct = lazy(()=> import('./pages/AddProduct'));
 const Categories = lazy(()=> import('./pages/Categories'));
 const SubCategories = lazy(()=>import('./pages/SubCategories'))
 const ViewProducts = lazy(()=>import('./pages/ViewProduct'));
+const EditCategory = lazy(()=>import('./pages/EditCategory'));
+
 const RoutesWrapper = ({setCategoryId, categoryId, showLabel}) => (
   <Suspense fallback={<Spinner/>}>
     <Routes>
@@ -43,7 +46,10 @@ const RoutesWrapper = ({setCategoryId, categoryId, showLabel}) => (
         path={rootPathNames.viewProduct}
         element={<ProtectedRoute component={ViewProducts} isProtected={false} categoryId={categoryId} showLabel={showLabel}/>}
       />
-      
+        <Route
+        path={rootPathNames.editCategory}
+        element={<ProtectedRoute component={EditCategory} isProtected={false} setCategoryId={setCategoryId} categoryId={categoryId}/>}
+      />
     </Routes>
   </Suspense>
 );

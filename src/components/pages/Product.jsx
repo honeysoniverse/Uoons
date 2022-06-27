@@ -20,7 +20,7 @@ Image,
 import Pagination from './Pagination';
 import { colors } from '../../resources/colors';
 import Button from '../Button';
-import { FaSearch, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaSearch, FaEdit, FaTrashAlt} from 'react-icons/fa';
 import { rootPathNames } from '../config/pathNames';
 import Link from '../Link';
 import {useState, useEffect} from 'react';
@@ -40,6 +40,7 @@ const Product = ({showLabel}) => {
 
 
 const getAllProduct = process.env.REACT_APP_GET_ALL_PRODUCT_WITH_PAGINATION_API;
+const deleteProductById = process.env.REACT_APP_DELETE_PRODUCT_API;
 
 const sellerId_LOC = localStorage.getItem("LoginData")
 const sellerId = JSON.parse(sellerId_LOC).data.userId
@@ -47,7 +48,7 @@ const sellerId = JSON.parse(sellerId_LOC).data.userId
 
 
   //Get all product by seller id
- // http://13.233.1.96:9092/product/item/getAllProductWithPagination?pageNo=0&pageSize=5
+
   const allProductData = async()=>{
     const response = await axios.get(`${getAllProduct}/${sellerId}?pageNo=${currentPage}&pageSize=5`, {
       headers: {
@@ -55,38 +56,44 @@ const sellerId = JSON.parse(sellerId_LOC).data.userId
       }})
       console.log(response.data.data.productResponseDtoList)
 
-      console.log('>>>>allProductData',response.data.data.totalNoOfProduct)//39
-
       setProductDataCount(response.data.data.totalNoOfProduct)
 
-       setProductData(response.data.data.productResponseDtoList)
+      setProductData(response.data.data.productResponseDtoList)
 
       setLoading(false)
   }
 
-  // const allProductDataCount = async()=>{
-   
-  //   const response = await axios.get(`${getAllProductCount}/${sellerId}`, {
-  //     headers: {
-  //         'Content-Type': 'application/json',
-  //     }})
-  //     console.log('>>>>allProductData',response.data.data)
-      
-  //     setLoading(false)
-  // }
+  //Delete product by product id
 
-  // useEffect(()=>{
-  //   setLoading(true)
-  //   allProductDataCount()
-  // },[])
-  
+  const deleteProductApi = async (productId) => {
+
+		const response = await axios.delete(`${deleteProductById}/${productId}`, {
+			headers: {
+				'Content-Type': 'application/json'
+			}	
+		})
+     	console.log(response)
+
+       if(response.status === 200){
+			console.log("response 200 is running")
+        allProductData()
+     }	
+	}
+
   useEffect(()=>{
     setLoading(true)
     allProductData()
     console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>run",currentPage)
   },[currentPage])
-  
-
+   
+  const deleteProduct = (productId) =>{
+    console.log("delete clicked", productId)
+    deleteProductApi(productId);
+  }
+ 
+  const editProduct = () =>{
+    console.log("edit clicked")
+  }
   return (
     <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
       <Flex color="white" justifyContent="flex-end" mb="16px">
@@ -121,11 +128,13 @@ const sellerId = JSON.parse(sellerId_LOC).data.userId
                         <Th color={colors.white} fontSize="14px">Maximum Retail Price</Th>
                         <Th color={colors.white} fontSize="14px">Sale Price</Th>
                         <Th color={colors.white} fontSize="14px">Offer Price</Th>
+                        <Th color={colors.white} fontSize="14px">Edit</Th>
+                        <Th color={colors.white} fontSize="14px">Delete</Th>
             
                 </Tr>
                 </Thead>
                 <Tbody fontWeight="500" justifyContent="space-around" letterSpacing="2px">
-                        {productData?.map((currElem, index, array)=>{
+                        {productData?.map((currElem, index, productId)=>{
                             return (
                             <>
                             <Tr key={index}>
@@ -136,6 +145,10 @@ const sellerId = JSON.parse(sellerId_LOC).data.userId
                               <Td>{currElem.MRP}</Td>
                               <Td>{currElem.salePrice}</Td>
                               <Td>{currElem.offerPrice}</Td>
+                              {/* <Td><Icon as={FaEdit} fill="blue" ml="10px" cursor="pointer" height="50px" /></Td> */}
+                              <Td><Button handleOnClick={()=>editProduct(currElem.productId)} name="Edit"></Button></Td>
+                              <Td><Button handleOnClick={()=>deleteProduct(currElem.productId)} name="Delete"></Button></Td>
+                              {/* <Td><Icon as={FaTrashAlt} fill="red" ml="10px" cursor="pointer" height="50px"/></Td> */}
                             </Tr>    
                         </>
                      ) } ) } 
