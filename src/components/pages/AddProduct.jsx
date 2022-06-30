@@ -5,12 +5,12 @@ import InputField from '../InputField';
 import Button from '../Button';
 import { FaRupeeSign } from 'react-icons/fa';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { actioncreator } from '../../state/action-creators/combinactioncreator';
-import { bindActionCreators } from "redux";
+// import { useDispatch, useSelector } from 'react-redux';
+// import { actioncreator } from '../../state/action-creators/combinactioncreator';
+// import { bindActionCreators } from "redux";
 import axios from 'axios';
 
-const AddProduct = () => {
+const AddProduct = ({setShowSeccessText, showSuccessText}) => {
     const inputFieldRef = React.useRef(null);
     const multiUploadInputRef = React.useRef(null);
 
@@ -19,9 +19,9 @@ const AddProduct = () => {
         salientFeaturess:[],
         returnPolicy: "",
         title: "",
-        MRP:0,
-        offer_price: 0,
-        sale_price:0,
+        MRP:"",
+        offerPrice: "",
+        salePrice:"",
         additionalInformation:[]
         }
 
@@ -34,7 +34,7 @@ const AddProduct = () => {
     const [file, setFile] = useState();
     const [multiFile, setMultiFile] = useState([])
     const [productDetail, setProductDetail] = useState(initProductState)
-    const [showSuccessText, setShowSeccessText] = useState(false)
+   
 
 
 
@@ -63,11 +63,9 @@ const AddProduct = () => {
     const getTitle = (e) =>  setProductDetail(prev => ({...prev, title: e}))
     const getReturnPolicy = (e) => setProductDetail(prev => ({...prev, returnPolicy: e.target.value}))
     const getMRP = (e) =>  setProductDetail(prev => ({...prev, MRP: parseFloat(e)}))
-    const getSalePrice = (e) =>  setProductDetail(prev => ({...prev, sale_price: parseFloat(e)}))
-    const getOfferPrice = (e) =>  setProductDetail(prev => ({...prev, offer_price: parseFloat(e)}))
-    console.log(productDetail.MRP);
-    console.log(typeof productDetail.sale_price)
-    console.log(typeof productDetail.offer_price)
+    const getSalePrice = (e) =>  setProductDetail(prev => ({...prev, salePrice: parseFloat(e)}))
+    const getOfferPrice = (e) =>  setProductDetail(prev => ({...prev, offerPrice: parseFloat(e)}))
+   
     
     const getAdditionalInfoTitle = (title, index) =>  {
              let updatedAdditionalInfo = [...productDetail.additionalInformation];
@@ -178,14 +176,7 @@ const AddProduct = () => {
             setFile()
             setMultiFile([])
            }
- 
-    useEffect(() => {
-
-        fetchCategory()
-        fetchSubCatgeory()
-
-    }, [categoryId])
-
+console.log(file)
     //Post product api
 
     const saveProduct = async () => {
@@ -208,19 +199,26 @@ const AddProduct = () => {
         )
         console.log(response)
         if(response.status === 200){
-               setShowSeccessText(true);
+            setShowSeccessText(true);
                clearData()
                setTimeout(()=>{
                 setShowSeccessText(false)
-               },3000)
-           
+               },5000)
+               fetchCategory()
         }
     }
+    useEffect(() => {
+
+        fetchCategory()
+        fetchSubCatgeory()
+
+    }, [categoryId])
 
     return (
         <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
+            
             <Box bg={colors.white} borderRadius="lg" height="auto" ml="280px" padding='20px' fontFamily='Poppins, sans-serif'>
-               {showSuccessText && <Text color={colors.green}>Product Added Successfully</Text>}
+              
                 <Text fontSize="18px">Add Product</Text>
                 <hr />
 
@@ -270,11 +268,11 @@ const AddProduct = () => {
                 <HStack mt='40px' spacing={5}>
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>Sale Price</FormLabel>
-                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={getSalePrice} value={productDetail.sale_price} />
+                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={getSalePrice} value={productDetail.salePrice} />
                     </VStack>
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>Offer Price</FormLabel>
-                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={getOfferPrice} value={productDetail.offer_price} />
+                        <InputField width="100%" type="number" icon={FaRupeeSign} setValue={getOfferPrice} value={productDetail.offerPrice} />
                     </VStack>
                     <VStack alignItems='flex-start' flex="1">
                         <FormLabel>MRP</FormLabel>

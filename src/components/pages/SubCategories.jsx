@@ -115,6 +115,7 @@ const SubCategories =({setCategoryId, categoryId, showLabel}) => {
             body:formData 
         });
         const parsedSubCatData = await response.json()
+        console.log(parsedSubCatData)
 
         if(response.status === 200){
             alert("Sub Category added successfully")
@@ -122,6 +123,9 @@ const SubCategories =({setCategoryId, categoryId, showLabel}) => {
         
         }
         console.log(parsedSubCatData)
+        if(response.status === 200){
+            console.log(parsedSubCatData.data.subcatId)
+        }
     }
 
 

@@ -14,8 +14,9 @@ const Categories = lazy(()=> import('./pages/Categories'));
 const SubCategories = lazy(()=>import('./pages/SubCategories'))
 const ViewProducts = lazy(()=>import('./pages/ViewProduct'));
 const EditCategory = lazy(()=>import('./pages/EditCategory'));
+const EditProduct = lazy(()=>import('./pages/EditProduct'));
 
-const RoutesWrapper = ({setCategoryId, categoryId, showLabel}) => (
+const RoutesWrapper = ({setCategoryId, categoryId, showLabel, setProductId, productId, setShowSeccessText, showSuccessText}) => (
   <Suspense fallback={<Spinner/>}>
     <Routes>
       <Route
@@ -28,7 +29,7 @@ const RoutesWrapper = ({setCategoryId, categoryId, showLabel}) => (
       />
         <Route
         path={rootPathNames.products}
-        element={<ProtectedRoute component={ProductPage} isProtected={false} showLabel={showLabel}/>}
+        element={<ProtectedRoute component={ProductPage} isProtected={false} showLabel={showLabel} setProductId={setProductId} productId={productId}/>}
       />
         <Route
         path={rootPathNames.categories}
@@ -40,7 +41,8 @@ const RoutesWrapper = ({setCategoryId, categoryId, showLabel}) => (
       />
        <Route
         path={rootPathNames.addProduct}
-        element={<ProtectedRoute component={AddProduct} isProtected={false}  />}
+        element={<ProtectedRoute component={AddProduct} isProtected={false}  setProductId={setProductId} productId={productId} categoryId={categoryId} showLabel={showLabel}
+        setShowSeccessText={setShowSeccessText} showSuccessText={showSuccessText}/>}
       />
       <Route
         path={rootPathNames.viewProduct}
@@ -50,7 +52,12 @@ const RoutesWrapper = ({setCategoryId, categoryId, showLabel}) => (
         path={rootPathNames.editCategory}
         element={<ProtectedRoute component={EditCategory} isProtected={false} setCategoryId={setCategoryId} categoryId={categoryId}/>}
       />
+    <Route
+        path={rootPathNames.editProduct}
+        element={<ProtectedRoute component={EditProduct} isProtected={false}  setProductId={setProductId} productId={productId}/>}
+      />
     </Routes>
+   
   </Suspense>
 );
 

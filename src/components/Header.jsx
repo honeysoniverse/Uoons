@@ -1,20 +1,24 @@
 import React, { useState } from 'react'
-import { HStack, Image, Icon, Input, VStack, SimpleGrid, Button, useBreakpointValue } from '@chakra-ui/react';
-import { FaBars, FaSearch } from 'react-icons/fa';
+import { HStack, Image, Icon, Input, VStack, Box, Text, Button, useBreakpointValue } from '@chakra-ui/react';
+import { FaBars, FaSearch, FaWindowClose } from 'react-icons/fa';
 import { colors } from '../resources/colors';
 import InputField from './InputField';
 
 
-const Header = ({setShowLabel}) => {
+const Header = ({setShowLabel, setShowSucessText, showSuccessText}) => {
   const [search, setSearch] = useState('');
   const isMdBreakpoint = useBreakpointValue({ base: false, md: true });
+  
 
   const sideToggle =()=>{
     setShowLabel(prev=>!prev)
   }
+
+  
+  
   return (<>
 
-    <HStack justifyContent="space-evenly" boxShadow="md" position="sticky" top="0" bg={colors.white} zIndex={1}
+    <HStack justifyContent="space-evenly" boxShadow="md" position="sticky" top="0" bg={colors.white} zIndex={1} 
       height={
         {
           base: '60px', sm:'80px', md: '140px', lg: '100px', xl: '80px',
@@ -69,6 +73,14 @@ const Header = ({setShowLabel}) => {
         </HStack>
       </HStack>
     </HStack>
+  
+    {showSuccessText && 
+               <Box bg={colors.green} height="32px" mb={10} ml={300}  position="sticky" top="20" fontFamily="Poppins, sans-serif"
+               borderRadius="0 0 8px 8px" zIndex={1}>
+                <Icon as={FaWindowClose}  position="absolute" fill="white" left="98%"/>
+               <Text color={colors.white} textAlign="center" fontWeight="600">Product Added Successfully</Text>
+               </Box>}
+              
 </>
   )
 }

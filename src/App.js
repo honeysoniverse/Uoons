@@ -17,6 +17,8 @@ function App() {
   const [showLabel, setShowLabel] = useState(true)
   const [showImg, setShowImg] = useState(true)
   const[categoryId, setCategoryId] = useState('')
+  const [productId, setProductId] = useState('')
+  const [showSuccessText, setShowSeccessText] = useState(false)
 
   
  const redirect = () => {
@@ -25,9 +27,10 @@ function App() {
   return (
       <ChakraProvider>
         {!isAuthenticated && <Login setIsAuthenticated={setIsAuthenticated} setShowImg={setShowImg}/>}
-        {isAuthenticated && <Header setShowLabel={setShowLabel}/>}
+        {isAuthenticated && <Header setShowLabel={setShowLabel} showSuccessText={showSuccessText}/>}
         {isAuthenticated && <DesktopMenu setIsAuthenticated={setIsAuthenticated} showLabel={showLabel}/>}
-        {isAuthenticated && <RoutesWrapper setCategoryId={setCategoryId} categoryId={categoryId} showLabel={showLabel}/>}
+        {isAuthenticated && <RoutesWrapper setCategoryId={setCategoryId} categoryId={categoryId} showLabel={showLabel} 
+        setProductId={setProductId} productId={productId} setShowSeccessText={setShowSeccessText} showSuccessText={showSuccessText}/>}
         {isAuthenticated && <Footer/>} 
  
  {/* added by me delete it. */}

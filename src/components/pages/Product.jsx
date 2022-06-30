@@ -24,19 +24,22 @@ import { FaSearch, FaEdit, FaTrashAlt} from 'react-icons/fa';
 import { rootPathNames } from '../config/pathNames';
 import Link from '../Link';
 import {useState, useEffect} from 'react';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import axios from 'axios';
 import Loader from "react-js-loader";
+import { useNavigate } from 'react-router-dom';
 
-const Product = ({showLabel}) => {
+const Product = ({ setProductId, productId, showLabel}) => {
   const [productData, setProductData] = useState([])
   const [productDataCount, setProductDataCount] = useState(0)
   const [showPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(0)
   const [isLoading, setLoading] = useState(false)
-  const [pagination, setPagination] = useState({
-  start:0,
-  end:showPerPage
-})
+//   const [pagination, setPagination] = useState({
+//   start:0,
+//   end:showPerPage
+// })
 
 
 const getAllProduct = process.env.REACT_APP_GET_ALL_PRODUCT_WITH_PAGINATION_API;
@@ -45,7 +48,7 @@ const deleteProductById = process.env.REACT_APP_DELETE_PRODUCT_API;
 const sellerId_LOC = localStorage.getItem("LoginData")
 const sellerId = JSON.parse(sellerId_LOC).data.userId
 
-
+const navigate = useNavigate()
 
   //Get all product by seller id
 
@@ -88,12 +91,32 @@ const sellerId = JSON.parse(sellerId_LOC).data.userId
    
   const deleteProduct = (productId) =>{
     console.log("delete clicked", productId)
-    deleteProductApi(productId);
+    showConfirmationDialogue(productId)
   }
  
-  const editProduct = () =>{
-    console.log("edit clicked")
+  const editProduct = (product) =>{
+    console.log("edit clicked", product)
+    setProductId(product)
+    navigate(rootPathNames.editProduct)
+    
   }
+
+  const showConfirmationDialogue = (productId) => {
+
+		confirmAlert({
+		  title: 'confirm Delete!',
+		  message: 'Are you sure to delete product?.',
+		  buttons: [
+			{
+			  label: 'Yes',
+			  onClick: () => deleteProductApi(productId)
+			},
+			{
+			  label: 'No',
+			}
+		  ]
+		});
+	  }
   return (
     <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
       <Flex color="white" justifyContent="flex-end" mb="16px">
@@ -145,10 +168,8 @@ const sellerId = JSON.parse(sellerId_LOC).data.userId
                               <Td>{currElem.MRP}</Td>
                               <Td>{currElem.salePrice}</Td>
                               <Td>{currElem.offerPrice}</Td>
-                              {/* <Td><Icon as={FaEdit} fill="blue" ml="10px" cursor="pointer" height="50px" /></Td> */}
-                              <Td><Button handleOnClick={()=>editProduct(currElem.productId)} name="Edit"></Button></Td>
-                              <Td><Button handleOnClick={()=>deleteProduct(currElem.productId)} name="Delete"></Button></Td>
-                              {/* <Td><Icon as={FaTrashAlt} fill="red" ml="10px" cursor="pointer" height="50px"/></Td> */}
+                              <Td><Icon as={FaEdit} onClick={()=>editProduct(currElem.productId)}fill="blue" ml="10px" cursor="pointer" height="50px" /></Td>
+                               <Td><Icon as={FaTrashAlt} onClick={()=>deleteProduct(currElem.productId)}fill="red" ml="10px" cursor="pointer" height="50px"/></Td> 
                             </Tr>    
                         </>
                      ) } ) } 
