@@ -36,8 +36,6 @@ const AddProduct = ({setShowSeccessText, showSuccessText}) => {
     const [productDetail, setProductDetail] = useState(initProductState)
    
 
-
-
     const categoryApi = process.env.REACT_APP_CATEGORY_API;
     const subCategoryApi = process.env.REACT_APP_SUB_CATEGORY_API;
     const postDataApi = process.env.REACT_APP_POSTDATA_API;

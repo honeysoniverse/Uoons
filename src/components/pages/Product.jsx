@@ -148,7 +148,7 @@ const navigate = useNavigate()
                             <Tr>
                         <Th color={colors.white} fontSize="14px">Image</Th>
                         <Th color={colors.white} fontSize="14px">Product</Th>
-                        <Th color={colors.white} fontSize="14px">Maximum Retail Price</Th>
+                        <Th color={colors.white} fontSize="14px">MRP</Th>
                         <Th color={colors.white} fontSize="14px">Sale Price</Th>
                         <Th color={colors.white} fontSize="14px">Offer Price</Th>
                         <Th color={colors.white} fontSize="14px">Edit</Th>
@@ -157,7 +157,7 @@ const navigate = useNavigate()
                 </Tr>
                 </Thead>
                 <Tbody fontWeight="500" justifyContent="space-around" letterSpacing="2px">
-                        {productData?.map((currElem, index, productId)=>{
+                        {productData?.reverse().map((currElem, index, productId)=>{
                             return (
                             <>
                             <Tr key={index}>

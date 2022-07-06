@@ -217,7 +217,7 @@ const SubCategories =({setCategoryId, categoryId, showLabel}) => {
                             <HStack justifyContent="space-around">
                                 <ChakraButton height="50px" width="100px" fontSize="14px" onClick={subCategoryFileUpload} mt="40px">Upload Image</ChakraButton>
                                 <Input type="file" style={{ display: 'none' }} ref={subImageFieldRef} onChange={handleSelectedSubCategoryFile} accept="image/png, image/jpeg" />
-                                <Image src ={subCategoryImageUpload}height="200px" width="200px"  objectFit="cover" />
+                                {subCategoryImageUpload !== "" &&<Image src ={URL.createObjectURL(subCategoryImageUpload)}height="200px" width="200px"  objectFit="cover" />}
                             </HStack>
 
                         </ModalBody>

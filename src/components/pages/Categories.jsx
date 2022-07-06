@@ -26,6 +26,8 @@ const Categories = ({ setCategoryId, categoryId, showLabel }) => {
     const postCategory = process.env.REACT_APP_POSTCATEGORY_API;
     const getAllCategory = process.env.REACT_APP_GET_ALL_CATEGORY_WITH_PAGINATION_API;
     const postSubCategory = process.env.REACT_APP_POSTSUBCATEGORY_API;
+    const searchCategory = process.env.REACT_APP_SEARCH_CATEGORY;
+
 
     const sellerId_LOC = localStorage.getItem("LoginData");
     const sellerId = JSON.parse(sellerId_LOC).data.userId;
@@ -63,6 +65,7 @@ const Categories = ({ setCategoryId, categoryId, showLabel }) => {
     //     end:showPerPage
     //   })
     const [isLoading, setLoading] = useState(false)
+    const [categorySearchTerm, setCategorySearchTerm] = useState("");
 
 
     // const onPaginationChange = (start, end) => {
@@ -77,10 +80,14 @@ const Categories = ({ setCategoryId, categoryId, showLabel }) => {
             }
         })
         console.log(response)
+   
         setGetCategoryApi(response.data.data.categoryResponseList)
         setCategoryDataCount(response.data.data.totalNoOfCategory)
         setLoading(false)
     }
+
+    // Search Category Api
+    
 
     //Get all category image by category id (get call)
 
@@ -183,7 +190,7 @@ const Categories = ({ setCategoryId, categoryId, showLabel }) => {
             setShowSubCategoryDialogueBox(false)
             setShowCategoryDialogueBox(false)
             setTimeout(()=>{
-                setShowSucessText(true)
+                setShowSucessText(false)
             },5000)
 
         }
@@ -250,6 +257,15 @@ const Categories = ({ setCategoryId, categoryId, showLabel }) => {
         setShowCategoryDialogueBox(true)
     }
 
+    const search =(e) => setCategorySearchTerm(e)
+    
+
+    const searchCat = async() =>{
+        const response = await axios.get(`${searchCategory}/${categorySearchTerm}`)
+        console.log(response)
+       
+    }
+    
     return (
 
         <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
@@ -271,10 +287,14 @@ const Categories = ({ setCategoryId, categoryId, showLabel }) => {
                                 <option value="8">8</option>
                             </Select>
                         </Box>
-                        {/* <Box ml="100px">
-                            <Icon as={FaSearch} mr="10px" />
-                        <Input placeholder="search"  width="100%"/>
-                       </Box> */}
+                        <Box ml="100px" zIndex={0}>
+                            <HStack>
+                            <Icon as={FaSearch}  />
+                        <Input placeholder="search" width="auto" onChange={(e)=>search(e.target.value)}/>
+                        <Button name="Search" handleOnClick={searchCat}></Button> 
+                            </HStack>
+                          
+                       </Box>
                     </Flex>
                 </HStack>
                 {/* /////////////////////////////////////////////////////// */}
@@ -292,7 +312,15 @@ const Categories = ({ setCategoryId, categoryId, showLabel }) => {
                             </Tr>
                         </Thead>
                         <Tbody fontWeight="" justifyContent="space-around" letterSpacing="2px">
-                            {getCategoryApi.reverse().map((currElem, index) => {
+                            {getCategoryApi.filter((value)=>{
+                                if(categorySearchTerm === ""){
+                                    return value;
+                                }else if(
+                                    value.categoryName.toLowerCase().includes(categorySearchTerm.toLowerCase())
+                                ){
+                                    return value;
+                                }
+                            }).map((currElem, index) => {
                                 return (
                                     <>
                                         <Tr key={index}>

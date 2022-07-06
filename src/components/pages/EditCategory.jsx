@@ -27,14 +27,6 @@ console.log(categoryId)
         setCategoryName(e)
     }
 
-    const fileUpload = () => {
-        inputFieldRef.current.click();
-    }
-
-    const handleSelectedFile = (e) => {
-        
-      setImage(URL.createObjectURL(e.target.files[0]));
-    }
 
     //Get category by category ID
 
@@ -48,8 +40,17 @@ console.log(categoryId)
       setCategoryName(response.data.data.categoryName)
       setImage(response.data.data.image)
     }
-    console.log(image)
-    // image && console.log(URL.createObjectURL(image))
+    
+    
+    const fileUpload = () => {
+      inputFieldRef.current.click();
+  }
+
+    const handleSelectedFile = (e) => {
+        
+      setImage(e.target.files[0]);
+      console.log(image)
+    }
   
     const updateCategory = async(e) =>{
         e.preventDefault()
@@ -96,7 +97,7 @@ console.log(categoryId)
         <FormLabel>Upload Image</FormLabel>
         <ChakraButton height="100px" width="300px"  fontSize="14px" onClick={fileUpload}>+Add File</ChakraButton>
         <Input type="file" style={{ display: 'none' }} ref={inputFieldRef} onChange={handleSelectedFile} accept="image/png, image/jpeg"/>
-         <Image src={image} width="100px" height="100px"/>
+        {image ? <Image src={`http://13.233.1.96:9092/product/category/categoryImage/${categoryId}`} width="100px" height="100px"/>:null}
         <Button handleOnClick={updateCategory} name="Submit"></Button>
      </VStack>
      </Box>
