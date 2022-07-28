@@ -1,7 +1,8 @@
 import React from 'react'
 import {
-    Box, Text, HStack, Select, Input, Flex, Icon, Button as ChakraButton, Image,Modal, ModalOverlay,ModalContent,ModalHeader,
-    ModalFooter,ModalBody, ModalCloseButton, useDisclosure, Table,Thead,Tbody,Tr,Th,Td,TableContainer,useBreakpointValue} from '@chakra-ui/react';
+    Box, Text, HStack, Select, Input, Flex, Icon, Button as ChakraButton, Image, Modal, ModalOverlay, ModalContent, ModalHeader,
+    ModalFooter, ModalBody, ModalCloseButton, useDisclosure, Table, Thead, Tbody, Tr, Th, Td, TableContainer, useBreakpointValue
+} from '@chakra-ui/react';
 import { rootPathNames } from '../config/pathNames';
 import { colors } from '../../resources/colors';
 import InputField from '../InputField';
@@ -66,7 +67,7 @@ const Categories = ({ setCategoryId, categoryId, showLabel }) => {
     //   })
     const [isLoading, setLoading] = useState(false)
     const [categorySearchTerm, setCategorySearchTerm] = useState("");
-
+    const [displayPagination, setDisplayPagination] = useState(true);
 
     // const onPaginationChange = (start, end) => {
     // 	setPagination({start : start, end : end});
@@ -80,14 +81,14 @@ const Categories = ({ setCategoryId, categoryId, showLabel }) => {
             }
         })
         console.log(response)
-   
+
         setGetCategoryApi(response.data.data.categoryResponseList)
         setCategoryDataCount(response.data.data.totalNoOfCategory)
         setLoading(false)
     }
 
     // Search Category Api
-    
+
 
     //Get all category image by category id (get call)
 
@@ -152,7 +153,7 @@ const Categories = ({ setCategoryId, categoryId, showLabel }) => {
 
         if (response.status === 200) {
 
-            
+
             setShowCategoryDialogueBox(false)
             setCategoryTitle("")
             setShowSubCategoryDialogueBox(true)
@@ -189,9 +190,9 @@ const Categories = ({ setCategoryId, categoryId, showLabel }) => {
             setShowSucessText(true)
             setShowSubCategoryDialogueBox(false)
             setShowCategoryDialogueBox(false)
-            setTimeout(()=>{
+            setTimeout(() => {
                 setShowSucessText(false)
-            },5000)
+            }, 5000)
 
         }
         console.log(parsedSubCatData)
@@ -252,30 +253,38 @@ const Categories = ({ setCategoryId, categoryId, showLabel }) => {
             ]
         });
     }
-    const openModal = () =>{
+    const openModal = () => {
         onOpen()
         setShowCategoryDialogueBox(true)
     }
 
-    const search =(e) => setCategorySearchTerm(e)
-    
+    const search = (value) => setCategorySearchTerm(value)
 
-    const searchCat = async() =>{
-        const response = await axios.get(`${searchCategory}/${categorySearchTerm}`)
-        console.log(response)
-       
+
+    const searchCat = async () => {
+        if (categorySearchTerm == "") {
+
+            getCategoryData();
+            setDisplayPagination(true);
+        } else {
+
+            const response = await axios.get(`${searchCategory}/${categorySearchTerm}`)
+
+            console.log(response.data.data)
+            setGetCategoryApi(response.data.data);
+        }
     }
-    
+
     return (
 
         <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
-           
+
             <Flex color="white" justifyContent="flex-end" mb="16px" >
                 <Button name='Add Category' handleOnClick={openModal}></Button>
             </Flex>
 
             <Box bg={colors.white} borderRadius="lg" height="auto" marginLeft={showLabel ? "280px" : "100px"} padding='20px' fontFamily='Poppins, sans-serif'>
-            {showSuccessText && <Text color={colors.green}>Category saved succesfully</Text>}
+                {showSuccessText && <Text color={colors.green}>Category saved succesfully</Text>}
                 <Text fontSize="18px">Categories</Text>
                 <hr />
                 <HStack justifyContent='flex-start' >
@@ -289,12 +298,15 @@ const Categories = ({ setCategoryId, categoryId, showLabel }) => {
                         </Box>
                         <Box ml="100px" zIndex={0}>
                             <HStack>
-                            <Icon as={FaSearch}  />
-                        <Input placeholder="search" width="auto" onChange={(e)=>search(e.target.value)}/>
-                        <Button name="Search" handleOnClick={searchCat}></Button> 
+                                <Icon as={FaSearch} />
+                                <Input placeholder="search" width="auto" onChange={(e) => search(e.target.value)} onClick={() => {
+                                    setGetCategoryApi([])
+                                    setDisplayPagination(false);
+                                }} />
+                                <Button name="Search" handleOnClick={searchCat}></Button>
                             </HStack>
-                          
-                       </Box>
+
+                        </Box>
                     </Flex>
                 </HStack>
                 {/* /////////////////////////////////////////////////////// */}
@@ -312,15 +324,7 @@ const Categories = ({ setCategoryId, categoryId, showLabel }) => {
                             </Tr>
                         </Thead>
                         <Tbody fontWeight="" justifyContent="space-around" letterSpacing="2px">
-                            {getCategoryApi.filter((value)=>{
-                                if(categorySearchTerm === ""){
-                                    return value;
-                                }else if(
-                                    value.categoryName.toLowerCase().includes(categorySearchTerm.toLowerCase())
-                                ){
-                                    return value;
-                                }
-                            }).map((currElem, index) => {
+                            {getCategoryApi.map((currElem, index) => {
                                 return (
                                     <>
                                         <Tr key={index}>
@@ -339,10 +343,10 @@ const Categories = ({ setCategoryId, categoryId, showLabel }) => {
 
                     </Table> : <Loader type="spinner-default" bgColor={colors.cornflowerBlue} title={"box-rotate-y"} color={'#FFFFFF'} size={50} />}
 
-                    <Pagination
+                    {displayPagination && <Pagination
                         showPerPage={showPerPage}
                         total={categoryDataCount}
-                        currentPage={setCurrentPage} />
+                        currentPage={setCurrentPage} />}
                 </TableContainer>
 
                 {/* modal dialogie box for category*/}
@@ -396,7 +400,7 @@ const Categories = ({ setCategoryId, categoryId, showLabel }) => {
                         <hr />
                         <ModalFooter>
                             <HStack spacing={8} width="100%">
-                            
+
                                 <Button name="Save" handleOnClick={saveSubCategory}></Button>
                                 <Button name="Close" handleOnClick={onClose}></Button>
                             </HStack>

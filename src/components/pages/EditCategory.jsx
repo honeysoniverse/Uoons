@@ -11,7 +11,8 @@ import { rootPathNames } from '../config/pathNames';
 const EditCategory = ({setCategoryId, categoryId}) => {
 console.log(categoryId)
     const [categoryName, setCategoryName] = useState("")
-    const [image, setImage] = useState()
+    const [image, setImage] = useState("")
+    const [firstImage,setFirstImage]=useState(false);
 
     const inputFieldRef = React.useRef(null);
 
@@ -48,10 +49,17 @@ console.log(categoryId)
 
     const handleSelectedFile = (e) => {
         
-      setImage(e.target.files[0]);
-      console.log(image)
+      // setImage(e.target.files[0]);
+      // console.log(image)
+
+
+      const [file] = e.target.files;
+      setFirstImage(true);
+      setImage(URL.createObjectURL(file));
+
     }
   
+    //Post call to update category//
     const updateCategory = async(e) =>{
         e.preventDefault()
         const formData = new FormData();
@@ -97,7 +105,7 @@ console.log(categoryId)
         <FormLabel>Upload Image</FormLabel>
         <ChakraButton height="100px" width="300px"  fontSize="14px" onClick={fileUpload}>+Add File</ChakraButton>
         <Input type="file" style={{ display: 'none' }} ref={inputFieldRef} onChange={handleSelectedFile} accept="image/png, image/jpeg"/>
-        {image ? <Image src={`http://13.233.1.96:9092/product/category/categoryImage/${categoryId}`} width="100px" height="100px"/>:null}
+        { firstImage!=" " ?<Image src={image} height="100px" width="100px" objectFit="cover" border="2px solid black"/> :  <Image src={`http://13.233.1.96:9092/product/category/categoryImage/${categoryId}`} width="100px" height="100px"/>}
         <Button handleOnClick={updateCategory} name="Submit"></Button>
      </VStack>
      </Box>

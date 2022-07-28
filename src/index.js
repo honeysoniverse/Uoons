@@ -12,7 +12,7 @@ const root = ReactDOM.createRoot(container);
 
 
 root.render(
-  <StrictMode>
+  
     <BrowserRouter>
     <ColorModeScript />
 
@@ -20,7 +20,7 @@ root.render(
     <App />
     </Provider>
     </BrowserRouter>
-  </StrictMode>
+ 
 );
 
 // If you want your app to work offline and load faster, you can change

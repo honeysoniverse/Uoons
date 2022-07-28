@@ -11,7 +11,6 @@ import { rootPathNames } from '../config/pathNames';
 const EditProduct = ({productId}) => {
 
 
-
     const inputFieldRef = React.useRef(null);
     const multiUploadInputRef = React.useRef(null);
 
@@ -33,6 +32,7 @@ const EditProduct = ({productId}) => {
 
      const [productDetail, setProductDetail] = useState(initProductState) 
      const [mainImage, setMainImage] = useState("")
+     const [firstImage, setFirstImage] = useState(false)
      const [multiImages, setMultiImages] = useState([])
      const [showLabel, setShowLabel] = useState(false);
      const [showDescLabel, setShowDescLabel] = useState(false)
@@ -122,8 +122,12 @@ const fileUpload = () => {
     }
 
     const handleSelectedFile = (e) => {
-        console.log(">>>>>handleSelectedFile",e.target.files[0])
-      setMainImage(e.target.files[0]);
+    //     console.log(">>>>>handleSelectedFile",e.target.files[0])
+    //   setMainImage(e.target.files[0]);
+
+      const [file] = e.target.files;
+      setFirstImage(true);
+      setMainImage(URL.createObjectURL(file));
     }
 
     //Multiple file upload
@@ -137,12 +141,17 @@ const fileUpload = () => {
 
         images.push(e.target.files)
         for (let i = 0; i < images[0].length; i++) {
-            imagesArray.push(images[0][i]);
+            imagesArray.push(URL.createObjectURL(images[0][i]));
+            if(i==4)
+            break;
         }
+      
         setMultiImages(imagesArray)
+   
+      
     }
 
-    //Post call for product
+    //EditPost call for product
 
     const editProductData = async (e) =>{
         e.preventDefault()
@@ -189,14 +198,15 @@ const fileUpload = () => {
 
                         <ChakraButton height="100px" width="300px" border="1px dashed gray" fontSize="14px" onClick={fileUpload}>Add File</ChakraButton>
                         <Input type="file" style={{ display: 'none' }} ref={inputFieldRef} onChange={handleSelectedFile} accept="image/*" />
-                    <Image src={`http://13.233.1.96:9092/product/item/productmainImage/${productId}`} height="250px" width="300px" objectFit="cover" border="2px solid black"/>
+                     { firstImage!=" " ?<Image src={mainImage} height="250px" width="300px" objectFit="cover" border="2px solid black"/> : <Image src={`http://13.233.1.96:9092/product/item/productmainImage/${productId}`} height="250px" width="300px" objectFit="cover" border="2px solid black"/>
+}     
                     </Box>
                     <Box>
-                        <ChakraButton height="100px" width="300px" border="1px dashed gray" fontSize="14px" onClick={multiFileUpload}>+ Add File</ChakraButton>
-                        <Input type="file" style={{ display: 'none' }} ref={multiUploadInputRef} onChange={handleMultiSelected} accept="image/*" multiple />
+                        <ChakraButton  height="100px" width="300px" border="1px dashed gray" fontSize="14px" onClick={multiFileUpload}>+ Add File
+                        <Input type="file" style={{ display: 'none' }} ref={multiUploadInputRef} onChange={handleMultiSelected} accept="image/*" multiple /></ChakraButton>
                         <ul style={{display:"flex", justifyContent:'space-around'}}>
-                            {multiImages.length !== 0 && multiImages.map((item) => {
-                                return <Image src={`http://13.233.1.96:9092/product/item/getAllProductImages/496`} height="75px" width="75px" objectFit="cover" display="inline" border={colors.infoGray} borderWidth="2px" borderStyle="solid" padding="8px 0px"/>
+                            {multiImages.length !== 0 && multiImages.map((item) => { console.log(JSON.stringify(item));
+                                return <Image src={item} height="75px" width="75px" objectFit="cover" display="inline" border={colors.infoGray} borderWidth="2px" borderStyle="solid" padding="8px 0px"/>
                             })}
                         </ul>
                     </Box>

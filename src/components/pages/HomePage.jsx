@@ -2,10 +2,10 @@ import React from 'react'
 import Body from '../Body';
 
 
-const Homepage = () => {
+const Homepage = ({showLabel}) => {
   return (
     <div>
-    <Body/>
+    <Body showLabel={showLabel}/>
     </div>
   )
 }

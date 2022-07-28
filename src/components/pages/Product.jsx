@@ -36,6 +36,8 @@ const Product = ({ setProductId, productId, showLabel}) => {
   const [showPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(0)
   const [isLoading, setLoading] = useState(false)
+  const [productSearchTerm,setProductSearchTerm]=useState("");
+  const [displayPagination,setDisplayPagination]=useState(true);
 //   const [pagination, setPagination] = useState({
 //   start:0,
 //   end:showPerPage
@@ -44,6 +46,7 @@ const Product = ({ setProductId, productId, showLabel}) => {
 
 const getAllProduct = process.env.REACT_APP_GET_ALL_PRODUCT_WITH_PAGINATION_API;
 const deleteProductById = process.env.REACT_APP_DELETE_PRODUCT_API;
+const searchProduct=process.env.REACT_APP_SEARCH_PRODUCT;
 
 const sellerId_LOC = localStorage.getItem("LoginData")
 const sellerId = JSON.parse(sellerId_LOC).data.userId
@@ -117,6 +120,22 @@ const navigate = useNavigate()
 		  ]
 		});
 	  }
+    const search = (value) => setProductSearchTerm(value)
+
+
+    const searchPro = async () => {
+      if (productSearchTerm == "") {
+
+          allProductData();
+          setDisplayPagination(true);
+     } else {
+
+         const response = await axios.get(`${searchProduct}/${productSearchTerm}`)
+
+          console.log(response.data.data)
+           setProductData(response.data.data)
+    }
+  }
   return (
     <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
       <Flex color="white" justifyContent="flex-end" mb="16px">
@@ -140,7 +159,10 @@ const navigate = useNavigate()
           </Select>
           <Spacer />
          <Center> <Icon as={FaSearch} mr="10px" /></Center>
-          <Input placeholder="Basic usage"  w="32%" />
+          <Input placeholder="Search Product"  w="32%" onChange={(e) => search(e.target.value)} onClick={() => {
+                                     setProductData([])
+                                    setDisplayPagination(false)}}/>
+                                    <Button name="Search" handleOnClick={searchPro}></Button>
         </Flex>
          <TableContainer mt="40px" >
             {!isLoading?<Table variant='striped' colorScheme="gray">
@@ -176,11 +198,11 @@ const navigate = useNavigate()
                         </Tbody>
                      
                 </Table>: <Loader type="spinner-default" bgColor={colors.cornflowerBlue} title={"box-rotate-y"} color={'#FFFFFF'} size={50}/>}
-                <Pagination
+              {  displayPagination && <Pagination
                         showPerPage={showPerPage} 
 				                total={productDataCount}
                         currentPage={setCurrentPage}
-                        />
+                        />}
                 </TableContainer>
           
       
