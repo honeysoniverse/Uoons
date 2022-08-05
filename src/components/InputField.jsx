@@ -8,7 +8,8 @@ const InputField = ({ placeholder, setValue, icon, type, mb, width, boxShadow, r
 
   
     const handleSetValue = (e) => {
-        setValue(e.target.value)
+        setValue(e.target.current_value)
+        console.log(e.target.value,"CONSOLE FOR TESTING")
     }
     
   return (
