@@ -8,8 +8,10 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { rootPathNames } from '../config/pathNames';
 
-const EditProduct = ({productId}) => {
+const EditProduct = ({productId,categoryId}) => {
 
+   console.log(categoryId,">>>>>>>categoryId")
+   console.log(productId,">>>>>>>productId")
 
     const inputFieldRef = React.useRef(null);
     const multiUploadInputRef = React.useRef(null);
@@ -47,7 +49,7 @@ const EditProduct = ({productId}) => {
             }
         })
 
-        console.log(response)
+        console.log(response,"<<<<<<<<<edit product console")
         if(response.data.data.additionalInformation.length>0) setShowLabel(true)
         if(response.data.data.salient_features.length>0) setShowLabel(true)
         setProductDetail(prev => ({...prev, title: response.data.data.title}))
@@ -142,7 +144,7 @@ const fileUpload = () => {
         images.push(e.target.files)
         for (let i = 0; i < images[0].length; i++) {
             imagesArray.push(URL.createObjectURL(images[0][i]));
-            if(i==4)
+            if(i===4)
             break;
         }
       
@@ -165,7 +167,7 @@ const fileUpload = () => {
 
         console.log(formData)
 
-        const response = await fetch(`${editProduct}/${sellerId}/${productId}`, {
+        const response = await fetch(`${editProduct}/2/2/${sellerId}/${productId}`, {
             method: 'PUT',
             body:formData
         })
@@ -176,7 +178,8 @@ const fileUpload = () => {
             navigate(rootPathNames.products)
         }
         }
-    
+        
+       
 
   return (
     <Box bg={colors.backgroundGray} w="auto" p={6} m="auto">
@@ -198,7 +201,7 @@ const fileUpload = () => {
 
                         <ChakraButton height="100px" width="300px" border="1px dashed gray" fontSize="14px" onClick={fileUpload}>Add File</ChakraButton>
                         <Input type="file" style={{ display: 'none' }} ref={inputFieldRef} onChange={handleSelectedFile} accept="image/*" />
-                     { firstImage!=" " ?<Image src={mainImage} height="250px" width="300px" objectFit="cover" border="2px solid black"/> : <Image src={`http://13.233.1.96:9092/product/item/productmainImage/${productId}`} height="250px" width="300px" objectFit="cover" border="2px solid black"/>
+                     { firstImage !=" " ?<Image src={mainImage} height="250px" width="300px" objectFit="cover" border="2px solid black"/> : <Image src={`http://13.233.1.96:9092/product/item/productmainImage/${productId}`} height="250px" width="300px" objectFit="cover" border="2px solid black"/>
 }     
                     </Box>
                     <Box>
@@ -246,11 +249,12 @@ const fileUpload = () => {
 
                                 <FormLabel >Description</FormLabel></HStack>}
                             {productDetail.additionalInformation.map((item, index) =>
+                       
                              <HStack>
                              <InputField setValue={(title)=> getAdditionalInfoTitle(title,index)} value={item.additionalInfoDescTitle}/>
                              <InputField setValue={(data) => getAdditionalInfoDesc(data, index)} value={item.additionalInfoDescData}/>
                          </HStack>
-                            )}
+                        )}
                         </VStack>
 
                     </VStack>

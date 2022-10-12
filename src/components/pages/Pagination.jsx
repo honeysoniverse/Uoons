@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Flex, Link, List, ListItem } from '@chakra-ui/react';
+import React, { useState } from "react";
+import { Flex, List  } from '@chakra-ui/react';
 import Button from "../Button";
 
 const Pagination = ({ showPerPage , total, currentPage }) => {
@@ -22,8 +22,8 @@ const Pagination = ({ showPerPage , total, currentPage }) => {
         setCounter(counter - 1)
       }
     } else if (type === "next") {
-      console.log(">>>counter",counter)
-      console.log(">>>Math.ceil(total / showPerPage)",Math.ceil(total / showPerPage))
+      // console.log(">>>counter",counter)
+      // console.log(">>>Math.ceil(total / showPerPage)",Math.ceil(total / showPerPage))
       if (counter === Math.ceil(total / showPerPage)-1) {
         currentPage(counter);
         setCounter(0)

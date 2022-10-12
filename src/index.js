@@ -16,7 +16,7 @@ root.render(
     <BrowserRouter>
     <ColorModeScript />
 
-<Provider store={store}>
+    <Provider store={store}>
     <App />
     </Provider>
     </BrowserRouter>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect} from 'react'
 import { Box, Text, HStack, Select, Image, FormLabel, VStack, Textarea, Button as ChakraButton, Input } from '@chakra-ui/react';
 import { colors } from '../../resources/colors';
 import InputField from '../InputField';
@@ -38,22 +38,26 @@ const AddProduct = ({setShowSeccessText, showSuccessText}) => {
 
     const categoryApi = process.env.REACT_APP_CATEGORY_API;
     const subCategoryApi = process.env.REACT_APP_SUB_CATEGORY_API;
-    const postDataApi = process.env.REACT_APP_POSTDATA_API;
+    const postDataApi = process.env.REACT_APP_POST_DATA_API;
     
     const sellerId_LOC = localStorage.getItem("LoginData")
     const sellerId = JSON.parse(sellerId_LOC).data.userId
 
     const handlesetCategoryValue = async (e) => {
-      
+      //get category id
         for (let i = 0; i < categoryApiData.length; i++) {
-            if (e.target.value === categoryApiData[i].categoryName) setCategoryId(categoryApiData[i].catId)
+            if (e.target.value === categoryApiData[i].categoryName) 
+            setCategoryId(categoryApiData[i].catId)
+           
         }
+        
     }
-
+    console.log(categoryId,">>>>>>>>>>>>>>>>>>>catId")
     const handlesetSubCategoryValue = async (e) => {
        
         for (let i = 0; i < subCategoryApiData.length; i++) {
-            if (e.target.value === subCategoryApiData[i].subCategoryName) setSubCategoryId(subCategoryApiData[i].subcatId)
+            if (e.target.value === subCategoryApiData[i].subCategoryName) 
+            setSubCategoryId(subCategoryApiData[i].subcatId)
         }
     }
 
@@ -71,9 +75,9 @@ const AddProduct = ({setShowSeccessText, showSuccessText}) => {
              setProductDetail(prev => ({...prev, additionalInformation: updatedAdditionalInfo}));
     }
 
-    const getAdditionalInfoDesc = (title, index) =>  {
+    const getAdditionalInfoDesc = (data, index) =>  {
         let updatedAdditionalInfo = [...productDetail.additionalInformation];
-        updatedAdditionalInfo[index].additionalInfoDescData = title;
+        updatedAdditionalInfo[index].additionalInfoDescData = data;
          setProductDetail(prev => ({...prev, additionalInformation: updatedAdditionalInfo}));
     }
 
@@ -103,7 +107,18 @@ const AddProduct = ({setShowSeccessText, showSuccessText}) => {
         setProductDetail( prevState => ({...prevState,
             salientFeaturess:  [...prevState.salientFeaturess,'']
          }));
-      }
+    }
+
+    const handleRemoveSalientFeature = ()=>{
+        if(productDetail.salientFeaturess.length<=1){
+            setShowDescLabel(false)
+        }
+        let updatedSalientFeaturess = [...productDetail.salientFeaturess];
+        updatedSalientFeaturess.splice(-1);
+        setProductDetail(prev => ({...prev,  salientFeaturess: updatedSalientFeaturess}));
+    }
+
+
 
   const  getSalientFeature = (e, index) => {
     let updatedAreas = [...productDetail.salientFeaturess];
@@ -123,7 +138,9 @@ const AddProduct = ({setShowSeccessText, showSuccessText}) => {
                 'Content-Type': 'application/json',
             }
         })
+        console.log(response)
         setCategoryApiData(response.data.data)
+     
     }
 
     //Fetch Sub-Category
@@ -138,7 +155,7 @@ const AddProduct = ({setShowSeccessText, showSuccessText}) => {
         setSubCategoryApiData(response.data.data)
     }
 
-    //File uploader
+    // File uploader
     const fileUpload = () => {
         inputFieldRef.current.click();
     }
@@ -148,7 +165,7 @@ const AddProduct = ({setShowSeccessText, showSuccessText}) => {
         setFile(e.target.files[0]);
     }
 
-    //Multiple file upload
+    // Multiple file upload
     const multiFileUpload = () => {
         multiUploadInputRef.current.click()
     }
@@ -165,6 +182,7 @@ const AddProduct = ({setShowSeccessText, showSuccessText}) => {
     
     }
 
+
         //Clearing data after submiting
         
         const clearData = () =>{
@@ -174,23 +192,18 @@ const AddProduct = ({setShowSeccessText, showSuccessText}) => {
             setFile()
             setMultiFile([])
            }
-console.log(file)
+// console.log(file)
     //Post product api
 
     const saveProduct = async () => {
-
         const formData = new FormData();
         formData.append('product', new Blob([JSON.stringify(productDetail)], {
-
             type: "application/json"
-            
         }));
         formData.append('mainimages', file);
-          
-          for (let i = 0; i < multiFile.length; i++) {
-            formData.append('images', multiFile[i])}
-
-
+        for (let i = 0; i < multiFile.length; i++) {
+            formData.append('images', multiFile[i])
+        }
         const response = await axios.post(`${postDataApi}/${categoryId}/${subCategoryId}/${sellerId}`, formData ,{
 
         }
@@ -247,10 +260,9 @@ console.log(file)
 
                 <HStack mt="40px" justifyContent="space-evenly" alignItems="flex-start">
                     <Box>
-
                         <ChakraButton height="100px" width="300px" border="1px dashed gray" fontSize="14px" onClick={fileUpload}>Add File</ChakraButton>
                         <Input type="file" style={{ display: 'none' }} ref={inputFieldRef} onChange={handleSelectedFile} accept="image/*" />
-                        {file ? <Image src={URL.createObjectURL(file)} height="auto" width="300px" objectFit="cover" border="2px solid black"/> : null}
+                        {file ? <Image src={URL.createObjectURL(file)} height="200px" width="300px" objectFit="cover" border="2px solid black"/> : null}
                     </Box>
                     <Box>
                         <ChakraButton height="100px" width="300px" border="1px dashed gray" fontSize="14px" onClick={multiFileUpload}>+ Add File</ChakraButton>
@@ -312,6 +324,7 @@ console.log(file)
 
                             <FormLabel>Salient Features</FormLabel>
                             <Button name='+' handleOnClick={salientOnClick} ></Button>
+                            <Button name='-' handleOnClick={handleRemoveSalientFeature}></Button>
                         </HStack>
 
                         <VStack>

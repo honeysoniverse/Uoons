@@ -19,7 +19,6 @@ import {
   FaLinkedin,
   FaUser,
   FaKey,
-  FaBars,
 } from 'react-icons/fa';
 import axios from 'axios';
 import PagesWrapper from '../PagesWrapper';
@@ -94,6 +93,10 @@ const password = passwordValue.loginReducer.password
             <Text color={colors.white} fontFamily="Poppins, sans-serif">Create your seller account in
           just few steps to become a seller with us</Text>
           </Box>}
+
+
+
+          
           <Box
             padding="50px"
             background={colors.white}
@@ -128,7 +131,7 @@ const password = passwordValue.loginReducer.password
 
            <VStack alignItems="flex-start">
              <InputField
-             setValue={setEmailValue}
+              setValue={setEmailValue}
               icon={FaUser}
               placeholder="Email"
               type="email"

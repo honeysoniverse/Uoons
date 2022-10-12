@@ -33,6 +33,7 @@ const DesktopMenu = ({setIsAuthenticated, showLabel}) => {
 
   return (
     <VStack
+     
       spacing={0.5}
       border={`3px solid ${colors.backgroundGray}`}
       height="100%"
@@ -45,12 +46,12 @@ const DesktopMenu = ({setIsAuthenticated, showLabel}) => {
       boxShadow="2xl"
       display='flex'
       position="fixed"
-      padding="13px"
+      padding="5px"
     >
       {getMainMenu().map((navItem) => (
-          <HStack width="100%">
+        <HStack width="100%">
         <Link
-        width="100%"
+          width="100%"
           key={navItem.path}
           to={navItem.path}
           as={NavLink}
@@ -59,7 +60,7 @@ const DesktopMenu = ({setIsAuthenticated, showLabel}) => {
           borderBottom={`3px solid ${colors.white}`}
           padding={
             {
-              base: '2', md: '3', lg: '3', xl: '3',
+              base: '1', md: '1', lg: '1', xl: '1',
             }
           }
           fontSize={
@@ -131,10 +132,11 @@ const DesktopMenu = ({setIsAuthenticated, showLabel}) => {
         }}
       >
         <HStack spacing={4}>
+        <Icon as={FaSignOutAlt} color={colors.iconGray}/>
          {showLabel && <Text>
             Logout
           </Text>}
-          <Icon as={FaSignOutAlt} color={colors.iconGray}/>
+         
         </HStack>
       </Button>
     </VStack>

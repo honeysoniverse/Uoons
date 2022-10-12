@@ -30,7 +30,8 @@ function App() {
         {isAuthenticated && <Header setShowLabel={setShowLabel} showSuccessText={showSuccessText}/>}
         {isAuthenticated && <DesktopMenu setIsAuthenticated={setIsAuthenticated} showLabel={showLabel}/>}
         {isAuthenticated && <RoutesWrapper setCategoryId={setCategoryId} categoryId={categoryId} showLabel={showLabel} 
-        setProductId={setProductId} productId={productId} setShowSeccessText={setShowSeccessText} showSuccessText={showSuccessText}/>}
+        setProductId={setProductId} productId={productId} setShowSeccessText={setShowSeccessText} showSuccessText={showSuccessText}
+        setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated}/>}
         {isAuthenticated && <Footer/>} 
  
  {/* added by me delete it. */}

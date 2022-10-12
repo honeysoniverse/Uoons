@@ -16,17 +16,18 @@ import axios from 'axios';
 import Button from '../Button';
 
 const ViewProduct = ({categoryId, showLabel}) => { 
-    console.log(categoryId)
+   
 
     const [viewProductApi, setViewProductApi] = useState([])
 
-    const viewProduct = process.env.REACT_APP_VIEWPRODUCT_API;
+    const viewProduct = process.env.REACT_APP_VIEW_PRODUCT_API;
     const sellerId_LOC = localStorage.getItem("LoginData");
     const sellerId = JSON.parse(sellerId_LOC).data.userId;
 
     
 
     const viewProductData = async () =>{
+        console.log(categoryId)
         const response = await axios.get(`${viewProduct}/${categoryId}/${sellerId}?pageNo=0&pageSize=10`, {
             headers: {
                 'Content-Type': 'application/json',

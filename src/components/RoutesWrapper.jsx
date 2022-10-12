@@ -4,17 +4,18 @@ import { Routes, Route } from 'react-router-dom'
 import {  rootPathNames } from './config/pathNames';
 import ProtectedRoute from './ProtectedRoute';
 
-
-
 const HomePage = lazy(() => import('./pages/HomePage'));
 const OrdersPage = lazy(() => import('./pages/Orders'));
 const ProductPage = lazy(() => import('./pages/Product'));
 const AddProduct = lazy(()=> import('./pages/AddProduct'));
 const Categories = lazy(()=> import('./pages/Categories'));
-const SubCategories = lazy(()=>import('./pages/SubCategories'))
+const SubCategories = lazy(()=>import('./pages/SubCategories'));
 const ViewProducts = lazy(()=>import('./pages/ViewProduct'));
 const EditCategory = lazy(()=>import('./pages/EditCategory'));
 const EditProduct = lazy(()=>import('./pages/EditProduct'));
+const Settings = lazy(()=>import('./pages/Settings/Settings'));
+const Payments = lazy(()=>import('./pages/Payments'));
+const Support = lazy(()=>import('./pages/SupportMainPage'));
 
 const RoutesWrapper = ({setCategoryId, categoryId, showLabel, setProductId, productId, setShowSeccessText, showSuccessText}) => (
   <Suspense fallback={<Spinner/>}>
@@ -25,7 +26,7 @@ const RoutesWrapper = ({setCategoryId, categoryId, showLabel, setProductId, prod
       />
        <Route
         path={rootPathNames.orders}
-        element={<ProtectedRoute component={OrdersPage} isProtected={false} />}
+        element={<ProtectedRoute component={OrdersPage} isProtected={false}  showLabel={showLabel}/>}
       />
         <Route
         path={rootPathNames.products}
@@ -52,9 +53,21 @@ const RoutesWrapper = ({setCategoryId, categoryId, showLabel, setProductId, prod
         path={rootPathNames.editCategory}
         element={<ProtectedRoute component={EditCategory} isProtected={false} setCategoryId={setCategoryId} categoryId={categoryId}/>}
       />
-    <Route
+      <Route
         path={rootPathNames.editProduct}
-        element={<ProtectedRoute component={EditProduct} isProtected={false}  setProductId={setProductId} productId={productId}/>}
+        element={<ProtectedRoute component={EditProduct} isProtected={false}  setProductId={setProductId} productId={productId} setCategoryId={setCategoryId} categoryId={categoryId}/>}
+      />
+      <Route
+        path={rootPathNames.settings}
+        element={<ProtectedRoute component={Settings} isProtected={false}  showLabel={showLabel}/>}
+      />
+       <Route
+        path={rootPathNames.payments}
+        element={<ProtectedRoute component={Payments} isProtected={false}  showLabel={showLabel}/>}
+      />
+       <Route
+        path={rootPathNames.support}
+        element={<ProtectedRoute component={Support} isProtected={false}  showLabel={showLabel}/>}
       />
     </Routes>
    

@@ -37,7 +37,7 @@ const SubCategories =({setCategoryId, categoryId, showLabel}) => {
 
     
     const getAllCategories = process.env.REACT_APP_GET_ALL_CATEGORY_WITH_PAGINATION_API;
-    const postSubCategory = process.env.REACT_APP_POSTSUBCATEGORY_API;
+    const postSubCategory = process.env.REACT_APP_POST_SUBCATEGORY_API;
     
     const sellerId_LOC = localStorage.getItem("LoginData");
     const sellerId = JSON.parse(sellerId_LOC).data.userId;

@@ -10,7 +10,7 @@ export const pathNames = {
   analytics: '/analytics',
   payments: '/payments',
   announcements: '/announcements',
-  support: 'https://uoons.com',
+  support: '/support',
   priceRecommendations: '/priceRecommendations',
   qualityDashboard: '/qualityDashboard',
   notices: '/notices',
@@ -33,7 +33,7 @@ export const rootPathNames = {
   analytics: '/analytics/*',
   payments: '/payments/*',
   announcements: '/announcements/*',
-  support: 'https://uoons.com/*',
+  support: '/support/*',
   priceRecommendations: '/priceRecommendations/*',
   qualityDashboard: '/qualityDashboard/*',
   notices: '/notices/*',
@@ -42,5 +42,6 @@ export const rootPathNames = {
   addProduct:'/products/addproduct/*',
   viewProduct:'/prducts/viewproduct/*',
   editCategory: '/categories/editcategory/*',
-  editProduct:'/products/editproduct/*'
+  editProduct:'/products/editproduct/*',
 };
+

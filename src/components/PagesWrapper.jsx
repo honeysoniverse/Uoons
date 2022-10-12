@@ -2,10 +2,7 @@ import PropTypes from 'prop-types';
 import { useBreakpointValue, VStack } from '@chakra-ui/react';
 import { colors } from '../resources/colors';
 
-const PagesWrapper = ({
-  id,
-  children,
-}) => {
+const PagesWrapper = ({id, children}) => {
   const isMdBreakpoint = useBreakpointValue(
     {
       md: true, base: false,
@@ -14,6 +11,7 @@ const PagesWrapper = ({
 
   return (
     <VStack
+    
       fontFamily="Roboto"
       id={id}
       bg={colors.backgroundGray}
